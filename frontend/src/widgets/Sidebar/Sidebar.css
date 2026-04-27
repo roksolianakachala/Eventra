@@ -1,0 +1,166 @@
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  margin-bottom: 32px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #075ee8;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 14px;
+  border-radius: 10px;
+
+  font-size: 15px;
+  color: #1e293b;
+  transition: 0.2s;
+}
+
+.sidebar-nav a svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sidebar-nav a:hover {
+  background: #f1f5ff;
+}
+
+.sidebar-nav a.active {
+  background: #eaf2ff;
+  color: #075ee8;
+  font-weight: 600;
+}
+
+.sidebar-card {
+  margin-top: auto;
+  background: #eaf2ff;
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+}
+
+.sidebar-card h3 {
+  font-size: 15px;
+  margin: 10px 0;
+}
+
+.sidebar-card p {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #475569;
+}
+
+.sidebar-card button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #075ee8;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ========================= */
+/* 📱 TABLET (до 1024px) */
+/* ========================= */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 220px;
+    padding: 20px 14px;
+  }
+
+  .logo {
+    font-size: 26px;
+  }
+
+  .sidebar-nav a {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+}
+
+/* ========================= */
+/* 📱 MOBILE (до 768px) */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    flex-direction: column;
+    padding: 14px;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .logo {
+    margin-bottom: 14px;
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 6px;
+  }
+
+  .sidebar-nav a {
+    flex-shrink: 0;
+    height: 40px;
+    padding: 0 12px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .sidebar-nav a span {
+    display: none; /* ховаємо текст → лишаються іконки */
+  }
+
+  .sidebar-nav a svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .sidebar-card {
+    display: none;
+  }
+}
+
+/* ========================= */
+/* 📱 SMALL MOBILE (до 480px) */
+/* ========================= */
+
+@media (max-width: 480px) {
+  .sidebar-nav a {
+    height: 36px;
+    padding: 0 10px;
+  }
+
+  .sidebar-nav a svg {
+    width: 16px;
+    height: 16px;
+  }
+}
