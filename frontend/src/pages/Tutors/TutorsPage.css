@@ -1,0 +1,122 @@
+.tutors-page {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 32px;
+}
+
+/* LEFT */
+.tutors-heading {
+  margin-bottom: 24px;
+}
+
+.tutors-heading h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+}
+
+.tutors-heading p {
+  margin: 0 0 16px;
+  color: #475569;
+}
+
+.add-tutor-btn {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  background: #075ee8;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-tutor-btn:hover {
+  background: #064fc2;
+}
+
+.tutor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tutor-card {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #ffffff;
+  transition: 0.2s;
+}
+
+.tutor-card:hover {
+  border-color: #075ee8;
+}
+
+.tutor-card.active {
+  border: 2px solid #075ee8;
+}
+
+/* AVATAR */
+.avatar {
+  width: 56px;
+  height: 56px;
+  background: #eaf3ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar.big {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  font-size: 32px;
+}
+
+/* RIGHT */
+.tutors-right {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+}
+
+.tutor-header {
+  text-align: center;
+}
+
+.subject {
+  display: inline-block;
+  background: #eaf3ff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.tutor-header h2 {
+  margin: 12px 0;
+}
+
+.tutor-section {
+  margin-top: 24px;
+}
+
+.contact-btn {
+  margin-top: 24px;
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 12px;
+  background: #075ee8;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.contact-btn:hover {
+  background: #064fc2;
+}
