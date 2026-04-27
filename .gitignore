@@ -1,0 +1,9 @@
+# Модулі інсталяції 
+node_modules/
+
+# Файли конфігурації та середовища 
+.env 
+
+# Системні файли 
+.DS_Store # MacOS 
+Thumbs.db # Windows 
