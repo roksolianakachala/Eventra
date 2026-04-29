@@ -41,7 +41,7 @@ const createEvent = async (req, res) => {
             });
         } 
 
-        const creatorId = "123e4567-e89b-12d3-a456-426614174000"; // ТИМЧАСОВО, замінити на реальний ID користувача після реалізації аутентифікації 
+        const creatorId = "e72264e4-debf-4ad8-9415-53127244c04d"; // ТИМЧАСОВО, замінити на реальний ID користувача після реалізації аутентифікації 
         
         const newEvent = await eventsService.createNewEvent(creatorId, eventData); 
 
