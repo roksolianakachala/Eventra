@@ -1,4 +1,22 @@
-const supabase = require('../../config/db.config');
+const supabase = require('../../config/db.config'); 
+
+const findEvent = async (eventId) => { 
+    const { data, error } = await supabase
+        .from('events')
+        .select('*')          
+        .eq('id', eventId)    
+        .single(); 
+
+    if (error && error.code === 'PGRST116') { 
+        return null; 
+    }
+
+    if (error) {
+        throw new Error(`Помилка пошуку в базі: ${error.message}`); 
+    }
+
+    return data; 
+};
 
 const createNewEvent = async (creatorId, eventData) => {
     

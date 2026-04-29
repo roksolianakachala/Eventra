@@ -1,17 +1,17 @@
 const eventsService = require('./events.service');
 
-const getEventById = (req, res) => {
+const getEventById = async (req, res) => { 
     try { 
-        const eventId = parseInt(req.params.id);
+        const eventId = req.params.id;
 
-        if (isNaN(eventId)) {
+        if (!eventId) {
             return res.status(400).json({ 
                 status: "error", 
-                message: "ID події має бути числом" 
+                message: "ID події є обов'язковим" 
             });
         }
 
-        const event = eventsService.findEvent(eventId);
+        const event = await eventsService.findEvent(eventId); 
 
         if (!event) {
             return res.status(404).json({ 
@@ -26,9 +26,10 @@ const getEventById = (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ status: "error", message: "Помилка сервера" });
-    }
-}; 
+        console.error("Помилка при пошуку івенту:", error);
+        res.status(500).json({ status: "error", message: error.message }); 
+    } 
+};
 
 const createEvent = async (req, res) => { 
     try {
