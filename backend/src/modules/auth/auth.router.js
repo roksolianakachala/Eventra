@@ -13,7 +13,7 @@ router.get("/google", async (req, res) => {
     await supabaseAuth.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:3000"
+        redirectTo: "https://eventra-for-events.netlify.app"
       }
     });
 
@@ -31,7 +31,7 @@ router.get("/google/callback", async (req, res) => {
 
   if (error) {
     console.log(error);
-    return res.redirect("http://localhost:3000");
+    return res.redirect("https://eventra-for-events.netlify.app");
   }
 
   const user = data.user;
@@ -58,7 +58,7 @@ router.get("/google/callback", async (req, res) => {
 
   console.log(profileError);
 
-  res.redirect("http://localhost:3000");
+  res.redirect("https://eventra-for-events.netlify.app");
 });
 
 module.exports = router;

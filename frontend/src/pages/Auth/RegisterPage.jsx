@@ -32,7 +32,7 @@ function RegisterPage() {
 
   try {
     await axios.post(
-      "http://localhost:5000/api/auth/register",
+      `https://eventra-j1tj.onrender.com/api/auth/register`,
       formData
     );
 
@@ -160,7 +160,7 @@ function RegisterPage() {
 
         <div className="social-buttons">
           <button className="social-btn" onClick={() => {
-            window.location.href = "http://localhost:5000/api/auth/google";}}>
+            window.location.href = `https://eventra-j1tj.onrender.com/api/auth/google`;}}>
             <Mail size={18} />
             Google
           </button>
