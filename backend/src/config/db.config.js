@@ -19,6 +19,8 @@ if (!supabaseUrl || !supabaseKey || !supabaseServiceKey) {
     throw new Error("Відсутні необхідні змінні оточення для підключення до Supabase");
 } 
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey); 
+const supabaseAuth = createClient(supabaseUrl, supabaseKey);
 
-module.exports = supabase; 
+const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+module.exports = { supabaseAuth, supabaseAdmin }; 
