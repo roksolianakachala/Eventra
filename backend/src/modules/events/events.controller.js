@@ -1,3 +1,4 @@
+const { supabaseAuth } = require('../../config/db.config.js'); 
 const eventsService = require('./events.service');
 
 const getEventById = async (req, res) => { 
@@ -34,7 +35,27 @@ const getEventById = async (req, res) => {
 const createEvent = async (req, res) => { 
     try {
         const eventData = req.body; 
+        const authData = req.headers.authorization; 
 
+        if (!authData) {
+            return res.status(401).json({
+                status: "error",
+                message: "Need authorization header" 
+            });
+        } 
+
+        const token = authData.split(" ")[1]; 
+        const {data: { user }, error} = await supabaseAuth.auth.getUser(token); 
+        
+        if (error || !user) { 
+            return res.status(401).json({
+                status: "error",
+                message: error.message || "Invalid token"  
+            });
+        } 
+        
+        const creatorId = user.id; 
+        
         if (!eventData.title || !eventData.category ||  !eventData.access_type || !eventData.start_time || !eventData.location) {
             return res.status(400).json({
                 status: "error",
@@ -42,8 +63,6 @@ const createEvent = async (req, res) => {
             });
         } 
 
-        const creatorId = "e72264e4-debf-4ad8-9415-53127244c04d"; // ТИМЧАСОВО, замінити на реальний ID користувача після реалізації аутентифікації 
-        
         const newEvent = await eventsService.createNewEvent(creatorId, eventData); 
 
         res.status(201).json({ 

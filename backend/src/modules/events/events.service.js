@@ -1,7 +1,7 @@
-const supabase = require('../../config/db.config'); 
+const { supabaseAuth, supabaseAdmin } = require('../../config/db.config'); 
 
 const findEvent = async (eventId) => { 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAuth
         .from('events')
         .select('*')          
         .eq('id', eventId)    
@@ -24,7 +24,7 @@ const createNewEvent = async (creatorId, eventData) => {
         throw new Error("Подія не може починатися в минулому часі!");
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
         .from('events') 
         .insert([
             {
