@@ -1,6 +1,48 @@
 import "./AuthPages.css";
 import { CalendarDays, User, Lock, Eye, Mail, UserRound, Apple } from "lucide-react";
+import { useState } from "react";
+import axios from "axios";
+
 function RegisterPage() {
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    birthDate: "",
+    gender: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+  if (formData.password !== formData.confirmPassword) {
+    alert("Паролі не співпадають");
+    return;
+  }
+
+  try {
+    await axios.post(
+      `https://eventra-j1tj.onrender.com/api/auth/register`,
+      formData
+    );
+
+    alert("Реєстрація успішна");
+  } catch (error) {
+    alert("Помилка реєстрації");
+  }
+};
+
+
   return (
     <div className="auth-page">
       <section className="auth-info">
@@ -26,13 +68,13 @@ function RegisterPage() {
           Створіть акаунт, щоб користуватися всіма можливостями Eventra
         </p>
 
-        <form className="auth-form">
+        <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-two-columns">
             <label>
               Ім’я
               <div className="auth-input">
                 <User size={18} />
-                <input type="text" placeholder="Введіть ваше ім’я" />
+                <input type="text" name="firstName" placeholder="Введіть ваше ім’я" onChange={handleChange}/>
               </div>
             </label>
 
@@ -40,7 +82,7 @@ function RegisterPage() {
               Прізвище
               <div className="auth-input">
                 <User size={18} />
-                <input type="text" placeholder="Введіть ваше прізвище" />
+                <input type="text" name="lastName" placeholder="Введіть ваше прізвище" onChange={handleChange}/>
               </div>
             </label>
           </div>
@@ -49,7 +91,7 @@ function RegisterPage() {
             Email або номер телефону
             <div className="auth-input">
               <Mail size={18} />
-              <input type="email" placeholder="Введіть email" />
+              <input type="email" name="email" placeholder="Введіть email" onChange={handleChange}/>
             </div>
           </label>
 
@@ -60,7 +102,7 @@ function RegisterPage() {
                 <div className="input-with-icon">
                   <Lock size={18} />
 
-                  <input type="password" placeholder="Введіть пароль" />
+                  <input type="password" name="password" placeholder="Введіть пароль" onChange={handleChange}/>
 
                   <Eye size={18} className="eye-icon" />
                 </div>
@@ -73,7 +115,7 @@ function RegisterPage() {
                 <div className="input-with-icon">
                   <Lock size={18} />
 
-                  <input type="password" placeholder="Підтвердіть пароль" />
+                  <input type="password" name="confirmPassword" placeholder="Підтвердіть пароль" onChange={handleChange}/>
 
                   <Eye size={18} className="eye-icon" />
                 </div>
@@ -86,14 +128,14 @@ function RegisterPage() {
               Дата народження
               <div className="auth-input">
                 <CalendarDays size={18} />
-                <input type="date" placeholder="ДД . ММ . РРРР" />
+                <input type="date" name="birthDate" placeholder="ДД . ММ . РРРР" onChange={handleChange}/>
               </div>
             </label>
 
             <label>
               Стать (необов’язково)
               <div className="auth-input">
-                <input type="text" placeholder="Оберіть стать" />
+                <input type="text" name="gender" placeholder="Оберіть стать" onChange={handleChange}/>
                 <span>⌄</span>
               </div>
             </label>
@@ -117,7 +159,8 @@ function RegisterPage() {
         </div>
 
         <div className="social-buttons">
-          <button className="social-btn">
+          <button className="social-btn" onClick={() => {
+            window.location.href = `https://eventra-j1tj.onrender.com/api/auth/google`;}}>
             <Mail size={18} />
             Google
           </button>
