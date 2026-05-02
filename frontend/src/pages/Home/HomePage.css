@@ -340,7 +340,12 @@
 }
 
 @media (max-width: 768px) {
+  .home-page {
+    width: 100%;
+  }
+
   .hero {
+    width: 100%;
     flex-direction: column;
     min-height: 0;
     padding: 20px 16px;
@@ -395,7 +400,7 @@
   }
 
   .scroll-row .event-card {
-    min-width: calc(100vw - 40px);
+    min-width: 82vw;
   }
 
   .scroll-btn.left {
@@ -434,7 +439,7 @@
   }
 
   .scroll-row .event-card {
-    min-width: calc(100vw - 28px);
+    min-width: 84vw;
   }
 
   .scroll-btn {

@@ -4,6 +4,7 @@
 
 html {
   width: 100%;
+  min-height: 100%;
   overflow-x: hidden;
 }
 
@@ -13,6 +14,13 @@ body {
   background: #f8fbff;
   color: #0f172a;
   width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100%;
   overflow-x: hidden;
 }
 
@@ -99,12 +107,71 @@ textarea:focus-visible {
 }
 
 @media (max-width: 768px) {
+  html,
+  body,
+  #root,
+  .app-layout,
+  .main-area {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   .main-area {
     width: 100%;
   }
 
   .page-content {
+    display: block;
+    max-width: none;
+    margin: 0;
     padding: 12px;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .home-page,
+  .events-page,
+  .people-page,
+  .tutors-page,
+  .messages-page,
+  .saved-page,
+  .profile-page,
+  .settings-page,
+  .create-event-page,
+  .become-tutor-page,
+  .auth-page {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+  }
+
+  .page-content,
+  .page-content > *,
+  .app-layout,
+  .main-area {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+  }
+
+  .app-main,
+  .page,
+  .page-container,
+  .content,
+  .main-content,
+  .dashboard-content {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    box-sizing: border-box;
   }
 
   button,

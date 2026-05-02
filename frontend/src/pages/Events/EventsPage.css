@@ -447,6 +447,10 @@
 }
 
 @media (max-width: 768px) {
+  .events-page {
+    width: 100%;
+  }
+
   .events-title h1 {
     font-size: 28px;
   }
@@ -467,7 +471,7 @@
 
   .scroll-row .top-event-card,
   .scroll-row .small-event-card {
-    min-width: calc(100vw - 40px);
+    min-width: 82vw;
   }
 
   .scroll-btn.left {
@@ -509,7 +513,7 @@
 
   .scroll-row .top-event-card,
   .scroll-row .small-event-card {
-    min-width: calc(100vw - 28px);
+    min-width: 84vw;
   }
 
   .scroll-btn {
