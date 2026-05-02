@@ -1,0 +1,287 @@
+.create-event-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.create-event-header {
+  margin-bottom: 24px;
+}
+
+.create-event-header h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+}
+
+.create-event-header p {
+  margin: 0;
+  color: #475569;
+  font-size: 17px;
+}
+
+.create-event-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.create-event-form,
+.event-preview {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 28px;
+  min-width: 0;
+}
+
+.event-image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.event-image-box {
+  height: 190px;
+  border: 2px dashed #cfdbee;
+  border-radius: 18px;
+  background: #f8fbff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #075ee8;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  min-height: 140px;
+}
+
+.event-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-image-upload input {
+  display: none;
+}
+
+
+.event-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.create-event-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.create-event-form input,
+.create-event-form select,
+.create-event-form textarea {
+  width: 100%;
+  border: 1px solid #cfdbee;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.create-event-form input:focus,
+.create-event-form select:focus,
+.create-event-form textarea:focus {
+  border-color: #075ee8;
+}
+
+.event-full-width {
+  margin-top: 20px;
+}
+
+.create-event-form textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.event-form-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.event-form-actions button {
+  height: 50px;
+  padding: 0 28px;
+  border-radius: 10px;
+  border: none;
+
+  background: #075ee8;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.event-secondary-btn {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #cfdbee;
+}
+
+.event-preview {
+  position: sticky;
+  top: 110px;
+}
+
+.event-preview h2 {
+  margin-bottom: 22px;
+  font-size: 24px;
+}
+
+.event-preview-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.event-preview-image {
+  height: 180px;
+  background: #eaf3ff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.event-preview-body {
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px; 
+}
+
+.event-preview-category {
+  display: inline-block;
+  background: #eaf3ff;
+  color: #075ee8;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  width: fit-content;
+}
+
+.event-preview-body h3 {
+  margin: 4px 0 6px;
+  font-size: 20px;
+}
+
+.icon-text,
+.upload-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  font-size: 14px;
+}
+
+.icon-text svg,
+.upload-placeholder svg {
+  color: #94a3b8;
+}
+
+.event-preview-description {
+  margin-top: 10px;
+}
+
+.event-preview-description h4 {
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.event-preview-description p {
+  color: #475569;
+  line-height: 1.5;
+}
+
+
+@media (max-width: 1200px) {
+  .create-event-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .event-preview {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .create-event-header h1 {
+    font-size: 28px;
+  }
+
+  .create-event-header {
+    margin-bottom: 18px;
+  }
+
+  .create-event-form,
+  .event-preview {
+    padding: 20px;
+    border-radius: 14px;
+  }
+
+  .event-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .create-event-header h1 {
+    font-size: 26px;
+  }
+
+  .create-event-header p {
+    font-size: 15px;
+  }
+
+  .event-image-box {
+    height: 150px;
+  }
+
+  .event-form-actions {
+    flex-direction: column;
+  }
+
+  .event-form-actions button {
+    width: 100%;
+    height: 48px;
+  }
+}
+
+@media (max-width: 420px) {
+  .create-event-form,
+  .event-preview {
+    padding: 14px;
+  }
+
+  .event-preview-body {
+    padding: 14px;
+  }
+}

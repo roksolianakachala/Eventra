@@ -1,0 +1,283 @@
+.people-page {
+  width: 100%;
+  min-width: 0;
+}
+
+/* HEADER */
+.people-header {
+  margin-bottom: 24px;
+}
+
+.people-header h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+}
+
+.people-header p {
+  margin: 0;
+  color: #475569;
+  font-size: 17px;
+}
+
+/* FILTERS */
+.people-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.category-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  height: 42px;
+  padding: 0 14px;
+
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  min-height: 44px;
+}
+
+.category-btn svg {
+  color: #64748b;
+}
+
+.category-btn:hover {
+  background: #eaf3ff;
+  border-color: #c7dcff;
+}
+
+.category-btn:hover svg {
+  color: #075ee8;
+}
+
+.people-filters .active {
+  background: #075ee8;
+  color: #ffffff;
+  border-color: #075ee8;
+}
+
+.people-filters .active svg {
+  color: #ffffff;
+}
+
+/* GRID */
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+/* CARD */
+.person-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-height: 280px;
+
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px;
+  min-width: 0;
+}
+
+/* CONTENT */
+.person-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* TOP */
+.person-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.person-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #075ee8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.person-top h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.icon-text svg {
+  color: #94a3b8;
+}
+
+/* BIO */
+.person-bio {
+  min-height: 54px;
+  margin: 12px 0;
+  color: #334155;
+  line-height: 1.5;
+}
+
+/* INTERESTS */
+.person-interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.person-interests span {
+  background: #eaf3ff;
+  color: #334155;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/* 🔥 КНОПКИ ВИРІВНЯНІ */
+.person-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.person-actions button {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  height: 42px;
+  border-radius: 9px;
+  border: none;
+
+  background: #075ee8;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  min-height: 44px;
+}
+
+.person-actions button:hover {
+  opacity: 0.9;
+}
+
+.person-actions button.secondary {
+  background: #eaf3ff;
+  color: #075ee8;
+}
+
+@media (max-width: 1200px) {
+  .people-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .people-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .people-header h1 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .people-header {
+    margin-bottom: 18px;
+  }
+
+  .people-header h1 {
+    font-size: 28px;
+  }
+
+  .people-header p {
+    font-size: 15px;
+  }
+
+  .people-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+
+  .people-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-btn {
+    flex: 0 0 auto;
+    height: 44px;
+  }
+
+  .person-card {
+    min-height: 0;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .people-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .people-header h1 {
+    font-size: 26px;
+  }
+
+  .people-header p {
+    font-size: 15px;
+  }
+
+  .person-card {
+    padding: 16px;
+  }
+
+  .person-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 420px) {
+  .person-top {
+    align-items: flex-start;
+  }
+
+  .person-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
