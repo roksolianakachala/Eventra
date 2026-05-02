@@ -16,6 +16,7 @@ import {
   SlidersHorizontal,
   Star,
   User,
+  X,
 } from "lucide-react";
 
 import { useAuth } from "../../app/providers";
@@ -162,6 +163,7 @@ function MessagesPage() {
   const [messageText, setMessageText] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [showActions, setShowActions] = useState(false);
+  const [isInfoPanelOpen, setIsInfoPanelOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(5);
 
   const selectedChat = conversations.find((chat) => chat.id === selectedConversation);
@@ -189,6 +191,7 @@ function MessagesPage() {
   const selectConversation = (conversation) => {
     setSelectedConversation(conversation.id);
     setShowActions(false);
+    setIsInfoPanelOpen(false);
     setConversations((current) =>
       current.map((item) => (item.id === conversation.id ? { ...item, unread: 0 } : item))
     );
@@ -356,13 +359,14 @@ function MessagesPage() {
                   onClick={() => {
                     setSelectedConversation(null);
                     setShowActions(false);
+                    setIsInfoPanelOpen(false);
                   }}
                 >
                   <ArrowLeft size={18} />
                   Назад
                 </button>
 
-                <div className="chat-person">
+                <button className="chat-person chat-person-trigger" type="button" onClick={() => setIsInfoPanelOpen(true)}>
                   <div className={`chat-avatar ${selectedChat.support ? "support" : ""}`}>
                     {selectedChat.avatar}
                   </div>
@@ -372,7 +376,7 @@ function MessagesPage() {
                       <span></span> {selectedChat.online ? "Онлайн" : "Був(ла) нещодавно"}
                     </p>
                   </div>
-                </div>
+                </button>
 
                 <div className="chat-menu-wrap">
                   <button
@@ -428,7 +432,13 @@ function MessagesPage() {
               </div>
             </section>
 
-            <aside className="chat-profile-panel">
+            {isInfoPanelOpen && <div className="chat-info-overlay" onClick={() => setIsInfoPanelOpen(false)} />}
+
+            <aside className={`chat-profile-panel chat-info-panel ${isInfoPanelOpen ? "open" : ""}`}>
+              <button className="chat-info-close" type="button" onClick={() => setIsInfoPanelOpen(false)} aria-label="Close chat info">
+                <X size={22} />
+              </button>
+
               <div className={`profile-avatar-large ${selectedChat.support ? "support" : ""}`}>
                 {selectedChat.avatar}
               </div>
