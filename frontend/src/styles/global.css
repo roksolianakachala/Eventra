@@ -128,7 +128,7 @@ textarea:focus-visible {
     display: block;
     max-width: none;
     margin: 0;
-    padding: 12px;
+    padding: 16px 12px 12px;
     overflow-x: hidden;
     box-sizing: border-box;
   }
@@ -192,6 +192,6 @@ textarea:focus-visible {
 
 @media (max-width: 420px) {
   .page-content {
-    padding: 10px;
+    padding: 14px 10px 10px;
   }
 }

@@ -1,5 +1,5 @@
 import "./AuthPages.css";
-import { CalendarDays, User, Lock, Eye, Mail, UserRound, Apple, ChevronDown } from "lucide-react";
+import { CalendarDays, User, Lock, Eye, EyeOff, Mail, UserRound, Apple } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../app/providers";
@@ -8,6 +8,8 @@ import { getGoogleAuthUrl } from "../../services/authService";
 function RegisterPage() {
   const navigate = useNavigate();
   const { registerUser } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -79,7 +81,7 @@ function RegisterPage() {
               Ім’я
               <div className="auth-input">
                 <User size={18} />
-                <input type="text" name="firstName" placeholder="Введіть ваше ім’я" onChange={handleChange}/>
+                <input type="text" name="firstName" placeholder="Введіть ваше ім’я" onChange={handleChange} required />
               </div>
             </label>
 
@@ -87,7 +89,7 @@ function RegisterPage() {
               Прізвище
               <div className="auth-input">
                 <User size={18} />
-                <input type="text" name="lastName" placeholder="Введіть ваше прізвище" onChange={handleChange}/>
+                <input type="text" name="lastName" placeholder="Введіть ваше прізвище" onChange={handleChange} required />
               </div>
             </label>
           </div>
@@ -96,7 +98,7 @@ function RegisterPage() {
             Email або номер телефону
             <div className="auth-input">
               <Mail size={18} />
-              <input type="email" name="email" placeholder="Введіть email" onChange={handleChange}/>
+              <input type="email" name="email" placeholder="Введіть email" onChange={handleChange} required />
             </div>
           </label>
 
@@ -107,9 +109,22 @@ function RegisterPage() {
                 <div className="input-with-icon">
                   <Lock size={18} />
 
-                  <input type="password" name="password" placeholder="Введіть пароль" onChange={handleChange}/>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Введіть пароль"
+                    onChange={handleChange}
+                    required
+                  />
 
-                  <Eye size={18} className="eye-icon" />
+                  <button
+                    className="eye-icon"
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    aria-label={showPassword ? "Сховати пароль" : "Показати пароль"}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
               </div>
             </label>
@@ -120,9 +135,22 @@ function RegisterPage() {
                 <div className="input-with-icon">
                   <Lock size={18} />
 
-                  <input type="password" name="confirmPassword" placeholder="Підтвердіть пароль" onChange={handleChange}/>
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Підтвердіть пароль"
+                    onChange={handleChange}
+                    required
+                  />
 
-                  <Eye size={18} className="eye-icon" />
+                  <button
+                    className="eye-icon"
+                    type="button"
+                    onClick={() => setShowConfirmPassword((current) => !current)}
+                    aria-label={showConfirmPassword ? "Сховати підтвердження пароля" : "Показати підтвердження пароля"}
+                  >
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
               </div>
             </label>
@@ -133,15 +161,20 @@ function RegisterPage() {
               Дата народження
               <div className="auth-input">
                 <CalendarDays size={18} />
-                <input type="date" name="birthDate" placeholder="ДД . ММ . РРРР" onChange={handleChange}/>
+                <input type="date" name="birthDate" placeholder="ДД . ММ . РРРР" onChange={handleChange} required />
               </div>
             </label>
 
             <label>
-              Стать (необов’язково)
+              Стать
               <div className="auth-input">
-                <input type="text" name="gender" placeholder="Оберіть стать" onChange={handleChange}/>
-                <ChevronDown size={18} />
+                <select name="gender" value={formData.gender} onChange={handleChange} required>
+                  <option value="">Оберіть стать</option>
+                  <option value="male">Чоловіча</option>
+                  <option value="female">Жіноча</option>
+                  <option value="other">Інше</option>
+                  <option value="prefer_not_to_say">Не хочу вказувати</option>
+                </select>
               </div>
             </label>
           </div>

@@ -83,12 +83,14 @@
   min-width: 0;
 }
 
-.auth-input input {
+.auth-input input,
+.auth-input select {
   width: 100%;
   border: none;
   outline: none;
   font-size: 15px;
   color: #111827;
+  background: transparent;
 }
 
 .auth-input input::placeholder {
@@ -190,11 +192,13 @@
   min-width: 0;
 }
 
-.input-with-icon input {
+.input-with-icon input,
+.auth-input select {
   flex: 1;
   border: none;
   outline: none;
   font-size: 15px;
+  min-width: 0;
 }
 
 .input-with-icon svg {
@@ -202,7 +206,23 @@
 }
 
 .eye-icon {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  flex-shrink: 0;
+}
+
+.eye-icon:hover {
+  background: #eaf3ff;
+  color: #075ee8;
 }
 .social-buttons {
   display: flex;
@@ -245,11 +265,13 @@
   height: 46px;
 }
 
-.auth-input input {
+.auth-input input,
+.auth-input select {
   flex: 1;
   border: none;
   outline: none;
   font-size: 15px;
+  min-width: 0;
 }
 
 .auth-input svg {
