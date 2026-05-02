@@ -17,13 +17,11 @@ app.use(cors({
 app.use(express.json()); 
 
 
-
 const authRouter = require("./src/modules/auth/auth.router");
+const eventsRouter = require("./src/modules/events/events.router"); 
 
 app.use("/api/auth", authRouter);
-
-
-
+app.use("/api/events", eventsRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`); 
