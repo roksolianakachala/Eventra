@@ -31,20 +31,20 @@ function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  if (formData.password !== formData.confirmPassword) {
-    alert("Паролі не співпадають");
-    return;
-  }
+    if (formData.password !== formData.confirmPassword) {
+      alert("Паролі не співпадають");
+      return;
+    }
 
-  try {
-    await registerUser(formData);
+    try {
+      await registerUser(formData);
 
-    alert("Реєстрація успішна");
-    navigate("/profile");
-  } catch (error) {
-    alert(error.message || "Помилка реєстрації");
-  }
-};
+      alert("Реєстрація успішна");
+      navigate("/profile");
+    } catch (error) {
+      alert(error.message || "Помилка реєстрації");
+    }
+  };
 
   const handleSocialPlaceholder = () => {
     alert("Цей спосіб реєстрації буде доступний після підключення backend.");
@@ -55,7 +55,7 @@ function RegisterPage() {
       <section className="auth-info">
         <h1>
           Створіть свій акаунт<br />
-           <h2 className="auth-title">
+          <h2 className="auth-title">
             Ласкаво просимо до <span>Eventra</span>
           </h2>
         </h1>
@@ -160,8 +160,12 @@ function RegisterPage() {
             <label>
               Дата народження
               <div className="auth-input">
-                <CalendarDays size={18} />
-                <input type="date" name="birthDate" placeholder="ДД . ММ . РРРР" onChange={handleChange} required />
+                <input
+                  type="date"
+                  name="birthDate"
+                  onChange={handleChange}
+                  required
+                />
               </div>
             </label>
 
@@ -198,7 +202,8 @@ function RegisterPage() {
 
         <div className="social-buttons">
           <button className="social-btn" type="button" onClick={() => {
-            window.location.href = getGoogleAuthUrl();}}>
+            window.location.href = getGoogleAuthUrl();
+          }}>
             <Mail size={18} />
             Google
           </button>
