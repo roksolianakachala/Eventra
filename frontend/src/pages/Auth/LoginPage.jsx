@@ -1,5 +1,5 @@
 import "./AuthPages.css";
-import { Smile, Lock, Eye, Mail, UserRound, Apple } from "lucide-react";
+import { Smile, Lock, Eye, EyeOff, Mail, UserRound, Apple } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../app/providers";
@@ -7,6 +7,7 @@ import { getGoogleAuthUrl } from "../../services/authService";
 function LoginPage() {
   const navigate = useNavigate();
   const { loginUser } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -75,9 +76,21 @@ function LoginPage() {
               <div className="input-with-icon">
                 <Lock size={18} />
 
-                <input type="password" name="password" placeholder="Введіть пароль" onChange={handleChange} />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Введіть пароль"
+                  onChange={handleChange}
+                />
 
-                <Eye size={18} className="eye-icon" />
+                <button
+                  className="eye-icon"
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  aria-label={showPassword ? "Сховати пароль" : "Показати пароль"}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
           </label>

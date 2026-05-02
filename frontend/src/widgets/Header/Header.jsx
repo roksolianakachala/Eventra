@@ -4,7 +4,7 @@ import { useAuth } from "../../app/providers";
 import "./Header.css";
 
 function Header({ onMenuClick }) {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   const handleNotificationsClick = () => {
     // TODO: Connect notifications to the backend notifications API.
@@ -35,11 +35,18 @@ function Header({ onMenuClick }) {
           <MessageSquare size={22} />
         </Link>
 
-        <div className="user">
-          <div className="avatar">{user.initials}</div>
-          <span>{user.fullName}</span>
-          <ChevronDown size={18} />
-        </div>
+        {isAuthenticated ? (
+          <div className="user">
+            <div className="avatar">{user.initials}</div>
+            <span>{user.fullName}</span>
+            <ChevronDown size={18} />
+          </div>
+        ) : (
+          <div className="header-auth-actions">
+            <Link to="/login">Увійти</Link>
+            <Link to="/register">Реєстрація</Link>
+          </div>
+        )}
       </div>
     </header>
   );

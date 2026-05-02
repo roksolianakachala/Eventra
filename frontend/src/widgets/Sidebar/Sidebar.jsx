@@ -11,9 +11,11 @@ import {
   X,
 } from "lucide-react";
 
+import { useAuth } from "../../app/providers";
 import "./Sidebar.css";
 
 function Sidebar({ isOpen, onClose }) {
+  const { isAuthenticated } = useAuth();
   const menuItems = [
     { to: "/", label: "Головна", icon: Home, end: true },
     { to: "/events", label: "Події", icon: CalendarDays },
@@ -49,7 +51,7 @@ function Sidebar({ isOpen, onClose }) {
           ))}
         </nav>
 
-        <div className="sidebar-card">
+        {!isAuthenticated && <div className="sidebar-card">
           <div className="card-icon">
             <Users size={36} />
           </div>
@@ -62,7 +64,7 @@ function Sidebar({ isOpen, onClose }) {
           <NavLink to="/register" onClick={onClose}>
             <button type="button">Приєднатися</button>
           </NavLink>
-        </div>
+        </div>}
       </aside>
     </>
   );
