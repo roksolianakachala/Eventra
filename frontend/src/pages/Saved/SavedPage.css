@@ -1,5 +1,6 @@
 .saved-page {
   width: 100%;
+  min-width: 0;
 }
 
 .saved-header {
@@ -21,6 +22,8 @@
   display: flex;
   gap: 14px;
   margin-bottom: 28px;
+  overflow-x: auto;
+  padding-bottom: 4px;
 }
 
 .saved-tabs button {
@@ -31,6 +34,7 @@
   background: #ffffff;
   font-weight: 600;
   cursor: pointer;
+  flex: 0 0 auto;
 }
 
 .saved-tabs button.active {
@@ -50,6 +54,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   overflow: hidden;
+  min-width: 0;
 }
 
 .saved-image {
@@ -94,6 +99,7 @@
 .saved-info h3 {
   margin: 14px 0 12px;
   font-size: 20px;
+  overflow-wrap: anywhere;
 }
 
 .saved-info p {
@@ -151,4 +157,48 @@
 
 .saved-bookmark svg {
   color: #075ee8;
+}
+
+@media (max-width: 1200px) {
+  .saved-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .saved-header h1 {
+    font-size: 30px;
+  }
+
+  .saved-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .saved-header h1 {
+    font-size: 26px;
+  }
+
+  .saved-header p {
+    font-size: 15px;
+  }
+
+  .saved-image {
+    height: 170px;
+  }
+
+  .saved-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .saved-info {
+    padding: 14px;
+  }
+
+  .saved-info h3 {
+    font-size: 18px;
+  }
 }

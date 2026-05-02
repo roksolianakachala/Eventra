@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./TutorsPage.css";
-import { Star, MapPin } from "lucide-react";
+import { GraduationCap, Star, MapPin } from "lucide-react";
 import "./TutorsPage.css";
 
 function TutorsPage() {
@@ -41,7 +41,12 @@ function TutorsPage() {
     },
   ];
 
-  const [selectedTutor, setSelectedTutor] = useState(tutors[0]);
+  const [selectedTutor, setSelectedTutor] = useState(null);
+
+  const handleContactTutor = () => {
+    // TODO: Connect tutor contact requests to backend messaging/booking flow.
+    navigate("/messages");
+  };
 
   return (
     <div className="tutors-page">
@@ -66,7 +71,9 @@ function TutorsPage() {
                 }`}
               onClick={() => setSelectedTutor(tutor)}
             >
-              <div className="avatar">👨‍🏫</div>
+              <div className="avatar">
+                <GraduationCap size={28} />
+              </div>
 
               <div>
                 <h3>{tutor.name}</h3>
@@ -81,10 +88,13 @@ function TutorsPage() {
       </div>
 
       {/* RIGHT */}
+      {selectedTutor && (
       <div className="tutors-right">
         <div className="tutor-details">
           <div className="tutor-header">
-            <div className="avatar big">👨‍🏫</div>
+            <div className="avatar big">
+              <GraduationCap size={42} />
+            </div>
 
             <span className="subject">{selectedTutor.subject}</span>
 
@@ -107,9 +117,10 @@ function TutorsPage() {
             <p>{selectedTutor.experience}</p>
           </div>
 
-          <button className="contact-btn">Зв’язатися</button>
+          <button className="contact-btn" type="button" onClick={handleContactTutor}>Зв’язатися</button>
         </div>
       </div>
+      )}
     </div>
   );
 }

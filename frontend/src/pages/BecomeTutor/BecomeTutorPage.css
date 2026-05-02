@@ -1,5 +1,6 @@
 .become-tutor-page {
   width: 100%;
+  min-width: 0;
 }
 
 .become-tutor-header {
@@ -29,6 +30,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 28px;
+  min-width: 0;
 }
 
 .photo-upload {
@@ -52,6 +54,15 @@
   font-weight: 700;
   cursor: pointer;
   overflow: hidden;
+}
+
+.photo-upload-box span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 10px;
 }
 
 .photo-upload-box img {
@@ -181,6 +192,10 @@
 
 .preview-card > p {
   margin: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .preview-section {
@@ -207,15 +222,60 @@
   font-weight: 700;
 }
 @media (max-width: 1200px) {
-  .profile-layout,
-  .messages-layout,
-  .create-event-layout,
   .become-tutor-layout {
     grid-template-columns: 1fr;
   }
 
-  .tutor-preview,
-  .event-preview {
+  .tutor-preview {
     position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .become-tutor-header h1 {
+    font-size: 30px;
+  }
+
+  .become-tutor-form,
+  .tutor-preview {
+    padding: 22px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .become-tutor-header h1 {
+    font-size: 26px;
+  }
+
+  .become-tutor-header p {
+    font-size: 15px;
+  }
+
+  .photo-upload-box {
+    width: 140px;
+    height: 140px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .become-tutor-form,
+  .tutor-preview {
+    padding: 14px;
+  }
+
+  .preview-card h3 {
+    font-size: 20px;
   }
 }

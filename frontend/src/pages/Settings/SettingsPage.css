@@ -1,5 +1,6 @@
 .settings-page {
   width: 100%;
+  min-width: 0;
 }
 
 .settings-header {
@@ -29,6 +30,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 24px;
+  min-width: 0;
 }
 
 .settings-card-title {
@@ -88,6 +90,7 @@
   color: #ffffff;
   font-weight: 700;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .settings-field {
@@ -161,4 +164,58 @@
 
 .danger-btn {
   background: #dc2626 !important;
+}
+
+@media (max-width: 992px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .danger-card {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .settings-header h1 {
+    font-size: 30px;
+  }
+
+  .settings-row,
+  .settings-action-row {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 576px) {
+  .settings-header h1 {
+    font-size: 26px;
+  }
+
+  .settings-header p {
+    font-size: 15px;
+  }
+
+  .settings-card {
+    padding: 18px;
+  }
+
+  .settings-card-title h2 {
+    font-size: 20px;
+  }
+
+  .settings-row,
+  .settings-action-row {
+    flex-direction: column;
+  }
+
+  .settings-action-row button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .settings-card {
+    padding: 14px;
+  }
 }

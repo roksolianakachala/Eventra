@@ -1,7 +1,19 @@
 import "./SavedPage.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CalendarDays, MapPin, Star } from "lucide-react";
 
 function SavedPage() {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("Усі");
+
+  const handleSavedPlaceholder = () => {
+    // TODO: Connect saved item updates to the backend saved-items API.
+    alert("Збережені елементи будуть оновлюватися після підключення backend.");
+  };
+
+  const tabs = ["Усі", "Події", "Люди", "Репетитори"];
+
   const savedEvents = [
     {
       title: "Концерт гурту Без обмежень",
@@ -37,10 +49,16 @@ function SavedPage() {
       </div>
 
       <div className="saved-tabs">
-        <button className="active">Усі</button>
-        <button>Події</button>
-        <button>Люди</button>
-        <button>Репетитори</button>
+        {tabs.map((tab) => (
+          <button
+            className={activeTab === tab ? "active" : ""}
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
       <div className="saved-grid">
@@ -49,7 +67,7 @@ function SavedPage() {
             <div className="saved-image">
               <img src={event.image} alt={event.title} />
 
-              <button className="saved-bookmark">
+              <button className="saved-bookmark" type="button" onClick={handleSavedPlaceholder}>
                 <Star size={18} />
               </button>
             </div>
@@ -72,8 +90,8 @@ function SavedPage() {
               </div>
 
               <div className="saved-actions">
-                <button>Детальніше</button>
-                <button className="remove-btn">Прибрати</button>
+                <button type="button" onClick={() => navigate("/events")}>Детальніше</button>
+                <button className="remove-btn" type="button" onClick={handleSavedPlaceholder}>Прибрати</button>
               </div>
             </div>
           </article>

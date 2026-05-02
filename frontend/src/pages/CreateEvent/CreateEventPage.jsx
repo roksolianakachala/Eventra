@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Calendar, Clock, MapPin, Users, Ticket, ImagePlus,} from "lucide-react";
 import "./CreateEventPage.css";
 
 function CreateEventPage() {
+  const navigate = useNavigate();
   const [event, setEvent] = useState({
     title: "",
     category: "Музика",
@@ -30,6 +32,12 @@ function CreateEventPage() {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: Send new event data to the backend events API.
+    alert("Публікація події буде доступна після підключення backend.");
+  };
+
   return (
     <div className="create-event-page">
       <div className="create-event-header">
@@ -41,7 +49,7 @@ function CreateEventPage() {
       </div>
 
       <div className="create-event-layout">
-        <form className="create-event-form">
+        <form className="create-event-form" onSubmit={handleSubmit}>
           <label className="event-image-upload">
             Обкладинка події
             <div className="event-image-box">
@@ -171,7 +179,7 @@ function CreateEventPage() {
 
           <div className="event-form-actions">
             <button type="submit">Опублікувати подію</button>
-            <button type="button" className="event-secondary-btn">
+            <button type="button" className="event-secondary-btn" onClick={() => navigate("/events")}>
               Скасувати
             </button>
           </div>

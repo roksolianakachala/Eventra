@@ -1,30 +1,43 @@
-import { Users, Bell, MessageSquare, Search, ChevronDown } from "lucide-react";
+import { Users, Bell, MessageSquare, Search, ChevronDown, Menu } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../app/providers";
 import "./Header.css";
 
-function Header() {
+function Header({ onMenuClick }) {
+  const { user } = useAuth();
+
+  const handleNotificationsClick = () => {
+    // TODO: Connect notifications to the backend notifications API.
+    alert("Сповіщення будуть доступні після підключення backend.");
+  };
+
   return (
     <header className="header">
+      <button className="menu-btn" type="button" onClick={onMenuClick} aria-label="Open menu">
+        <Menu size={24} />
+      </button>
+
       <div className="search">
         <Search size={20} />
         <input placeholder="Пошук людей і подій за інтересами" />
       </div>
 
       <div className="header-actions">
-        <button className="header-icon-btn">
+        <Link className="header-icon-btn" to="/people" aria-label="Open people">
           <Users size={22} />
-        </button>
+        </Link>
 
-        <button className="header-icon-btn">
+        <button className="header-icon-btn" type="button" onClick={handleNotificationsClick}>
           <Bell size={22} />
         </button>
 
-        <button className="header-icon-btn">
+        <Link className="header-icon-btn" to="/messages" aria-label="Open messages">
           <MessageSquare size={22} />
-        </button>
+        </Link>
 
         <div className="user">
-          <div className="avatar">М</div>
-          <span>Марія Іваненко</span>
+          <div className="avatar">{user.initials}</div>
+          <span>{user.fullName}</span>
           <ChevronDown size={18} />
         </div>
       </div>

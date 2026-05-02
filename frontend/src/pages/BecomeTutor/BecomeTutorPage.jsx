@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { GraduationCap, ImagePlus, MapPin, Star } from "lucide-react";
 import "./BecomeTutorPage.css";
 
 function BecomeTutorPage() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -29,6 +32,12 @@ function BecomeTutorPage() {
     }
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // TODO: Send tutor application data to the backend tutor application API.
+    alert("Анкету буде надіслано після підключення backend.");
+  };
+
   return (
     <div className="become-tutor-page">
       <div className="become-tutor-header">
@@ -37,14 +46,17 @@ function BecomeTutorPage() {
       </div>
 
       <div className="become-tutor-layout">
-        <form className="become-tutor-form">
+        <form className="become-tutor-form" onSubmit={handleSubmit}>
           <label className="photo-upload">
             Фото профілю
             <div className="photo-upload-box">
               {form.photo ? (
                 <img src={form.photo} alt="Фото репетитора" />
               ) : (
-                <span>+ Додати фото</span>
+                <span>
+                  <ImagePlus size={18} />
+                  Додати фото
+                </span>
               )}
             </div>
             <input type="file" accept="image/*" onChange={handlePhotoChange} />
@@ -114,7 +126,7 @@ function BecomeTutorPage() {
 
           <div className="form-actions">
             <button type="submit">Надіслати анкету</button>
-            <button type="button" className="secondary-btn">Скасувати</button>
+            <button type="button" className="secondary-btn" onClick={() => navigate("/tutors")}>Скасувати</button>
           </div>
         </form>
 
@@ -123,7 +135,7 @@ function BecomeTutorPage() {
 
           <div className="preview-card">
             <div className="preview-photo">
-              {form.photo ? <img src={form.photo} alt="Preview" /> : <span>👨‍🏫</span>}
+              {form.photo ? <img src={form.photo} alt="Preview" /> : <GraduationCap size={42} />}
             </div>
 
             <span className="preview-subject">{form.subject}</span>
@@ -132,8 +144,8 @@ function BecomeTutorPage() {
               {form.firstName || "Ім’я"} {form.lastName || "Прізвище"}
             </h3>
 
-            <p>⭐ 0.0 (0 відгуків)</p>
-            <p>📍 {form.city || "Ваше місто"}</p>
+            <p><Star size={16} /> 0.0 (0 відгуків)</p>
+            <p><MapPin size={16} /> {form.city || "Ваше місто"}</p>
 
             <div className="preview-section">
               <h4>Про себе</h4>

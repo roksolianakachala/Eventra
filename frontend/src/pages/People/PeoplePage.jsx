@@ -11,8 +11,20 @@ import {
 } from "lucide-react";
 
 import "./PeoplePage.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../app/providers";
 
 function PeoplePage() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [activeFilter, setActiveFilter] = useState(0);
+
+  const handleAddPerson = () => {
+    // TODO: Connect add-person/follow action to the backend connections API.
+    alert("Додавання людей буде доступне після підключення backend.");
+  };
+
   const filters = [
     { name: "Усі", Icon: Users },
     { name: "Музика", Icon: Music },
@@ -24,11 +36,11 @@ function PeoplePage() {
 
   const people = [
     {
-      name: "Марія Іваненко",
-      city: "Львів, Україна",
-      interests: ["Музика", "Подорожі", "Книги"],
-      bio: "Люблю події, нові знайомства та творчі зустрічі.",
-      avatar: "М",
+      name: user.fullName,
+      city: user.location,
+      interests: user.interests,
+      bio: user.bio,
+      avatar: user.initials,
     },
     {
       name: "Андрій Коваль",
@@ -66,7 +78,9 @@ function PeoplePage() {
         {filters.map(({ name, Icon }, index) => (
           <button
             key={name}
-            className={index === 0 ? "active category-btn" : "category-btn"}
+            className={activeFilter === index ? "active category-btn" : "category-btn"}
+            type="button"
+            onClick={() => setActiveFilter(index)}
           >
             <Icon size={18} />
             {name}
@@ -104,12 +118,12 @@ function PeoplePage() {
 
             
             <div className="person-actions">
-              <button>
+              <button type="button" onClick={handleAddPerson}>
                 <UserPlus size={16} />
                 Додати
               </button>
 
-              <button className="secondary">
+              <button className="secondary" type="button" onClick={() => navigate("/messages")}>
                 <MessageSquare size={16} />
                 Написати
               </button>

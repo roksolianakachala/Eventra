@@ -1,5 +1,6 @@
 .profile-page {
   width: 100%;
+  min-width: 0;
 }
 
 .profile-title {
@@ -58,6 +59,7 @@
 
 .profile-main {
   padding: 28px;
+  min-width: 0;
 }
 
 .profile-main h2 {
@@ -82,6 +84,7 @@
   color: #075ee8;
   font-size: 34px;
   font-weight: 800;
+  flex-shrink: 0;
 }
 
 .profile-user h3 {
@@ -133,6 +136,8 @@
 
 .profile-form input,
 .profile-form textarea {
+  width: 100%;
+  min-width: 0;
   border: 1px solid #cfdbee;
   border-radius: 10px;
   padding: 14px 16px;
@@ -247,15 +252,76 @@
   border-bottom: 1px solid #e2e8f0;
 }
 @media (max-width: 1200px) {
-  .profile-layout,
-  .messages-layout,
-  .create-event-layout,
-  .become-tutor-layout {
+  .profile-layout {
     grid-template-columns: 1fr;
   }
 
-  .tutor-preview,
-  .event-preview {
-    position: static;
+  .profile-menu {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .profile-menu button {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-title h1 {
+    font-size: 30px;
+  }
+
+  .profile-main,
+  .profile-summary {
+    padding: 22px;
+  }
+
+  .profile-user {
+    align-items: flex-start;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-title h1 {
+    font-size: 26px;
+  }
+
+  .profile-title p {
+    font-size: 15px;
+  }
+
+  .profile-user {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .profile-avatar {
+    width: 88px;
+    height: 88px;
+    font-size: 28px;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+  }
+
+  .profile-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .profile-main,
+  .profile-summary,
+  .profile-menu {
+    padding: 14px;
+  }
+
+  .profile-user h3 {
+    font-size: 20px;
   }
 }

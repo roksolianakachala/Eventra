@@ -1,7 +1,25 @@
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import "./EventsPage.css";
-import { MapPin, Bell, MessageSquare, Music, Dumbbell, GraduationCap, Laptop, Palette, Gamepad2, ChevronDown, Users, User, } from "lucide-react";
+import { MapPin, Bell, MessageSquare, Music, Dumbbell, GraduationCap, Laptop, Palette, Gamepad2, ChevronDown, ChevronLeft, ChevronRight, Users, User, Heart, } from "lucide-react";
 
 function EventsPage() {
+  const [activeCategory, setActiveCategory] = useState(0);
+  const topEventsRef = useRef(null);
+  const smallEventsRef = useRef(null);
+
+  const scrollSection = (ref, direction) => {
+    ref.current?.scrollBy({
+      left: direction * 340,
+      behavior: "smooth",
+    });
+  };
+
+  const handlePlaceholderAction = () => {
+    // TODO: Connect this event action to backend event details/save API.
+    alert("Ця дія буде доступна після підключення подій до backend.");
+  };
+
   const categories = [
     { name: "Музика", Icon: Music },
     { name: "Спорт", Icon: Dumbbell },
@@ -108,7 +126,11 @@ function EventsPage() {
 
       <div className="events-categories">
         {categories.map((category, index) => (
-          <button className={index === 0 ? "active" : ""} key={category.name}>
+          <button
+            className={activeCategory === index ? "active" : ""}
+            key={category.name}
+            onClick={() => setActiveCategory(index)}
+          >
             {category.Icon && <category.Icon size={18} />}
             {category.name}
           </button>
@@ -118,10 +140,15 @@ function EventsPage() {
       <section className="events-section">
         <div className="events-section-header">
           <h2>Топ події для вас</h2>
-          <a href="/">Переглянути всі ›</a>
+          <Link to="/events">Переглянути всі ›</Link>
         </div>
 
-        <div className="top-events-grid">
+        <div className="scroll-shell">
+          <button className="scroll-btn left" type="button" onClick={() => scrollSection(topEventsRef, -1)} aria-label="Scroll top events left">
+            <ChevronLeft size={22} />
+          </button>
+
+        <div className="top-events-grid scroll-row" ref={topEventsRef}>
           {topEvents.map((event) => (
             <article className="top-event-card" key={event.title}>
               <div className="top-event-image">
@@ -133,7 +160,9 @@ function EventsPage() {
                   <small>{event.time}</small>
                 </div>
 
-                <button className="bookmark">♡</button>
+                <button className="bookmark" type="button" onClick={handlePlaceholderAction}>
+                  <Heart size={24} />
+                </button>
                 <span className="image-time">{event.time}</span>
               </div>
 
@@ -154,20 +183,30 @@ function EventsPage() {
                   <b>{event.members}</b>
                 </div>
 
-                <button className="details-btn">Детальніше</button>
+                <button className="details-btn" type="button" onClick={handlePlaceholderAction}>Детальніше</button>
               </div>
             </article>
           ))}
+        </div>
+
+          <button className="scroll-btn right" type="button" onClick={() => scrollSection(topEventsRef, 1)} aria-label="Scroll top events right">
+            <ChevronRight size={22} />
+          </button>
         </div>
       </section>
 
       <section className="events-section">
         <div className="events-section-header">
           <h2>Події, що можуть вас зацікавити</h2>
-          <a href="/">Переглянути всі ›</a>
+          <Link to="/events">Переглянути всі ›</Link>
         </div>
 
-        <div className="small-events-grid">
+        <div className="scroll-shell">
+          <button className="scroll-btn left" type="button" onClick={() => scrollSection(smallEventsRef, -1)} aria-label="Scroll interesting events left">
+            <ChevronLeft size={22} />
+          </button>
+
+        <div className="small-events-grid scroll-row" ref={smallEventsRef}>
           {smallEvents.map((event) => (
             <article className="small-event-card" key={event.title}>
               <img src={event.image} alt={event.title} />
@@ -191,9 +230,16 @@ function EventsPage() {
                 </div>
               </div>
 
-              <button className="small-bookmark">♡</button>
+              <button className="small-bookmark" type="button" onClick={handlePlaceholderAction}>
+                <Heart size={22} />
+              </button>
             </article>
           ))}
+        </div>
+
+          <button className="scroll-btn right" type="button" onClick={() => scrollSection(smallEventsRef, 1)} aria-label="Scroll interesting events right">
+            <ChevronRight size={22} />
+          </button>
         </div>
       </section>
 

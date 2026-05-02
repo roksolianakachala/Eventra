@@ -1,5 +1,6 @@
 .create-event-page {
   width: 100%;
+  min-width: 0;
 }
 
 .create-event-header {
@@ -30,6 +31,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 28px;
+  min-width: 0;
 }
 
 .event-image-upload {
@@ -225,5 +227,53 @@
 
   .event-preview {
     position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .create-event-header h1 {
+    font-size: 30px;
+  }
+
+  .create-event-form,
+  .event-preview {
+    padding: 22px;
+  }
+
+  .event-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .create-event-header h1 {
+    font-size: 26px;
+  }
+
+  .create-event-header p {
+    font-size: 15px;
+  }
+
+  .event-image-box {
+    height: 160px;
+  }
+
+  .event-form-actions {
+    flex-direction: column;
+  }
+
+  .event-form-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .create-event-form,
+  .event-preview {
+    padding: 14px;
+  }
+
+  .event-preview-body {
+    padding: 14px;
   }
 }

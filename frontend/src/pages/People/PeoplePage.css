@@ -1,5 +1,6 @@
 .people-page {
   width: 100%;
+  min-width: 0;
 }
 
 /* HEADER */
@@ -86,6 +87,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 22px;
+  min-width: 0;
 }
 
 /* CONTENT */
@@ -100,6 +102,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 
 .person-avatar {
@@ -118,6 +121,7 @@
 .person-top h3 {
   margin: 0 0 6px;
   font-size: 18px;
+  overflow-wrap: anywhere;
 }
 
 .icon-text {
@@ -188,4 +192,66 @@
 .person-actions button.secondary {
   background: #eaf3ff;
   color: #075ee8;
+}
+
+@media (max-width: 1200px) {
+  .people-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .people-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .people-header h1 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .people-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .category-btn {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .people-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .people-header h1 {
+    font-size: 26px;
+  }
+
+  .people-header p {
+    font-size: 15px;
+  }
+
+  .person-card {
+    padding: 18px;
+  }
+
+  .person-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 420px) {
+  .person-top {
+    align-items: flex-start;
+  }
+
+  .person-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
 }

@@ -13,6 +13,11 @@ import {
 import "./SettingsPage.css";
 
 function SettingsPage() {
+  const handleSettingsPlaceholder = () => {
+    // TODO: Connect account settings actions to backend account/security APIs.
+    alert("Ця дія налаштувань буде доступна після підключення backend.");
+  };
+
   return (
     <div className="settings-page">
       <div className="settings-header">
@@ -110,7 +115,7 @@ function SettingsPage() {
               <h3>Змінити пароль</h3>
               <p>Оновіть пароль для захисту облікового запису</p>
             </div>
-            <button>Змінити</button>
+            <button type="button" onClick={handleSettingsPlaceholder}>Змінити</button>
           </div>
 
           <div className="settings-row">
@@ -168,7 +173,7 @@ function SettingsPage() {
               <h3>Видалити акаунт</h3>
               <p>Після видалення акаунта дані буде втрачено</p>
             </div>
-            <button className="danger-btn">Видалити</button>
+            <button className="danger-btn" type="button" onClick={handleSettingsPlaceholder}>Видалити</button>
           </div>
         </section>
       </div>

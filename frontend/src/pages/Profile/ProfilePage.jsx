@@ -1,7 +1,24 @@
 import "./ProfilePage.css";
 import { Shield, MapPin, Mail, Phone, CalendarDays } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../app/providers";
 function ProfilePage() {
-  const interests = ["Музика", "Технології", "Психологія", "Подорожі", "Книги"];
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const interests = user.interests;
+  const [activeMenuIndex, setActiveMenuIndex] = useState(0);
+
+  const handleProfileSave = (event) => {
+    event.preventDefault();
+    // TODO: Persist profile updates through the backend profile API.
+    alert("Зміни профілю будуть збережені після підключення backend.");
+  };
+
+  const handlePlaceholderAction = () => {
+    // TODO: Connect this profile action to the backend user profile API.
+    alert("Ця дія буде доступна після підключення backend.");
+  };
 
   const menuItems = [
     "Особисті дані",
@@ -24,7 +41,12 @@ function ProfilePage() {
       <div className="profile-layout">
         <aside className="profile-menu">
           {menuItems.map((item, index) => (
-            <button key={item} className={index === 0 ? "active" : ""}>
+            <button
+              key={item}
+              className={activeMenuIndex === index ? "active" : ""}
+              onClick={() => setActiveMenuIndex(index)}
+              type="button"
+            >
               {item}
             </button>
           ))}
@@ -34,47 +56,47 @@ function ProfilePage() {
           <h2>Особисті дані</h2>
 
           <div className="profile-user">
-            <div className="profile-avatar">М</div>
+            <div className="profile-avatar">{user.initials}</div>
 
             <div>
-              <h3>Марія Іваненко</h3>
-              <p>maria.ivanenko@example.com</p>
-              <p><MapPin size={16} className="icon" /> Львів, Україна</p>
+              <h3>{user.fullName}</h3>
+              <p>{user.email}</p>
+              <p><MapPin size={16} className="icon" /> {user.location}</p>
 
-              <button className="change-photo-btn">Змінити фото</button>
+              <button className="change-photo-btn" type="button" onClick={handlePlaceholderAction}>Змінити фото</button>
             </div>
           </div>
 
           <div className="profile-divider"></div>
 
-          <form className="profile-form">
+          <form className="profile-form" onSubmit={handleProfileSave}>
             <div className="form-row">
               <label>
                 Ім’я
-                <input type="text" defaultValue="Марія" />
+                <input type="text" defaultValue={user.firstName} />
               </label>
 
               <label>
                 Прізвище
-                <input type="text" defaultValue="Іваненко" />
+                <input type="text" defaultValue={user.lastName} />
               </label>
             </div>
 
             <div className="form-row">
               <label>
                 Email
-                <input type="email" defaultValue="maria.ivanenko@example.com" />
+                <input type="email" defaultValue={user.email} />
               </label>
 
               <label>
                 Номер телефону
-                <input type="text" defaultValue="+380 50 123 45 67" />
+                <input type="text" defaultValue={user.phone} />
               </label>
             </div>
 
             <label>
               Про себе
-              <textarea defaultValue="Люблю музику, подорожі та нові знайомства. Завжди відкрита до цікавих подій та спільнот!" />
+              <textarea defaultValue={user.bio} />
             </label>
 
             <div className="interests-block">
@@ -86,14 +108,14 @@ function ProfilePage() {
                 ))}
               </div>
 
-              <button type="button" className="add-interest-btn">
+              <button type="button" className="add-interest-btn" onClick={handlePlaceholderAction}>
                 + Додати інтерес
               </button>
             </div>
 
             <div className="profile-actions">
               <button type="submit">Зберегти зміни</button>
-              <button type="button" className="cancel-btn">
+              <button type="button" className="cancel-btn" onClick={() => navigate("/")}>
                 Скасувати
               </button>
             </div>
@@ -104,10 +126,10 @@ function ProfilePage() {
           <h2>Підсумок профілю</h2>
 
           <div className="summary-list">
-            <p><Mail size={16} className="icon" /> maria.ivanenko@example.com</p>
-            <p><Phone size={16} className="icon" /> +380 50 123 45 67</p>
-            <p><MapPin size={16} className="icon" /> Львів, Україна</p>
-            <p><CalendarDays size={16} className="icon" /> Приєдналася 12 червня 2024</p>
+            <p><Mail size={16} className="icon" /> {user.email}</p>
+            <p><Phone size={16} className="icon" /> {user.phone}</p>
+            <p><MapPin size={16} className="icon" /> {user.location}</p>
+            <p><CalendarDays size={16} className="icon" /> Приєдналася {user.joinedAt}</p>
           </div>
 
           <div className="profile-tip">
@@ -120,9 +142,9 @@ function ProfilePage() {
 
           <div className="quick-actions">
             <h3>Швидкі дії</h3>
-            <button>Переглянути мій профіль →</button>
-            <button>Мої збережені події →</button>
-            <button>Мої повідомлення →</button>
+            <button type="button" onClick={() => navigate("/profile")}>Переглянути мій профіль →</button>
+            <button type="button" onClick={() => navigate("/saved")}>Мої збережені події →</button>
+            <button type="button" onClick={() => navigate("/messages")}>Мої повідомлення →</button>
           </div>
         </aside>
       </div>

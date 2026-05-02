@@ -1,9 +1,22 @@
 import { GraduationCap, Search, SlidersHorizontal, Send, Paperclip, MoreHorizontal, User, CalendarDays, Bookmark, Star, MapPin, BellOff, Ban,} from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./MessagesPage.css";
 import { MessageSquare } from "lucide-react";
+import { useAuth } from "../../app/providers";
 
 function MessagesPage() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [activeChatIndex, setActiveChatIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState("Усі");
+
+  const handleMessagePlaceholder = () => {
+    // TODO: Connect message actions to the backend messaging API.
+    alert("Ця дія повідомлень буде доступна після підключення backend.");
+  };
+
   const chats = [
     {
       name: "Олександр Іваненко",
@@ -42,7 +55,7 @@ function MessagesPage() {
 
   const messages = [
     {
-      text: "Доброго дня, Маріє! Бачу ваш інтерес до мого курсу математики.",
+      text: `Доброго дня, ${user.firstName}! Бачу ваш інтерес до мого курсу математики.`,
       time: "10:28",
       own: false,
     },
@@ -81,16 +94,24 @@ function MessagesPage() {
           </div>
 
           <div className="chat-tabs">
-            <button className="active">Усі</button>
-            <button>Непрочитані</button>
-            <button>Важливі</button>
+            {["Усі", "Непрочитані", "Важливі"].map((tab) => (
+              <button
+                className={activeTab === tab ? "active" : ""}
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
 
           <div className="chat-list">
-            {chats.map((chat) => (
+            {chats.map((chat, index) => (
               <div
-                className={`chat-item ${chat.active ? "active" : ""}`}
+                className={`chat-item ${activeChatIndex === index ? "active" : ""}`}
                 key={chat.name}
+                onClick={() => setActiveChatIndex(index)}
               >
                 <div className={`chat-avatar ${chat.support ? "support" : ""}`}>
                   {chat.avatar}
@@ -110,7 +131,7 @@ function MessagesPage() {
             ))}
           </div>
 
-          <button className="show-more-btn">Показати більше</button>
+          <button className="show-more-btn" type="button" onClick={handleMessagePlaceholder}>Показати більше</button>
         </aside>
 
         <section className="chat-window">
@@ -155,7 +176,7 @@ function MessagesPage() {
           <div className="message-input">
             <Paperclip size={20} />
             <input placeholder="Напишіть повідомлення..." />
-            <button>
+            <button type="button" onClick={handleMessagePlaceholder}>
               <Send size={20} />
             </button>
           </div>
@@ -167,15 +188,15 @@ function MessagesPage() {
           <p className="online-dot">Онлайн</p>
 
           <div className="profile-actions-chat">
-            <button>
+            <button type="button" onClick={() => navigate("/tutors")}>
               <User size={20} />
               Профіль
             </button>
-            <button>
+            <button type="button" onClick={() => navigate("/events")}>
               <CalendarDays size={20} />
               Подія
             </button>
-            <button>
+            <button type="button" onClick={handleMessagePlaceholder}>
               <Bookmark size={20} />
               Зберегти
             </button>
@@ -206,12 +227,12 @@ function MessagesPage() {
           </div>
 
           <div className="chat-settings">
-            <button>
+            <button type="button" onClick={handleMessagePlaceholder}>
               <BellOff size={18} />
               Вимкнути сповіщення
             </button>
 
-            <button className="danger">
+            <button className="danger" type="button" onClick={handleMessagePlaceholder}>
               <Ban size={18} />
               Заблокувати користувача
             </button>

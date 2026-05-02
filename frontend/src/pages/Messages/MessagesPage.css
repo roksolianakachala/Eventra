@@ -1,5 +1,6 @@
 .messages-page {
   width: 100%;
+  min-width: 0;
 }
 
 .messages-page h1 {
@@ -12,6 +13,7 @@
   grid-template-columns: 360px 1fr 340px;
   gap: 18px;
   align-items: stretch;
+  min-width: 0;
 }
 
 .chat-list-panel,
@@ -20,6 +22,7 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 16px;
+  min-width: 0;
 }
 
 .chat-list-panel {
@@ -228,7 +231,7 @@
 }
 
 .message-bubble {
-  max-width: 68%;
+  max-width: min(68%, 620px);
   background: #f1f5f9;
   border-radius: 12px;
   padding: 14px;
@@ -398,15 +401,96 @@
   color: #b91c1c;
 }
 @media (max-width: 1200px) {
-  .profile-layout,
-  .messages-layout,
-  .create-event-layout,
-  .become-tutor-layout {
+  .messages-layout {
+    grid-template-columns: 320px 1fr;
+  }
+
+  .chat-profile-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 992px) {
+  .messages-layout {
     grid-template-columns: 1fr;
   }
 
-  .tutor-preview,
-  .event-preview {
-    position: static;
+  .chat-window {
+    min-height: 560px;
+  }
+}
+
+@media (max-width: 768px) {
+  .messages-page h1 {
+    font-size: 30px;
+  }
+
+  .chat-list-panel,
+  .chat-window,
+  .chat-profile-panel {
+    border-radius: 14px;
+  }
+
+  .message-bubble {
+    max-width: 82%;
+  }
+}
+
+@media (max-width: 576px) {
+  .messages-page h1 {
+    font-size: 26px;
+  }
+
+  .chat-list-panel,
+  .chat-window,
+  .chat-profile-panel {
+    padding: 16px;
+  }
+
+  .chat-tabs {
+    overflow-x: auto;
+    gap: 18px;
+    justify-content: flex-start;
+  }
+
+  .chat-tabs button {
+    flex: 0 0 auto;
+  }
+
+  .chat-top {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .message-bubble {
+    max-width: 92%;
+  }
+
+  .profile-actions-chat {
+    grid-template-columns: 1fr;
+  }
+
+  .media-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .chat-list-panel,
+  .chat-window,
+  .chat-profile-panel {
+    padding: 12px;
+  }
+
+  .chat-item {
+    padding: 12px;
+  }
+
+  .message-input {
+    gap: 8px;
+  }
+
+  .message-input input {
+    min-width: 0;
   }
 }

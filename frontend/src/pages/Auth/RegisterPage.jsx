@@ -1,9 +1,13 @@
 import "./AuthPages.css";
-import { CalendarDays, User, Lock, Eye, Mail, UserRound, Apple } from "lucide-react";
+import { CalendarDays, User, Lock, Eye, Mail, UserRound, Apple, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../app/providers";
+import { getGoogleAuthUrl } from "../../services/authService";
 
 function RegisterPage() {
+  const navigate = useNavigate();
+  const { registerUser } = useAuth();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -31,24 +35,25 @@ function RegisterPage() {
   }
 
   try {
-    await axios.post(
-      `https://eventra-j1tj.onrender.com/api/auth/register`,
-      formData
-    );
+    await registerUser(formData);
 
     alert("Реєстрація успішна");
+    navigate("/profile");
   } catch (error) {
-    alert("Помилка реєстрації");
+    alert(error.message || "Помилка реєстрації");
   }
 };
 
+  const handleSocialPlaceholder = () => {
+    alert("Цей спосіб реєстрації буде доступний після підключення backend.");
+  };
 
   return (
     <div className="auth-page">
       <section className="auth-info">
         <h1>
-          Створіть свій акаунт <br />
-          у <h2 className="auth-title">
+          Створіть свій акаунт<br />
+           <h2 className="auth-title">
             Ласкаво просимо до <span>Eventra</span>
           </h2>
         </h1>
@@ -136,7 +141,7 @@ function RegisterPage() {
               Стать (необов’язково)
               <div className="auth-input">
                 <input type="text" name="gender" placeholder="Оберіть стать" onChange={handleChange}/>
-                <span>⌄</span>
+                <ChevronDown size={18} />
               </div>
             </label>
           </div>
@@ -159,18 +164,18 @@ function RegisterPage() {
         </div>
 
         <div className="social-buttons">
-          <button className="social-btn" onClick={() => {
-            window.location.href = `https://eventra-j1tj.onrender.com/api/auth/google`;}}>
+          <button className="social-btn" type="button" onClick={() => {
+            window.location.href = getGoogleAuthUrl();}}>
             <Mail size={18} />
             Google
           </button>
 
-          <button className="social-btn">
+          <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
             <UserRound size={18} />
             Facebook
           </button>
 
-          <button className="social-btn">
+          <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
             <Apple size={18} />
             Apple
           </button>

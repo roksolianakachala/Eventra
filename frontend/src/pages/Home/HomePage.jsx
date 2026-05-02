@@ -1,12 +1,26 @@
+import { useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./HomePage.css";
 import {
-  CalendarDays, MapPin, Music, Dumbbell, GraduationCap, Laptop, Palette, Gamepad2, ChevronDown,
+  CalendarDays, MapPin, Music, Dumbbell, GraduationCap, Laptop, Palette, Gamepad2, ChevronDown, ChevronLeft, ChevronRight, Heart,
 } from "lucide-react";
 import "./HomePage.css";
 
 function HomePage() {
   const navigate = useNavigate();
+  const recommendedRef = useRef(null);
+
+  const scrollRecommended = (direction) => {
+    recommendedRef.current?.scrollBy({
+      left: direction * 340,
+      behavior: "smooth",
+    });
+  };
+
+  const handleSaveEvent = () => {
+    // TODO: Connect saving recommended events to the backend saved-events API.
+    alert("Збереження подій буде доступне після підключення backend.");
+  };
 
   const categories = [
     { name: "Музика", icon: <Music size={18} /> },
@@ -96,7 +110,7 @@ function HomePage() {
 
       <section className="categories">
         {categories.map((cat) => (
-          <button key={cat.name} className="category-btn">
+          <button key={cat.name} className="category-btn" onClick={() => navigate("/events")}>
             {cat.icon}
             {cat.name}
           </button>
@@ -109,7 +123,12 @@ function HomePage() {
           <Link to="/events">Переглянути всі ›</Link>
         </div>
 
-        <div className="events-grid">
+        <div className="scroll-shell">
+          <button className="scroll-btn left" type="button" onClick={() => scrollRecommended(-1)} aria-label="Scroll recommended events left">
+            <ChevronLeft size={22} />
+          </button>
+
+        <div className="events-grid scroll-row" ref={recommendedRef}>
           {events.map((event) => (
             <div className="event-card" key={event.title}>
               <div className="event-image">
@@ -121,7 +140,9 @@ function HomePage() {
                   <small>{event.time}</small>
                 </div>
 
-                <div className="save-icon">♡</div>
+                <button className="save-icon" type="button" onClick={handleSaveEvent}>
+                  <Heart size={24} />
+                </button>
                 <div className="event-time">{event.time}</div>
               </div>
 
@@ -144,6 +165,11 @@ function HomePage() {
               </div>
             </div>
           ))}
+        </div>
+
+          <button className="scroll-btn right" type="button" onClick={() => scrollRecommended(1)} aria-label="Scroll recommended events right">
+            <ChevronRight size={22} />
+          </button>
         </div>
       </section>
     </div>

@@ -1,6 +1,40 @@
 import "./AuthPages.css";
 import { Smile, Lock, Eye, Mail, UserRound, Apple } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../app/providers";
+import { getGoogleAuthUrl } from "../../services/authService";
 function LoginPage() {
+  const navigate = useNavigate();
+  const { loginUser } = useAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      await loginUser(formData);
+      navigate("/profile");
+    } catch (error) {
+      alert(error.message || "Не вдалося увійти");
+    }
+  };
+
+  const handleSocialPlaceholder = () => {
+    
+    alert("Цей спосіб входу буде доступний після підключення backend.");
+  };
+
   return (
     <div className="auth-page">
       <section className="auth-info">
@@ -26,12 +60,12 @@ function LoginPage() {
           
         </p>
 
-        <form className="auth-form">
+        <form className="auth-form" onSubmit={handleSubmit}>
           <label>
             Email або номер телефону
             <div className="auth-input">
               <Mail size={18} />
-              <input type="email" placeholder="Введіть email" />
+              <input type="email" name="email" placeholder="Введіть email" onChange={handleChange} />
             </div>
           </label>
 
@@ -41,7 +75,7 @@ function LoginPage() {
               <div className="input-with-icon">
                 <Lock size={18} />
 
-                <input type="password" placeholder="Введіть пароль" />
+                <input type="password" name="password" placeholder="Введіть пароль" onChange={handleChange} />
 
                 <Eye size={18} className="eye-icon" />
               </div>
@@ -69,17 +103,18 @@ function LoginPage() {
         </div>
 
         <div className="social-buttons">
-          <button className="social-btn">
+          <button className="social-btn" type="button" onClick={() => {
+            window.location.href = getGoogleAuthUrl();}}>
             <Mail size={18} />
             Google
           </button>
 
-          <button className="social-btn">
+          <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
             <UserRound size={18} />
             Facebook
           </button>
 
-          <button className="social-btn">
+          <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
             <Apple size={18} />
             Apple
           </button>
