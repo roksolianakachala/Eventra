@@ -38,6 +38,7 @@
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .hero-image img {
@@ -121,8 +122,8 @@
   position: absolute;
   top: 50%;
   z-index: 2;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border: 1px solid #dbe4f0;
   border-radius: 50%;
   background: #ffffff;
@@ -198,6 +199,8 @@
   color: #ffffff;
   font-size: 26px;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .event-time {
@@ -339,32 +342,52 @@
 @media (max-width: 768px) {
   .hero {
     flex-direction: column;
-    padding: 28px 20px;
-    text-align: center;
+    min-height: 0;
+    padding: 20px 16px;
+    text-align: left;
+    gap: 18px;
   }
 
   .hero-text h1 {
-    font-size: 32px;
+    font-size: 29px;
+  }
+
+  .hero-text p {
+    margin: 16px 0 20px;
+    font-size: 16px;
   }
 
   .hero-text button {
     width: 100%;
-    max-width: 320px;
+    max-width: none;
+    height: 50px;
   }
 
   .hero-image {
     max-width: 100%;
   }
 
+  .hero-image img {
+    max-height: 220px;
+    object-fit: contain;
+  }
+
   .categories {
-    grid-template-columns: repeat(2, 1fr);
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding-bottom: 6px;
+    padding: 0 2px 8px;
+    margin: 20px -2px 24px;
+    scrollbar-width: none;
+  }
+
+  .categories::-webkit-scrollbar {
+    display: none;
   }
 
   .category-btn {
     flex: 0 0 auto;
+    min-height: 44px;
+    padding: 0 14px;
   }
 
   .events-grid {
@@ -372,7 +395,7 @@
   }
 
   .scroll-row .event-card {
-    min-width: 82vw;
+    min-width: calc(100vw - 40px);
   }
 
   .scroll-btn.left {
@@ -386,13 +409,13 @@
 
 @media (max-width: 576px) {
   .hero {
-    border-radius: 14px;
-    padding: 24px 16px;
-    gap: 22px;
+    border-radius: 12px;
+    padding: 18px 14px;
+    gap: 16px;
   }
 
   .hero-text h1 {
-    font-size: 28px;
+    font-size: 26px;
   }
 
   .hero-text p {
@@ -401,8 +424,9 @@
   }
 
   .section-header {
-    align-items: flex-start;
-    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 12px;
   }
 
   .section-header h2 {
@@ -410,7 +434,15 @@
   }
 
   .scroll-row .event-card {
-    min-width: 86vw;
+    min-width: calc(100vw - 28px);
+  }
+
+  .scroll-btn {
+    display: none;
+  }
+
+  .event-image {
+    height: 138px;
   }
 }
 
@@ -427,7 +459,7 @@
   }
 
   .event-info {
-    padding: 14px;
+    padding: 12px;
   }
 
   .event-info h3 {

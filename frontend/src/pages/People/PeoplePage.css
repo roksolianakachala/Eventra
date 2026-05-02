@@ -43,6 +43,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  min-height: 44px;
 }
 
 .category-btn svg {
@@ -183,6 +184,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: 0.2s;
+  min-height: 44px;
 }
 
 .person-actions button:hover {
@@ -211,14 +213,38 @@
 }
 
 @media (max-width: 768px) {
+  .people-header {
+    margin-bottom: 18px;
+  }
+
+  .people-header h1 {
+    font-size: 28px;
+  }
+
+  .people-header p {
+    font-size: 15px;
+  }
+
   .people-filters {
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding-bottom: 6px;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+
+  .people-filters::-webkit-scrollbar {
+    display: none;
   }
 
   .category-btn {
     flex: 0 0 auto;
+    height: 44px;
+  }
+
+  .person-card {
+    min-height: 0;
+    padding: 18px;
   }
 }
 
@@ -236,7 +262,7 @@
   }
 
   .person-card {
-    padding: 18px;
+    padding: 16px;
   }
 
   .person-actions {

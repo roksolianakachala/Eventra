@@ -30,6 +30,7 @@
   color: #ffffff;
   font-weight: 600;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .add-tutor-btn:hover {
@@ -52,6 +53,7 @@
   background: #ffffff;
   transition: 0.2s;
   min-width: 0;
+  min-height: 44px;
 }
 
 .tutor-card:hover {
@@ -119,6 +121,7 @@
   color: #ffffff;
   font-weight: 600;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .contact-btn:hover {
@@ -144,12 +147,21 @@
 }
 
 @media (max-width: 768px) {
+  .tutors-page {
+    gap: 18px;
+  }
+
   .tutors-heading h1 {
-    font-size: 30px;
+    font-size: 28px;
+  }
+
+  .tutors-heading {
+    margin-bottom: 18px;
   }
 
   .tutors-right {
-    padding: 24px;
+    padding: 20px;
+    border-radius: 14px;
   }
 }
 
@@ -164,6 +176,7 @@
 
   .tutor-card {
     padding: 14px;
+    gap: 12px;
   }
 
   .tutors-right {

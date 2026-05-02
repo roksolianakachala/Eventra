@@ -21,6 +21,35 @@ a {
   color: inherit;
 }
 
+img,
+svg {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: rgba(7, 94, 232, 0.14);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(7, 94, 232, 0.22);
+  outline-offset: 2px;
+}
+
 .app-layout {
   min-height: 100vh;
   width: 100%;
@@ -42,6 +71,10 @@ a {
   max-width: 1920px;
   margin: 0 auto;
   padding: 28px;
+}
+
+.page-content > * {
+  min-width: 0;
 }
 
 .icon-text {
@@ -71,12 +104,27 @@ a {
   }
 
   .page-content {
-    padding: 16px;
+    padding: 12px;
+  }
+
+  button,
+  [role="button"],
+  input,
+  select {
+    min-height: 44px;
+  }
+
+  textarea {
+    min-height: 110px;
+  }
+
+  h1 {
+    line-height: 1.18;
   }
 }
 
 @media (max-width: 420px) {
   .page-content {
-    padding: 12px;
+    padding: 10px;
   }
 }

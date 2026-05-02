@@ -56,6 +56,7 @@
   font-weight: 700;
   cursor: pointer;
   overflow: hidden;
+  min-height: 140px;
 }
 
 .event-image-box img {
@@ -127,6 +128,7 @@
   color: white;
   font-weight: 700;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .event-secondary-btn {
@@ -232,12 +234,17 @@
 
 @media (max-width: 768px) {
   .create-event-header h1 {
-    font-size: 30px;
+    font-size: 28px;
+  }
+
+  .create-event-header {
+    margin-bottom: 18px;
   }
 
   .create-event-form,
   .event-preview {
-    padding: 22px;
+    padding: 20px;
+    border-radius: 14px;
   }
 
   .event-form-grid {
@@ -255,7 +262,7 @@
   }
 
   .event-image-box {
-    height: 160px;
+    height: 150px;
   }
 
   .event-form-actions {
@@ -264,6 +271,7 @@
 
   .event-form-actions button {
     width: 100%;
+    height: 48px;
   }
 }
 

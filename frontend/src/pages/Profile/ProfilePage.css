@@ -49,6 +49,7 @@
   padding: 0 16px;
   font-size: 15px;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .profile-menu button.active {
@@ -107,6 +108,7 @@
   color: #075ee8;
   font-weight: 700;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .profile-divider {
@@ -177,6 +179,7 @@
   background: white;
   color: #075ee8;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .profile-actions {
@@ -194,6 +197,7 @@
   color: white;
   font-weight: 700;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .profile-actions .cancel-btn {
@@ -250,6 +254,7 @@
   text-align: left;
   cursor: pointer;
   border-bottom: 1px solid #e2e8f0;
+  min-height: 44px;
 }
 @media (max-width: 1200px) {
   .profile-layout {
@@ -268,12 +273,27 @@
 
 @media (max-width: 768px) {
   .profile-title h1 {
-    font-size: 30px;
+    font-size: 28px;
+  }
+
+  .profile-title {
+    margin-bottom: 18px;
   }
 
   .profile-main,
   .profile-summary {
-    padding: 22px;
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .profile-menu {
+    padding: 10px;
+    border-radius: 14px;
+    scrollbar-width: none;
+  }
+
+  .profile-menu::-webkit-scrollbar {
+    display: none;
   }
 
   .profile-user {
@@ -282,6 +302,7 @@
 
   .form-row {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 }
 
@@ -307,6 +328,7 @@
 
   .profile-actions {
     flex-direction: column;
+    gap: 10px;
   }
 
   .profile-actions button {

@@ -55,8 +55,8 @@
 }
 
 .sidebar-close-btn {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 8px;
   background: transparent;
@@ -91,6 +91,7 @@
   font-size: 15px;
   color: #1e293b;
   transition: 0.2s;
+  min-height: 44px;
 }
 
 .sidebar-nav a svg {
@@ -137,13 +138,14 @@
   color: #fff;
   font-weight: 600;
   cursor: pointer;
+  min-height: 44px;
 }
 
 /* ========================= */
 /* 📱 TABLET (до 1024px) */
 /* ========================= */
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .sidebar {
     width: 260px;
     padding: 20px 14px;
@@ -165,10 +167,10 @@
 
 @media (max-width: 768px) {
   .sidebar {
-    width: min(320px, 88vw);
+    width: min(84vw, 320px);
     height: 100vh;
     flex-direction: column;
-    padding: 20px 14px;
+    padding: 18px 14px;
     border-right: 1px solid #e2e8f0;
     border-bottom: none;
   }
@@ -185,10 +187,10 @@
   }
 
   .sidebar-nav a {
-    height: auto;
-    padding: 10px 12px;
-    font-size: 13px;
-    border-radius: 8px;
+    min-height: 46px;
+    padding: 11px 12px;
+    font-size: 15px;
+    border-radius: 10px;
   }
 
   .sidebar-nav a span {
@@ -196,8 +198,8 @@
   }
 
   .sidebar-nav a svg {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
   }
 
   .sidebar-card {
@@ -209,9 +211,9 @@
 /* 📱 SMALL MOBILE (до 480px) */
 /* ========================= */
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .sidebar {
-    width: min(300px, 92vw);
+    width: min(84vw, 320px);
     padding: 16px 12px;
   }
 
@@ -220,12 +222,18 @@
   }
 
   .sidebar-nav a {
-    height: auto;
-    padding: 10px;
+    min-height: 46px;
+    padding: 11px 10px;
   }
 
   .sidebar-nav a svg {
-    width: 16px;
-    height: 16px;
+    width: 21px;
+    height: 21px;
+  }
+}
+
+@media (max-width: 420px) {
+  .sidebar {
+    width: min(86vw, 310px);
   }
 }

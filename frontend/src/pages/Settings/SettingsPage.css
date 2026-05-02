@@ -91,6 +91,7 @@
   font-weight: 700;
   cursor: pointer;
   flex-shrink: 0;
+  min-height: 44px;
 }
 
 .settings-field {
@@ -110,12 +111,13 @@
   padding: 0 14px;
   font-size: 15px;
   background: #ffffff;
+  min-height: 44px;
 }
 
 .switch {
   position: relative;
-  width: 52px;
-  height: 30px;
+  width: 56px;
+  height: 32px;
   flex-shrink: 0;
 }
 
@@ -178,12 +180,24 @@
 
 @media (max-width: 768px) {
   .settings-header h1 {
-    font-size: 30px;
+    font-size: 28px;
+  }
+
+  .settings-header {
+    margin-bottom: 18px;
+  }
+
+  .settings-card {
+    padding: 20px;
+    border-radius: 14px;
   }
 
   .settings-row,
   .settings-action-row {
     align-items: flex-start;
+    min-height: 0;
+    padding-top: 14px;
+    margin-top: 14px;
   }
 }
 
