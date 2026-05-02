@@ -1,4 +1,4 @@
-const { supabaseAuth } = require("../../config/db.config");
+const { supabaseAuth, supabaseAdmin } = require("../../config/db.config");
 
 class UserModel {
   async createUser(data) {
@@ -12,10 +12,18 @@ class UserModel {
     } = data;
 
     const { data: authData, error } =
-  await supabaseAuth.auth.signUp({
-    email,
-    password,
-  });
+    await supabaseAuth.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          birth_date: birthDate,
+          gender: gender
+        }
+      }
+    });
 
     console.log("AUTH DATA:", authData);
     console.log("AUTH ERROR:", error);
