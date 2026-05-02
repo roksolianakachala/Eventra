@@ -16,6 +16,9 @@ app.use(cors({
 }));
 app.use(express.json()); 
 
+app.get('/', (req, res) => {
+  res.send('running ');
+});
 
 const authRouter = require("./src/modules/auth/auth.router");
 const eventsRouter = require("./src/modules/events/events.router"); 
