@@ -1,14 +1,21 @@
 .tutors-page {
-  display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
   width: 100%;
   min-width: 0;
 }
 
-/* LEFT */
+.tutors-left {
+  width: 100%;
+  max-width: 1120px;
+}
+
 .tutors-heading {
-  margin-bottom: 24px;
+  max-width: 720px;
+  margin: 0 auto 24px;
+  text-align: center;
 }
 
 .tutors-heading h1 {
@@ -22,7 +29,7 @@
 }
 
 .add-tutor-btn {
-  width: 100%;
+  width: min(100%, 360px);
   height: 50px;
   border: none;
   border-radius: 12px;
@@ -33,17 +40,20 @@
   min-height: 44px;
 }
 
-.add-tutor-btn:hover {
+.add-tutor-btn:hover,
+.contact-btn:hover {
   background: #064fc2;
 }
 
 .tutor-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 280px));
+  justify-content: center;
   gap: 16px;
 }
 
 .tutor-card {
+  width: 100%;
   display: flex;
   gap: 14px;
   padding: 16px;
@@ -51,6 +61,8 @@
   border-radius: 12px;
   cursor: pointer;
   background: #ffffff;
+  color: inherit;
+  text-align: left;
   transition: 0.2s;
   min-width: 0;
   min-height: 44px;
@@ -64,15 +76,35 @@
   border: 2px solid #075ee8;
 }
 
-/* AVATAR */
+.tutor-card h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.tutor-card p {
+  margin: 0 0 8px;
+  color: #475569;
+}
+
+.tutor-card span,
+.tutor-header p {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #475569;
+}
+
 .avatar {
   width: 56px;
   height: 56px;
   background: #eaf3ff;
   border-radius: 50%;
+  color: #075ee8;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .avatar.big {
@@ -82,13 +114,35 @@
   font-size: 32px;
 }
 
-/* RIGHT */
 .tutors-right {
+  position: relative;
+  width: min(100%, 860px);
   background: #ffffff;
   border-radius: 16px;
   padding: 32px;
   border: 1px solid #e2e8f0;
   min-width: 0;
+}
+
+.tutor-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background: #f8fbff;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.tutor-close-btn:hover {
+  background: #eaf3ff;
+  color: #075ee8;
 }
 
 .tutor-header {
@@ -124,25 +178,15 @@
   min-height: 44px;
 }
 
-.contact-btn:hover {
-  background: #064fc2;
-}
-
 @media (max-width: 1200px) {
   .tutors-page {
-    grid-template-columns: 360px 1fr;
     gap: 24px;
   }
 }
 
 @media (max-width: 992px) {
-  .tutors-page {
-    grid-template-columns: 1fr;
-  }
-
   .tutor-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
   }
 }
 
@@ -151,12 +195,23 @@
     gap: 18px;
   }
 
-  .tutors-heading h1 {
-    font-size: 28px;
+  .tutors-left,
+  .tutors-right {
+    width: 100%;
+    max-width: none;
   }
 
   .tutors-heading {
     margin-bottom: 18px;
+    text-align: left;
+  }
+
+  .tutors-heading h1 {
+    font-size: 28px;
+  }
+
+  .add-tutor-btn {
+    width: 100%;
   }
 
   .tutors-right {
@@ -167,16 +222,28 @@
 
 @media (max-width: 576px) {
   .tutor-list {
-    grid-template-columns: 1fr;
+    display: flex;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 12px;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .tutor-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tutor-card {
+    flex: 0 0 84vw;
+    padding: 14px;
+    gap: 12px;
+    scroll-snap-align: start;
   }
 
   .tutors-heading h1 {
     font-size: 26px;
-  }
-
-  .tutor-card {
-    padding: 14px;
-    gap: 12px;
   }
 
   .tutors-right {
@@ -195,5 +262,9 @@
     height: auto;
     min-height: 48px;
     padding: 12px;
+  }
+
+  .tutor-card {
+    flex-basis: 86vw;
   }
 }
