@@ -1,5 +1,8 @@
-export const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "https://eventra-j1tj.onrender.com/api";
+const DEFAULT_API_BASE_URL = "https://eventra-j1tj.onrender.com/api";
+
+export const API_BASE_URL = (
+  process.env.REACT_APP_API_URL || DEFAULT_API_BASE_URL
+).replace(/\/$/, "");
 
 export async function apiRequest(path, options = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
