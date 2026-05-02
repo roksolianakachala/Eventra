@@ -16,7 +16,6 @@ import {
   SlidersHorizontal,
   Star,
   User,
-  X,
 } from "lucide-react";
 
 import { useAuth } from "../../app/providers";
@@ -163,7 +162,7 @@ function MessagesPage() {
   const [messageText, setMessageText] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [showActions, setShowActions] = useState(false);
-  const [isInfoPanelOpen, setIsInfoPanelOpen] = useState(false);
+  const [mobileView, setMobileView] = useState("list");
   const [visibleCount, setVisibleCount] = useState(5);
 
   const selectedChat = conversations.find((chat) => chat.id === selectedConversation);
@@ -191,7 +190,7 @@ function MessagesPage() {
   const selectConversation = (conversation) => {
     setSelectedConversation(conversation.id);
     setShowActions(false);
-    setIsInfoPanelOpen(false);
+    setMobileView("chat");
     setConversations((current) =>
       current.map((item) => (item.id === conversation.id ? { ...item, unread: 0 } : item))
     );
@@ -270,7 +269,9 @@ function MessagesPage() {
     <div className="messages-page">
       <h1>Повідомлення</h1>
 
-      <div className={`messages-layout ${selectedChat ? "chat-selected" : "no-chat-selected"}`}>
+      <div
+        className={`messages-layout ${selectedChat ? "chat-selected" : "no-chat-selected"} mobile-view-${mobileView}`}
+      >
         <aside className="chat-list-panel">
           <div className="chat-search">
             <Search size={18} />
@@ -359,14 +360,14 @@ function MessagesPage() {
                   onClick={() => {
                     setSelectedConversation(null);
                     setShowActions(false);
-                    setIsInfoPanelOpen(false);
+                    setMobileView("list");
                   }}
                 >
                   <ArrowLeft size={18} />
                   Назад
                 </button>
 
-                <button className="chat-person chat-person-trigger" type="button" onClick={() => setIsInfoPanelOpen(true)}>
+                <button className="chat-person chat-person-trigger" type="button" onClick={() => setMobileView("profile")}>
                   <div className={`chat-avatar ${selectedChat.support ? "support" : ""}`}>
                     {selectedChat.avatar}
                   </div>
@@ -432,11 +433,10 @@ function MessagesPage() {
               </div>
             </section>
 
-            {isInfoPanelOpen && <div className="chat-info-overlay" onClick={() => setIsInfoPanelOpen(false)} />}
-
-            <aside className={`chat-profile-panel chat-info-panel ${isInfoPanelOpen ? "open" : ""}`}>
-              <button className="chat-info-close" type="button" onClick={() => setIsInfoPanelOpen(false)} aria-label="Close chat info">
-                <X size={22} />
+            <aside className="chat-profile-panel">
+              <button className="profile-back-btn" type="button" onClick={() => setMobileView("chat")}>
+                <ArrowLeft size={18} />
+                Назад
               </button>
 
               <div className={`profile-avatar-large ${selectedChat.support ? "support" : ""}`}>

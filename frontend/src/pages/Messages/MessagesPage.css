@@ -56,7 +56,8 @@
 .filter-toggle,
 .attachment-btn,
 .chat-menu-btn,
-.chat-back-btn {
+.chat-back-btn,
+.profile-back-btn {
   border: none;
   background: transparent;
   color: #64748b;
@@ -242,11 +243,16 @@
   gap: 14px;
 }
 
-.chat-back-btn {
+.chat-back-btn,
+.profile-back-btn {
   display: none;
   gap: 6px;
   color: #075ee8;
   font-weight: 700;
+}
+
+.profile-back-btn {
+  margin-bottom: 16px;
 }
 
 .chat-person {
@@ -403,11 +409,6 @@
 
 .chat-profile-panel {
   padding: 24px;
-}
-
-.chat-info-close,
-.chat-info-overlay {
-  display: none;
 }
 
 .profile-avatar-large {
@@ -579,12 +580,22 @@
     display: none;
   }
 
-  .messages-layout.chat-selected .chat-list-panel {
+  .messages-layout.mobile-view-list .chat-window,
+  .messages-layout.mobile-view-list .chat-profile-panel,
+  .messages-layout.mobile-view-chat .chat-list-panel,
+  .messages-layout.mobile-view-chat .chat-profile-panel,
+  .messages-layout.mobile-view-profile .chat-list-panel,
+  .messages-layout.mobile-view-profile .chat-window {
     display: none;
   }
 
-  .messages-layout.chat-selected .chat-back-btn {
+  .messages-layout.mobile-view-chat .chat-back-btn,
+  .messages-layout.mobile-view-profile .profile-back-btn {
     display: inline-flex;
+  }
+
+  .messages-layout.mobile-view-profile .chat-profile-panel {
+    display: block;
   }
 
   .chat-window {
@@ -611,49 +622,14 @@
     max-width: 82%;
   }
 
-  .chat-info-panel {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: min(86vw, 360px);
-    transform: translateX(100%);
-    transition: transform 0.25s ease;
-    z-index: 1200;
-    overflow-y: auto;
-    border-radius: 0;
-    box-shadow: -16px 0 40px rgba(15, 23, 42, 0.18);
+  .messages-layout.mobile-view-profile .chat-profile-panel {
+    min-height: 560px;
   }
 
-  .chat-info-panel.open {
-    transform: translateX(0);
-  }
-
-  .chat-info-overlay {
-    position: fixed;
-    inset: 0;
-    display: block;
-    background: rgba(15, 23, 42, 0.45);
-    backdrop-filter: blur(2px);
-    z-index: 1190;
-  }
-
-  .chat-info-close {
-    position: sticky;
-    top: 0;
-    margin-left: auto;
-    margin-bottom: 8px;
-    width: 38px;
-    height: 38px;
-    border: none;
-    border-radius: 8px;
-    background: #f8fbff;
-    color: #475569;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 1;
+  .messages-layout.mobile-view-profile .profile-avatar-large {
+    width: 112px;
+    height: 112px;
+    font-size: 38px;
   }
 }
 
