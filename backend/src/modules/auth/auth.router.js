@@ -6,7 +6,7 @@ const {
 } = require("../../config/db.config");
 
 router.post("/register", AuthController.register);
-// router.post("/login", AuthController.login);
+router.post("/login", AuthController.login);
 
 router.get("/google", async (req, res) => {
   const { data, error } =
