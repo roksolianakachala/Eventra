@@ -13,7 +13,7 @@ router.get("/google", async (req, res) => {
     await supabaseAuth.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "https://eventra-for-events.netlify.app"
+        redirectTo: "https://eventra-j1tj.onrender.com/api/auth/google/callback"
       }
     });
 
@@ -24,6 +24,9 @@ router.get("/google", async (req, res) => {
 
 
 router.get("/google/callback", async (req, res) => {
+
+  console.log("RECEIVED GOOGLE CALLBACK"); 
+
   const { code } = req.query;
 
   const { data, error } =
