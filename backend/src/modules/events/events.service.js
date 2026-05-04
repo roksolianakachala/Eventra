@@ -52,6 +52,27 @@ const createNewEvent = async (creatorId, eventData) => {
     return data[0]; 
 };
 
+const deleteEvent = async (creatorId, eventId) => {
+    const { data, error } = await supabaseAdmin
+        .from('events') 
+        .delete() 
+        .eq('id', eventId)
+        .eq('creator_id', creatorId) 
+        .select(); 
+
+    if (error) {
+        throw new Error(`Помилка бази даних: ${error.message}`);
+    }
+
+    if (!data || data.length === 0) {
+        throw new Error('Подію не знайдено або ви не маєте прав на її видалення'); 
+    } 
+    
+    return data[0]; 
+};
+
 module.exports = { 
-    createNewEvent 
+    findEvent, 
+    createNewEvent,
+    deleteEvent
 }; 
