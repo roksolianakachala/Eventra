@@ -26,9 +26,9 @@ const getEventById = async (req, res) => {
             data: event 
         });
 
-    } catch (error) {
-        console.error("Помилка при пошуку івенту:", error);
-        res.status(500).json({ status: "error", message: error.message }); 
+    } catch (err) {
+        console.error("Помилка при пошуку івенту:", err);
+        res.status(500).json({ status: "error", message: err.message }); 
     } 
 };
 
@@ -45,12 +45,12 @@ const createEvent = async (req, res) => {
         } 
 
         const token = authData.split(" ")[1]; 
-        const {data: { user }, error} = await supabaseAuth.auth.getUser(token); 
+        const {data: { user }, authError} = await supabaseAuth.auth.getUser(token); 
         
-        if (error || !user) { 
+        if (authError || !user) { 
             return res.status(401).json({
                 status: "error",
-                message: error.message || "Invalid token"  
+                message: authError.message || "Invalid token"  
             });
         } 
         
@@ -70,12 +70,30 @@ const createEvent = async (req, res) => {
             data: newEvent 
         }); 
         
-    } catch (error) {
-        res.status(500).json({ status: "error", message: error.message }); 
+    } catch (err) {
+        res.status(500).json({ status: "error", message: err.message }); 
     }
 } 
 
+const deleteEvent = async (req, res) => {
+    try { 
+        const eventId = req.params.id; 
+        const userId = req.user.id; 
+
+        const deletedEvent = await eventsService.deleteEvent(userId, eventId); 
+
+        res.status(200).json({ 
+            status: "success", 
+            message: "Подію успішно видалено",  
+            data: deletedEvent 
+        }); 
+    } catch (err) { 
+        res.status(500).json({ status: "error", message: err.message }); 
+    } 
+}
+
 module.exports = { 
     getEventById, 
-    createEvent 
+    createEvent,  
+    deleteEvent
 }; 
