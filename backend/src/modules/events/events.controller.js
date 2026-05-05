@@ -30,7 +30,21 @@ const getEventById = async (req, res) => {
         console.error("Помилка при пошуку івенту:", err);
         res.status(500).json({ status: "error", message: err.message }); 
     } 
-};
+}; 
+
+const getEvents = async (req, res) => {
+    try {
+        const { category, limit} = req.query; 
+        
+        const events = await eventsService.getAllEvents({ category, limit }); 
+        return res.status(200).json({ 
+            status: "success", 
+            data: events 
+        }); 
+    } catch (err) {
+        res.status(500).json({ status: "error", message: err.message }); 
+    } 
+} 
 
 const createEvent = async (req, res) => { 
     try {
@@ -94,6 +108,7 @@ const deleteEvent = async (req, res) => {
 
 module.exports = { 
     getEventById, 
+    getEvents, 
     createEvent,  
     deleteEvent
 }; 

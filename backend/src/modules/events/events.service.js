@@ -1,5 +1,28 @@
 const { supabaseAuth, supabaseAdmin } = require('../../config/db.config'); 
 
+
+const getAllEvents = async (filter = {}) => {
+    const { category, limit = 10 } = filter; 
+    
+    let query = supabaseAuth
+        .from('events')
+        .select('*') 
+        .order('start_time', { ascending: true }) 
+        .limit(limit); 
+    
+    if (category && category.trim() !== '') { 
+        query = query.eq('category', category); 
+    } 
+    
+    const { data, error } = await query; 
+
+    if (error) {
+        throw new Error(`Помилка отримання даних з бази: ${error.message}`);
+    } 
+
+    return data; 
+}
+
 const findEvent = async (eventId) => { 
     const { data, error } = await supabaseAuth
         .from('events')
@@ -16,7 +39,7 @@ const findEvent = async (eventId) => {
     }
 
     return data; 
-};
+}; 
 
 const createNewEvent = async (creatorId, eventData) => {
     
@@ -72,6 +95,7 @@ const deleteEvent = async (creatorId, eventId) => {
 };
 
 module.exports = { 
+    getAllEvents, 
     findEvent, 
     createNewEvent,
     deleteEvent
