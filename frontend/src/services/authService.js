@@ -21,6 +21,14 @@ export const demoUser = {
 export function normalizeUser(user = {}) {
   const source = user && typeof user === "object" ? user : {};
   const metadata = source.user_metadata || source.raw_user_meta_data || {};
+  const avatarUrl =
+    source.avatarUrl ||
+    source.avatar_url ||
+    source.picture ||
+    metadata.avatarUrl ||
+    metadata.avatar_url ||
+    metadata.picture ||
+    "";
   const firstName =
     source.firstName ||
     source.first_name ||
@@ -49,6 +57,7 @@ export function normalizeUser(user = {}) {
     lastName,
     fullName,
     email: source.email || demoUser.email,
+    avatarUrl,
     phone: source.phone || source.phoneNumber || demoUser.phone,
     city: source.city || demoUser.city,
     country: source.country || demoUser.country,
@@ -92,6 +101,7 @@ export function getUserFromJwtToken(token) {
     return normalizeUser({
       id: payload.sub,
       email: payload.email,
+      avatar_url: payload.avatar_url || payload.picture,
       user_metadata: payload.user_metadata,
     });
   } catch {
@@ -100,8 +110,13 @@ export function getUserFromJwtToken(token) {
 }
 
 function normalizeAuthResponse(response) {
-  const user = response?.user || response?.data?.user || response;
   const session = response?.session || response?.data?.session || null;
+  const user =
+    response?.user ||
+    response?.data?.user ||
+    session?.user ||
+    response?.data?.session?.user ||
+    response;
   const token =
     response?.token ||
     response?.accessToken ||

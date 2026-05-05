@@ -37,7 +37,11 @@ function Header({ onMenuClick }) {
 
         {isAuthenticated ? (
           <div className="user">
-            <div className="avatar">{user.initials}</div>
+            {user.avatarUrl ? (
+              <img className="avatar" src={user.avatarUrl} alt={user.fullName} />
+            ) : (
+              <div className="avatar">{user.initials}</div>
+            )}
             <span>{user.fullName}</span>
             <ChevronDown size={18} />
           </div>
