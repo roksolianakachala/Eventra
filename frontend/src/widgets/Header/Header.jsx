@@ -36,7 +36,7 @@ function Header({ onMenuClick }) {
         </Link>
 
         {isAuthenticated ? (
-          <div className="user">
+          <Link className="user" to="/profile" aria-label="Open my profile">
             {user.avatarUrl ? (
               <img className="avatar" src={user.avatarUrl} alt={user.fullName} />
             ) : (
@@ -44,7 +44,7 @@ function Header({ onMenuClick }) {
             )}
             <span>{user.fullName}</span>
             <ChevronDown size={18} />
-          </div>
+          </Link>
         ) : (
           <div className="header-auth-actions">
             <Link to="/login">Увійти</Link>

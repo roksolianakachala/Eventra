@@ -347,10 +347,18 @@
   .hero {
     width: 100%;
     flex-direction: column;
-    min-height: 0;
-    padding: 20px 16px;
-    text-align: left;
-    gap: 18px;
+    min-height: 600px;
+    padding: 28px 16px 0;
+    text-align: center;
+    gap: 0;
+    justify-content: space-between;
+    align-items: stretch;
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .hero-text h1 {
@@ -358,7 +366,7 @@
   }
 
   .hero-text p {
-    margin: 16px 0 20px;
+    margin: 18px 0 0;
     font-size: 16px;
   }
 
@@ -369,11 +377,16 @@
   }
 
   .hero-image {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
     max-width: 100%;
+    margin-top: 24px;
   }
 
   .hero-image img {
-    max-height: 220px;
+    width: min(100%, 430px);
+    max-height: 320px;
     object-fit: contain;
   }
 
@@ -415,17 +428,26 @@
 @media (max-width: 576px) {
   .hero {
     border-radius: 12px;
-    padding: 18px 14px;
-    gap: 16px;
+    min-height: 622px;
+    padding: 28px 18px 0;
   }
 
   .hero-text h1 {
-    font-size: 26px;
+    font-size: 27px;
   }
 
   .hero-text p {
-    margin: 18px 0 24px;
+    margin: 28px 0 0;
     font-size: 16px;
+  }
+
+  .hero-image {
+    margin-top: 22px;
+  }
+
+  .hero-image img {
+    width: min(100%, 390px);
+    max-height: 330px;
   }
 
   .section-header {
@@ -454,6 +476,16 @@
 @media (max-width: 420px) {
   .hero-text h1 {
     font-size: 25px;
+  }
+
+  .hero {
+    min-height: 590px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero-image img {
+    max-height: 300px;
   }
 
   .hero-text button {
