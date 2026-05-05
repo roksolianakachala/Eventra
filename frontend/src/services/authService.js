@@ -21,6 +21,8 @@ export const demoUser = {
 export function normalizeUser(user = {}) {
   const source = user && typeof user === "object" ? user : {};
   const metadata = source.user_metadata || source.raw_user_meta_data || {};
+  const hasRealIdentity = Boolean(source.id || source.user_id || source.email);
+  const isDemoUser = !hasRealIdentity || source.id === demoUser.id;
   const avatarUrl =
     source.avatarUrl ||
     source.avatar_url ||
@@ -35,35 +37,59 @@ export function normalizeUser(user = {}) {
     metadata.firstName ||
     metadata.first_name ||
     metadata.given_name ||
-    demoUser.firstName;
+    "";
   const lastName =
     source.lastName ||
     source.last_name ||
     metadata.lastName ||
     metadata.last_name ||
     metadata.family_name ||
-    demoUser.lastName;
+    "";
   const fullName =
     source.fullName ||
     source.name ||
     metadata.full_name ||
-    `${firstName} ${lastName}`.trim();
+    metadata.name ||
+    `${firstName} ${lastName}`.trim() ||
+    source.email?.split("@")[0] ||
+    "";
+  const isOldDemoValue = (value, demoValue) => !isDemoUser && value === demoValue;
+  const nameParts = fullName.split(" ").filter(Boolean);
+  const normalizedFirstName = isOldDemoValue(firstName, demoUser.firstName)
+    ? nameParts[0] || ""
+    : firstName;
+  const normalizedLastName = isOldDemoValue(lastName, demoUser.lastName)
+    ? nameParts.slice(1).join(" ")
+    : lastName;
+  const city = isOldDemoValue(source.city, demoUser.city) ? "" : source.city || "";
+  const country = isOldDemoValue(source.country, demoUser.country) ? "" : source.country || "";
+  const location = isOldDemoValue(source.location, demoUser.location)
+    ? ""
+    : source.location || [city, country].filter(Boolean).join(", ");
+  const sourceInterests = Array.isArray(source.interests) ? source.interests : [];
+  const interests = isOldDemoValue(sourceInterests.join("|"), demoUser.interests.join("|"))
+    ? []
+    : sourceInterests.length
+      ? sourceInterests
+      : [];
 
   return {
-    ...demoUser,
     ...source,
+    ...(isDemoUser ? demoUser : {}),
     id: source.id || source.user_id || demoUser.id,
-    firstName,
-    lastName,
+    firstName: normalizedFirstName,
+    lastName: normalizedLastName,
     fullName,
-    email: source.email || demoUser.email,
+    email: source.email || "",
     avatarUrl,
-    phone: source.phone || source.phoneNumber || demoUser.phone,
-    city: source.city || demoUser.city,
-    country: source.country || demoUser.country,
-    location: source.location || `${source.city || demoUser.city}, ${source.country || demoUser.country}`,
-    initials: source.initials || fullName.charAt(0).toUpperCase() || demoUser.initials,
-    interests: source.interests?.length ? source.interests : demoUser.interests,
+    phone: isOldDemoValue(source.phone || source.phoneNumber, demoUser.phone) ? "" : source.phone || source.phoneNumber || "",
+    city,
+    country,
+    location,
+    initials: source.initials || fullName.charAt(0).toUpperCase() || "",
+    bio: isOldDemoValue(source.bio, demoUser.bio) ? "" : source.bio || "",
+    interests,
+    joinedAt: isOldDemoValue(source.joinedAt, demoUser.joinedAt) ? "" : source.joinedAt || source.created_at || "",
   };
 }
 

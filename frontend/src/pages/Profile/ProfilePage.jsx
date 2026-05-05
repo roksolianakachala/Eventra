@@ -6,7 +6,7 @@ import { useAuth } from "../../app/providers";
 function ProfilePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const interests = user.interests;
+  const interests = Array.isArray(user.interests) ? user.interests : [];
   const [activeMenuIndex, setActiveMenuIndex] = useState(0);
 
   const handleProfileSave = (event) => {
@@ -56,12 +56,16 @@ function ProfilePage() {
           <h2>Особисті дані</h2>
 
           <div className="profile-user">
-            <div className="profile-avatar">{user.initials}</div>
+            {user.avatarUrl ? (
+              <img className="profile-avatar" src={user.avatarUrl} alt={user.fullName} />
+            ) : (
+              <div className="profile-avatar">{user.initials}</div>
+            )}
 
             <div>
               <h3>{user.fullName}</h3>
               <p>{user.email}</p>
-              <p><MapPin size={16} className="icon" /> {user.location}</p>
+              {user.location && <p><MapPin size={16} className="icon" /> {user.location}</p>}
 
               <button className="change-photo-btn" type="button" onClick={handlePlaceholderAction}>Змінити фото</button>
             </div>
@@ -127,9 +131,9 @@ function ProfilePage() {
 
           <div className="summary-list">
             <p><Mail size={16} className="icon" /> {user.email}</p>
-            <p><Phone size={16} className="icon" /> {user.phone}</p>
-            <p><MapPin size={16} className="icon" /> {user.location}</p>
-            <p><CalendarDays size={16} className="icon" /> Приєдналася {user.joinedAt}</p>
+            {user.phone && <p><Phone size={16} className="icon" /> {user.phone}</p>}
+            {user.location && <p><MapPin size={16} className="icon" /> {user.location}</p>}
+            {user.joinedAt && <p><CalendarDays size={16} className="icon" /> Приєдналася {user.joinedAt}</p>}
           </div>
 
           <div className="profile-tip">
