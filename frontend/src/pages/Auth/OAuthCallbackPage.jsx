@@ -8,7 +8,7 @@ function OAuthCallbackPage() {
   const { completeOAuthLogin } = useAuth();
 
   useEffect(() => {
-    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#\/?/, ""));
     const queryParams = new URLSearchParams(window.location.search);
     const params = hashParams.toString() ? hashParams : queryParams;
     const error = params.get("error");
@@ -31,6 +31,7 @@ function OAuthCallbackPage() {
     try {
       const user = JSON.parse(userParam);
       completeOAuthLogin({ token, user });
+      window.history.replaceState(null, "", "/profile");
       navigate("/profile", { replace: true });
     } catch {
       alert("Не вдалося прочитати дані Google-акаунта");

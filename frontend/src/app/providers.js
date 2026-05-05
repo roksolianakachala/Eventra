@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import {
   clearStoredAuth,
   demoUser,
@@ -19,6 +19,17 @@ export function AppProviders({ children }) {
     isAuthenticated: Boolean(storedAuth?.isAuthenticated || storedAuth?.token),
   });
 
+  const completeOAuthLogin = useCallback((auth) => {
+    const nextAuth = {
+      token: auth?.token || null,
+      user: normalizeUser(auth?.user),
+      isAuthenticated: true,
+    };
+    storeAuth(nextAuth);
+    setAuthState(nextAuth);
+    return nextAuth;
+  }, []);
+
   const value = useMemo(
     () => ({
       ...authState,
@@ -35,16 +46,7 @@ export function AppProviders({ children }) {
         setAuthState(nextAuth);
         return nextAuth;
       },
-      completeOAuthLogin(auth) {
-        const nextAuth = {
-          token: auth?.token || null,
-          user: normalizeUser(auth?.user),
-          isAuthenticated: true,
-        };
-        storeAuth(nextAuth);
-        setAuthState(nextAuth);
-        return nextAuth;
-      },
+      completeOAuthLogin,
       updateUser(userUpdates) {
         setAuthState((current) => {
           const nextAuth = {
@@ -65,7 +67,7 @@ export function AppProviders({ children }) {
         });
       },
     }),
-    [authState]
+    [authState, completeOAuthLogin]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
