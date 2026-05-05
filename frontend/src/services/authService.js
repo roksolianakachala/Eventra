@@ -75,6 +75,30 @@ export function clearStoredAuth() {
   localStorage.removeItem(AUTH_STORAGE_KEY);
 }
 
+function decodeBase64Url(value) {
+  const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
+  return decodeURIComponent(
+    atob(padded)
+      .split("")
+      .map((char) => `%${char.charCodeAt(0).toString(16).padStart(2, "0")}`)
+      .join("")
+  );
+}
+
+export function getUserFromJwtToken(token) {
+  try {
+    const payload = JSON.parse(decodeBase64Url(token.split(".")[1] || ""));
+    return normalizeUser({
+      id: payload.sub,
+      email: payload.email,
+      user_metadata: payload.user_metadata,
+    });
+  } catch {
+    return null;
+  }
+}
+
 function normalizeAuthResponse(response) {
   const user = response?.user || response?.data?.user || response;
   const session = response?.session || response?.data?.session || null;
@@ -110,6 +134,16 @@ export async function register(formData) {
   });
 
   return normalizeAuthResponse(response);
+}
+
+export async function getUserFromToken(token) {
+  const response = await apiRequest("/auth/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return normalizeUser(response?.user || response);
 }
 
 export function getGoogleAuthUrl() {

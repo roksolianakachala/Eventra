@@ -10,6 +10,23 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "https://eventra-for-events.net
 router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 
+router.get("/me", async (req, res) => {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+
+  if (!token) {
+    return res.status(401).json({ message: "Need authorization header" });
+  }
+
+  const { data, error } = await supabaseAuth.auth.getUser(token);
+
+  if (error) {
+    return res.status(403).json({ message: error.message });
+  }
+
+  res.json({ user: data.user });
+});
+
 router.get("/google", async (req, res) => {
   const { data, error } =
     await supabaseAuth.auth.signInWithOAuth({
