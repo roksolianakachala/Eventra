@@ -6,6 +6,19 @@ const {
 } = require("../../config/db.config");
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://eventra-for-events.netlify.app";
+const ALLOWED_FRONTEND_URLS = new Set([
+  "http://localhost:3000",
+  FRONTEND_URL,
+].filter(Boolean));
+
+function getFrontendUrl(value) {
+  try {
+    const url = new URL(value || FRONTEND_URL);
+    return ALLOWED_FRONTEND_URLS.has(url.origin) ? url.origin : FRONTEND_URL;
+  } catch {
+    return FRONTEND_URL;
+  }
+}
 
 router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
@@ -28,11 +41,13 @@ router.get("/me", async (req, res) => {
 });
 
 router.get("/google", async (req, res) => {
+  const frontendUrl = getFrontendUrl(req.query.frontend_url);
+  const redirectTo = `${frontendUrl}/auth/callback`;
   const { data, error } =
     await supabaseAuth.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "https://eventra-j1tj.onrender.com/api/auth/google/callback"
+        redirectTo,
       }
     });
 
@@ -47,6 +62,15 @@ router.get("/google/callback", async (req, res) => {
   console.log("RECEIVED GOOGLE CALLBACK"); 
 
   const { code } = req.query;
+  const frontendUrl = getFrontendUrl(req.query.frontend_url);
+
+  if (!code) {
+    const params = new URLSearchParams({
+      error: "Google authorization code was not found",
+    });
+
+    return res.redirect(`${frontendUrl}/auth/callback#${params.toString()}`);
+  }
 
   const { data, error } =
     await supabaseAuth.auth.exchangeCodeForSession(code);
@@ -57,7 +81,7 @@ router.get("/google/callback", async (req, res) => {
       error: error.message || "Google authorization failed",
     });
 
-    return res.redirect(`${FRONTEND_URL}/auth/callback#${params.toString()}`);
+    return res.redirect(`${frontendUrl}/auth/callback#${params.toString()}`);
   }
 
   const user = data.user;
@@ -66,11 +90,13 @@ router.get("/google/callback", async (req, res) => {
 
   const firstName =
     meta.given_name ||
+    meta.name?.split(" ")[0] ||
     meta.full_name?.split(" ")[0] ||
     "";
 
   const lastName =
     meta.family_name ||
+    meta.name?.split(" ").slice(1).join(" ") ||
     meta.full_name?.split(" ").slice(1).join(" ") ||
     "";
 
@@ -92,11 +118,12 @@ router.get("/google/callback", async (req, res) => {
       email: user.email,
       firstName,
       lastName,
-      fullName: meta.full_name || `${firstName} ${lastName}`.trim(),
+      fullName: meta.full_name || meta.name || `${firstName} ${lastName}`.trim(),
+      avatarUrl: meta.avatar_url || meta.picture || "",
     }),
   });
 
-  res.redirect(`${FRONTEND_URL}/auth/callback#${params.toString()}`);
+  res.redirect(`${frontendUrl}/auth/callback#${params.toString()}`);
 });
 
 module.exports = router;

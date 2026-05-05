@@ -162,5 +162,9 @@ export async function getUserFromToken(token) {
 }
 
 export function getGoogleAuthUrl() {
-  return `${API_BASE_URL}/auth/google`;
+  const params = new URLSearchParams({
+    frontend_url: window.location.origin,
+  });
+
+  return `${API_BASE_URL}/auth/google?${params.toString()}`;
 }
