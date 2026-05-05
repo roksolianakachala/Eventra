@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../app/providers";
 import "./HomePage.css";
 import {
   CalendarDays, MapPin, Music, Dumbbell, GraduationCap, Laptop, Palette, Gamepad2, ChevronDown, ChevronLeft, ChevronRight, Heart,
@@ -8,6 +9,7 @@ import "./HomePage.css";
 
 function HomePage() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const recommendedRef = useRef(null);
 
   const scrollRecommended = (direction) => {
@@ -98,9 +100,11 @@ function HomePage() {
             відвідуй івенти разом
           </p>
 
-          <button onClick={() => navigate("/register")}>
-            ПРИЄДНАТИСЯ ДО EVENTRA
-          </button>
+          {!isAuthenticated && (
+            <button onClick={() => navigate("/register")}>
+              ПРИЄДНАТИСЯ ДО EVENTRA
+            </button>
+          )}
         </div>
 
         <div className="hero-image">

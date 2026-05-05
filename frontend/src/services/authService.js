@@ -20,14 +20,31 @@ export const demoUser = {
 
 export function normalizeUser(user = {}) {
   const source = user && typeof user === "object" ? user : {};
-  const firstName = source.firstName || source.first_name || demoUser.firstName;
-  const lastName = source.lastName || source.last_name || demoUser.lastName;
+  const metadata = source.user_metadata || source.raw_user_meta_data || {};
+  const firstName =
+    source.firstName ||
+    source.first_name ||
+    metadata.firstName ||
+    metadata.first_name ||
+    metadata.given_name ||
+    demoUser.firstName;
+  const lastName =
+    source.lastName ||
+    source.last_name ||
+    metadata.lastName ||
+    metadata.last_name ||
+    metadata.family_name ||
+    demoUser.lastName;
   const fullName =
-    source.fullName || source.name || `${firstName} ${lastName}`.trim();
+    source.fullName ||
+    source.name ||
+    metadata.full_name ||
+    `${firstName} ${lastName}`.trim();
 
   return {
     ...demoUser,
     ...source,
+    id: source.id || source.user_id || demoUser.id,
     firstName,
     lastName,
     fullName,
@@ -60,11 +77,20 @@ export function clearStoredAuth() {
 
 function normalizeAuthResponse(response) {
   const user = response?.user || response?.data?.user || response;
-  const token = response?.token || response?.accessToken || response?.data?.token || null;
+  const session = response?.session || response?.data?.session || null;
+  const token =
+    response?.token ||
+    response?.accessToken ||
+    response?.access_token ||
+    response?.data?.token ||
+    session?.access_token ||
+    null;
+  const normalizedUser = normalizeUser(user);
 
   return {
     token,
-    user: normalizeUser(user),
+    user: normalizedUser,
+    isAuthenticated: Boolean(token || normalizedUser.id !== demoUser.id),
   };
 }
 

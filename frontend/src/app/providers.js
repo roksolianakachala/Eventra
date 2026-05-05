@@ -16,12 +16,13 @@ export function AppProviders({ children }) {
   const [authState, setAuthState] = useState({
     token: storedAuth?.token || null,
     user: normalizeUser(storedAuth?.user || demoUser),
+    isAuthenticated: Boolean(storedAuth?.isAuthenticated || storedAuth?.token),
   });
 
   const value = useMemo(
     () => ({
       ...authState,
-      isAuthenticated: Boolean(authState.token),
+      isAuthenticated: Boolean(authState.isAuthenticated || authState.token),
       async loginUser(credentials) {
         const nextAuth = await login(credentials);
         storeAuth(nextAuth);
@@ -39,6 +40,7 @@ export function AppProviders({ children }) {
           const nextAuth = {
             ...current,
             user: normalizeUser({ ...current.user, ...userUpdates }),
+            isAuthenticated: Boolean(current.isAuthenticated || current.token),
           };
           storeAuth(nextAuth);
           return nextAuth;
@@ -46,7 +48,11 @@ export function AppProviders({ children }) {
       },
       logoutUser() {
         clearStoredAuth();
-        setAuthState({ token: null, user: normalizeUser(demoUser) });
+        setAuthState({
+          token: null,
+          user: normalizeUser(demoUser),
+          isAuthenticated: false,
+        });
       },
     }),
     [authState]
