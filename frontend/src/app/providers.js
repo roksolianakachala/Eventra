@@ -35,6 +35,16 @@ export function AppProviders({ children }) {
         setAuthState(nextAuth);
         return nextAuth;
       },
+      completeOAuthLogin(auth) {
+        const nextAuth = {
+          token: auth?.token || null,
+          user: normalizeUser(auth?.user),
+          isAuthenticated: true,
+        };
+        storeAuth(nextAuth);
+        setAuthState(nextAuth);
+        return nextAuth;
+      },
       updateUser(userUpdates) {
         setAuthState((current) => {
           const nextAuth = {

@@ -5,6 +5,8 @@ const {
   supabaseAdmin
 } = require("../../config/db.config");
 
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://eventra-for-events.netlify.app";
+
 router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 
@@ -34,10 +36,15 @@ router.get("/google/callback", async (req, res) => {
 
   if (error) {
     console.log(error);
-    return res.redirect("https://eventra-for-events.netlify.app");
+    const params = new URLSearchParams({
+      error: error.message || "Google authorization failed",
+    });
+
+    return res.redirect(`${FRONTEND_URL}/auth/callback#${params.toString()}`);
   }
 
   const user = data.user;
+  const token = data.session?.access_token;
   const meta = user.user_metadata || {};
 
   const firstName =
@@ -61,7 +68,18 @@ router.get("/google/callback", async (req, res) => {
 
   console.log(profileError);
 
-  res.redirect("https://eventra-for-events.netlify.app");
+  const params = new URLSearchParams({
+    access_token: token || "",
+    user: JSON.stringify({
+      id: user.id,
+      email: user.email,
+      firstName,
+      lastName,
+      fullName: meta.full_name || `${firstName} ${lastName}`.trim(),
+    }),
+  });
+
+  res.redirect(`${FRONTEND_URL}/auth/callback#${params.toString()}`);
 });
 
 module.exports = router;

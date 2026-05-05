@@ -7,6 +7,7 @@ import EventsPage from "../pages/Events/EventsPage";
 import TutorsPage from "../pages/Tutors/TutorsPage";
 import ProfilePage from "../pages/Profile/ProfilePage";
 import LoginPage from "../pages/Auth/LoginPage";
+import OAuthCallbackPage from "../pages/Auth/OAuthCallbackPage";
 import RegisterPage from "../pages/Auth/RegisterPage";
 import BecomeTutorPage from "../pages/BecomeTutor/BecomeTutorPage";
 import CreateEventPage from "../pages/CreateEvent/CreateEventPage";
@@ -25,6 +26,7 @@ function AppRoutes() {
         <Route path="tutors" element={<TutorsPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="auth/callback" element={<OAuthCallbackPage />} />
         <Route path="become-tutor" element={<BecomeTutorPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="create-event" element={<CreateEventPage />} />
