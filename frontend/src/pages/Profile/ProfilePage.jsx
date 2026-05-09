@@ -33,6 +33,8 @@ function ProfilePage() {
       return;
     }
 
+    
+
     console.log("AUTH:", localStorage.getItem("eventra_auth"));
     console.log("TOKEN:", token);
 
