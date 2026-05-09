@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
 const authRouter = require("./src/modules/auth/auth.router");
 const eventsRouter = require("./src/modules/events/events.router"); 
-const profileRouter = require("./src/modules/profile/profile.routes");
+const profileRouter = require("./src/modules/Profile/profile.routes");
 
 app.use("/api/auth", authRouter);
 app.use("/api/events", eventsRouter);
