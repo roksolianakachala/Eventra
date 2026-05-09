@@ -10,7 +10,7 @@ export const eventService = {
         }  
         
         return await apiRequest(
-            "/events/create", 
+            "/events", 
             {
                 method: "POST", 
                 headers: {
