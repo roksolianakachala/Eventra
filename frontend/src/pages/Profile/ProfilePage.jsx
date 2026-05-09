@@ -16,11 +16,7 @@ function ProfilePage() {
 
     console.log("AUTH RAW:", localStorage.getItem("eventra_auth"));
 
-const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
-console.log("PARSED AUTH:", auth);
 
-const token = auth?.token;
-console.log("TOKEN:", token);
 
 
     const form = event.target;
@@ -34,8 +30,11 @@ console.log("TOKEN:", token);
       interests,
    };
 
-    const auth = JSON.parse(localStorage.getItem("eventra_auth"));
+    const auth = JSON.parse(localStorage.getItem("eventra_auth")|| "{}");
+    console.log("PARSED AUTH:", auth);
     const token = auth?.token;
+
+    console.log("TOKEN:", token);
 
     if (!token) {
       alert("Нема токена. Перелогінься");
