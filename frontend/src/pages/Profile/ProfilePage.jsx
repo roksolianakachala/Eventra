@@ -12,6 +12,7 @@ function ProfilePage() {
 
   const handleProfileSave = async (event) => {
     event.preventDefault();
+    
 
     const form = event.target;
 
