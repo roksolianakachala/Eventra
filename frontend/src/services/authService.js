@@ -194,3 +194,8 @@ export function getGoogleAuthUrl() {
 
   return `${API_BASE_URL}/auth/google?${params.toString()}`;
 }
+
+
+export function logout() {
+  clearStoredAuth();
+}

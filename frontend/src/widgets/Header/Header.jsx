@@ -1,10 +1,18 @@
 import { Users, Bell, MessageSquare, Search, ChevronDown, Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../app/providers";
 import "./Header.css";
 
 function Header({ onMenuClick }) {
-  const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const { user, isAuthenticated, logoutUser } = useAuth();
+
+  const handleLogout = () => {
+    logoutUser();
+    navigate("/login");
+  };
+
 
   const handleNotificationsClick = () => {
     // TODO: Connect notifications to the backend notifications API.
@@ -36,15 +44,22 @@ function Header({ onMenuClick }) {
         </Link>
 
         {isAuthenticated ? (
+          <>
           <Link className="user" to="/profile" aria-label="Open my profile">
             {user.avatarUrl ? (
               <img className="avatar" src={user.avatarUrl} alt={user.fullName} />
             ) : (
               <div className="avatar">{user.initials}</div>
             )}
+            
             <span>{user.fullName}</span>
             <ChevronDown size={18} />
           </Link>
+          
+          <button className="header-auth-actions" type="button" onClick={handleLogout}>
+            Вийти
+          </button>
+        </>
         ) : (
           <div className="header-auth-actions">
             <Link to="/login">Увійти</Link>
