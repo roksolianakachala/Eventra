@@ -50,6 +50,10 @@
   font-size: 15px;
   cursor: pointer;
   min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #1e293b;
 }
 
 .profile-menu button.active {
@@ -110,6 +114,293 @@
   font-weight: 700;
   cursor: pointer;
   min-height: 44px;
+}
+
+.profile-section-intro,
+.profile-setting-row,
+.profile-action-panel,
+.payment-method,
+.connected-item,
+.review-card,
+.subscription-card,
+.profile-plan {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.profile-section-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px;
+  margin-bottom: 20px;
+  background: #f8fbff;
+}
+
+.profile-section-intro svg {
+  color: #075ee8;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.profile-section-intro h3,
+.profile-setting-row h3,
+.profile-action-panel h3,
+.payment-method h3,
+.connected-item h3,
+.review-card h3,
+.subscription-card h3,
+.profile-plan h3 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  color: #0f172a;
+}
+
+.profile-section-intro p,
+.profile-setting-row p,
+.profile-action-panel p,
+.payment-method p,
+.connected-item p,
+.review-card p,
+.subscription-card p,
+.profile-plan p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.profile-password-input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #cfdbee;
+  border-radius: 10px;
+  padding: 0 12px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-password-input svg {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.profile-password-input input {
+  border: none;
+  padding: 0;
+}
+
+.profile-password-input button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-password-input button:hover {
+  background: #eaf3ff;
+  color: #075ee8;
+}
+
+.profile-setting-row {
+  min-height: 78px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.profile-switch {
+  position: relative;
+  width: 56px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.profile-switch input {
+  display: none;
+}
+
+.profile-switch span {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #cbd5e1;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.profile-switch span::before {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 4px;
+  top: 4px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: 0.2s;
+}
+
+.profile-switch input:checked + span {
+  background: #075ee8;
+}
+
+.profile-switch input:checked + span::before {
+  transform: translateX(24px);
+}
+
+.profile-action-panel,
+.payment-method,
+.connected-item {
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.profile-action-panel {
+  margin-top: 20px;
+  background: #f8fbff;
+}
+
+.profile-action-panel button,
+.payment-method button,
+.connected-item button,
+.profile-plan button,
+.review-card button {
+  height: 42px;
+  padding: 0 16px;
+  border: 1px solid #075ee8;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #075ee8;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 44px;
+  flex-shrink: 0;
+}
+
+.subscription-card {
+  padding: 22px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  background: #eaf3ff;
+}
+
+.subscription-card span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #075ee8;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.profile-eyebrow {
+  margin-bottom: 8px !important;
+  color: #075ee8 !important;
+  font-size: 13px !important;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.profile-plan-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.profile-plan {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-plan strong {
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.profile-plan button {
+  width: fit-content;
+  background: #075ee8;
+  color: #ffffff;
+}
+
+.payment-method {
+  margin-bottom: 14px;
+}
+
+.payment-method > svg {
+  color: #075ee8;
+  flex-shrink: 0;
+}
+
+.connected-list,
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.connected-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #eaf3ff;
+  color: #075ee8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.connected-item > div:nth-child(2),
+.payment-method > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.review-card {
+  padding: 18px;
+}
+
+.review-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.review-rating {
+  display: flex;
+  gap: 3px;
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.review-card > button {
+  margin-top: 16px;
 }
 
 .profile-divider {
@@ -219,6 +510,9 @@
 .summary-list p {
   margin: 0 0 18px;
   color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .profile-tip {
@@ -231,6 +525,9 @@
 .profile-tip h3 {
   margin: 0 0 10px;
   color: #075ee8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .profile-tip p {
@@ -272,6 +569,12 @@
   }
 }
 
+@media (max-width: 992px) {
+  .profile-plan-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .profile-title h1 {
     font-size: 28px;
@@ -305,6 +608,13 @@
     grid-template-columns: 1fr;
     gap: 14px;
   }
+
+  .profile-action-panel,
+  .payment-method,
+  .connected-item,
+  .subscription-card {
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 576px) {
@@ -334,6 +644,27 @@
 
   .profile-actions button {
     width: 100%;
+  }
+
+  .profile-setting-row,
+  .profile-action-panel,
+  .payment-method,
+  .connected-item,
+  .subscription-card,
+  .review-card-header {
+    flex-direction: column;
+  }
+
+  .profile-action-panel button,
+  .payment-method button,
+  .connected-item button,
+  .profile-plan button,
+  .review-card button {
+    width: 100%;
+  }
+
+  .profile-menu button {
+    padding: 0 12px;
   }
 }
 
