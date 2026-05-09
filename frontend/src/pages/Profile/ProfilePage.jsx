@@ -14,6 +14,15 @@ function ProfilePage() {
     event.preventDefault();
 
 
+    console.log("AUTH RAW:", localStorage.getItem("eventra_auth"));
+
+const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
+console.log("PARSED AUTH:", auth);
+
+const token = auth?.token;
+console.log("TOKEN:", token);
+
+
     const form = event.target;
 
     const payload = {
@@ -33,7 +42,7 @@ function ProfilePage() {
       return;
     }
 
-    
+
 
     console.log("AUTH:", localStorage.getItem("eventra_auth"));
     console.log("TOKEN:", token);
