@@ -64,24 +64,29 @@ export async function findOrCreateChat(participantId) {
   );
 }
 
-export function subscribeToChatMessages(chatId, token, onMessage) {
-  if (!isSupabaseRealtimeConfigured || !supabase || !chatId || !token) {
+export function subscribeToChatMessages(chatIds, token, onMessage) {
+  const subscribedChatIds = new Set(Array.isArray(chatIds) ? chatIds : [chatIds].filter(Boolean));
+
+  if (!isSupabaseRealtimeConfigured || !supabase || subscribedChatIds.size === 0 || !token) {
     return null;
   }
 
   applySupabaseRealtimeAuth(token);
 
   const channel = supabase
-    .channel(`eventra-chat:${chatId}`)
+    .channel(`eventra-chats:${[...subscribedChatIds].sort().join(",")}`)
     .on(
       "postgres_changes",
       {
         event: "INSERT",
         schema: "public",
         table: "messages",
-        filter: `chat_id=eq.${chatId}`,
       },
-      (payload) => onMessage(payload.new)
+      (payload) => {
+        if (subscribedChatIds.has(payload.new?.chat_id)) {
+          onMessage(payload.new);
+        }
+      }
     )
     .subscribe();
 

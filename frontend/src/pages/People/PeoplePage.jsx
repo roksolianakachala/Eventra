@@ -21,6 +21,7 @@ function PeoplePage() {
   const [activeFilter, setActiveFilter] = useState(0);
   const [people, setPeople] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [messagingPersonId, setMessagingPersonId] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
   const filters = [
@@ -66,11 +67,16 @@ function PeoplePage() {
   };
 
   const handleMessagePerson = async (person) => {
+    if (messagingPersonId) return;
+
     try {
+      setMessagingPersonId(person.id);
       const chat = await findOrCreateChat(person.id);
       navigate("/messages", { state: { chatId: chat.id } });
     } catch (error) {
       alert(error.message || "Не вдалося створити чат.");
+    } finally {
+      setMessagingPersonId(null);
     }
   };
 
@@ -142,9 +148,14 @@ function PeoplePage() {
                 Додати
               </button>
 
-              <button className="secondary" type="button" onClick={() => handleMessagePerson(person)}>
+              <button
+                className="secondary"
+                type="button"
+                onClick={() => handleMessagePerson(person)}
+                disabled={messagingPersonId === person.id}
+              >
                 <MessageSquare size={16} />
-                Написати
+                {messagingPersonId === person.id ? "Відкриваємо..." : "Написати"}
               </button>
             </div>
           </article>

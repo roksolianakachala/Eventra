@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -58,6 +58,10 @@ function addMessageOnce(messages, nextMessage) {
   return [...messages, nextMessage];
 }
 
+function sortByLatestMessage(first, second) {
+  return new Date(second.latestMessageAt || 0) - new Date(first.latestMessageAt || 0);
+}
+
 function MessagesPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -73,9 +77,16 @@ function MessagesPage() {
   const [visibleCount, setVisibleCount] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const selectedConversationRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
   const selectedChat = conversations.find((chat) => chat.id === selectedConversation);
+
+  useEffect(() => {
+    selectedConversationRef.current = selectedConversation;
+  }, [selectedConversation]);
 
   const loadChats = useCallback(async () => {
     if (!isAuthenticated || !token) {
@@ -105,29 +116,45 @@ function MessagesPage() {
     loadChats();
   }, [loadChats]);
 
-  useEffect(() => {
-    if (!selectedConversation || !token) return undefined;
+  const chatIdsKey = useMemo(
+    () => conversations.map((conversation) => conversation.id).sort().join(","),
+    [conversations]
+  );
 
-    const channel = subscribeToChatMessages(selectedConversation, token, (message) => {
+  useEffect(() => {
+    if (!chatIdsKey || !token) return undefined;
+
+    const chatIds = chatIdsKey.split(",");
+
+    const channel = subscribeToChatMessages(chatIds, token, (message) => {
       const nextMessage = formatMessageFromRealtime(message, user.id);
 
       setConversations((current) =>
         current.map((conversation) => {
           if (conversation.id !== nextMessage.chatId) return conversation;
 
+          const isOpenChat = selectedConversationRef.current === conversation.id;
+
           return {
             ...conversation,
             lastMessage: nextMessage.text,
             time: nextMessage.time,
-            unread: selectedConversation === conversation.id ? 0 : conversation.unread + 1,
+            latestMessageAt: nextMessage.createdAt,
+            unread: isOpenChat || nextMessage.own ? 0 : conversation.unread + 1,
             messages: addMessageOnce(conversation.messages || [], nextMessage),
           };
-        })
+        }).sort(sortByLatestMessage)
       );
     });
 
     return () => unsubscribeFromChatMessages(channel);
-  }, [selectedConversation, token, user.id]);
+  }, [chatIdsKey, token, user.id]);
+
+  useEffect(() => {
+    if (!selectedConversation) return;
+
+    messagesEndRef.current?.scrollIntoView({ block: "end" });
+  }, [selectedConversation, selectedChat?.messages.length]);
 
   const filteredConversations = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -224,9 +251,10 @@ function MessagesPage() {
   const sendMessage = async () => {
     const text = messageText.trim();
 
-    if (!text || !selectedChat) return;
+    if (!text || !selectedChat || isSending) return;
 
     try {
+      setIsSending(true);
       setMessageText("");
       const nextMessage = await sendChatMessage(selectedChat.id, text);
 
@@ -237,14 +265,17 @@ function MessagesPage() {
                 ...conversation,
                 lastMessage: nextMessage.text,
                 time: nextMessage.time,
+                latestMessageAt: nextMessage.createdAt,
                 messages: addMessageOnce(conversation.messages || [], nextMessage),
               }
             : conversation
-        )
+        ).sort(sortByLatestMessage)
       );
     } catch (error) {
       setMessageText(text);
       setErrorMessage(error.message || "Не вдалося надіслати повідомлення.");
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -438,6 +469,8 @@ function MessagesPage() {
                 {!isMessagesLoading && selectedChat.messages.length === 0 && (
                   <p className="chat-list-empty">Напишіть перше повідомлення</p>
                 )}
+
+                <div ref={messagesEndRef} />
               </div>
 
               <div className="message-input">
@@ -450,7 +483,7 @@ function MessagesPage() {
                   onChange={(event) => setMessageText(event.target.value)}
                   onKeyDown={handleMessageKeyDown}
                 />
-                <button type="button" onClick={sendMessage} disabled={!messageText.trim()}>
+                <button type="button" onClick={sendMessage} disabled={!messageText.trim() || isSending}>
                   <Send size={20} />
                 </button>
               </div>

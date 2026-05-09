@@ -208,6 +208,11 @@
   opacity: 0.9;
 }
 
+.person-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .person-actions button.secondary {
   background: #eaf3ff;
   color: #075ee8;
