@@ -1,4 +1,5 @@
 import "./ProfilePage.css";
+import { useState, useEffect } from "react";
 import {
   Apple,
   Bell,
@@ -19,15 +20,36 @@ import {
   Users,
   WalletCards,
 } from "lucide-react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../app/providers";
 
 function ProfilePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [profile, setProfile] = useState(null);
 
-  const interests = Array.isArray(user.interests) ? user.interests : [];
+
+  useEffect(() => {
+  const fetchProfile = async () => {
+    const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
+    const token = auth?.token;
+
+    if (!token) return;
+
+    const res = await fetch("https://eventra-j1tj.onrender.com/api/profile/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      });
+
+      const data = await res.json();
+      setProfile(data);
+   };
+
+    fetchProfile();
+  }, []);
+
+  const interests = Array.isArray(profile?.interests) ? profile.interests : [];
   const [activeMenuIndex, setActiveMenuIndex] = useState(0);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -38,9 +60,9 @@ function ProfilePage() {
     const form = event.currentTarget;
 
     const payload = {
-      firstName: form.firstName.value,
-      lastName: form.lastName.value,
-      email: form.email.value,
+      first_name: form.firstName.value,
+      last_name: form.lastName.value,
+      contact_email: form.email.value,
       phone: form.phone.value,
       bio: form.bio.value,
     };
@@ -131,18 +153,21 @@ function ProfilePage() {
       <h2>Особисті дані</h2>
 
       <div className="profile-user">
-        {user.avatarUrl ? (
-          <img className="profile-avatar" src={user.avatarUrl} alt={user.fullName} />
+        {profile?.avatar_url ? (
+          <img className="profile-avatar" src={profile.avatar_url} /> 
         ) : (
-          <div className="profile-avatar">{user.initials}</div>
+        <div className="profile-avatar">
+          {profile?.first_name?.[0]}{profile?.last_name?.[0]}
+        </div>
         )}
 
         <div>
-          <h3>{user.fullName}</h3>
+          <h3>{profile?.first_name} {profile?.last_name}</h3>
           <p>{user.email}</p>
-          {user.location && (
+          <p>{profile?.email}</p>
+          {profile?.location && (
             <p>
-              <MapPin size={16} className="icon" /> {user.location}
+              <MapPin size={16} className="icon" /> {profile.location}
             </p>
           )}
 
@@ -158,12 +183,12 @@ function ProfilePage() {
         <div className="form-row">
           <label>
             Ім'я
-            <input name="firstName" type="text" defaultValue={user.firstName} />
+            <input name="firstName" type="text" defaultValue={profile?.first_name || ""} />
           </label>
 
           <label>
             Прізвище
-            <input name="lastName" type="text" defaultValue={user.lastName} />
+            <input name="lastName" type="text" defaultValue={profile?.last_name || ""} />
           </label>
         </div>
 
@@ -175,13 +200,13 @@ function ProfilePage() {
 
           <label>
             Номер телефону
-            <input name="phone" type="text" defaultValue={user.phone} />
+            <input name="phone" type="text" defaultValue={profile?.phone || ""} />
           </label>
         </div>
 
         <label>
           Про себе
-          <textarea name="bio" defaultValue={user.bio} />
+          <textarea name="bio" defaultValue={profile?.bio || ""} />
         </label>
 
         <div className="interests-block">
@@ -418,6 +443,8 @@ function ProfilePage() {
     }
   };
 
+  if (!profile) return <div>Loading...</div>;
+
   return (
     <div className="profile-page">
       <div className="profile-title">
@@ -447,21 +474,21 @@ function ProfilePage() {
 
           <div className="summary-list">
             <p>
-              <Mail size={16} /> {user.email}
+              <Mail size={16} /> {profile?.email}
             </p>
-            {user.phone && (
+            {profile?.phone && (
               <p>
-                <Phone size={16} /> {user.phone}
+                <Phone size={16} /> {profile.phone}
               </p>
             )}
-            {user.location && (
+            {profile?.location && (
               <p>
-                <MapPin size={16} /> {user.location}
+                <MapPin size={16} /> {profile.location}
               </p>
             )}
-            {user.joinedAt && (
+            {profile?.joinedAt && (
               <p>
-                <CalendarDays size={16} /> Приєдналася {user.joinedAt}
+                <CalendarDays size={16} /> Приєдналася {profile.joinedAt}
               </p>
             )}
           </div>
