@@ -9,10 +9,33 @@ function ProfilePage() {
   const interests = Array.isArray(user.interests) ? user.interests : [];
   const [activeMenuIndex, setActiveMenuIndex] = useState(0);
 
-  const handleProfileSave = (event) => {
+
+  const handleProfileSave = async (event) => {
     event.preventDefault();
-    // TODO: Persist profile updates through the backend profile API.
-    alert("Зміни профілю будуть збережені після підключення backend.");
+
+    const form = event.target;
+
+    const payload = {
+      firstName: form[0].value,
+      lastName: form[1].value,
+      email: form[2].value,
+      phone: form[3].value,
+      bio: form[4].value,
+      interests,
+   };
+
+    const token = localStorage.getItem("token");
+
+    await fetch("/api/profile/me", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    alert("Профіль оновлено");
   };
 
   const handlePlaceholderAction = () => {

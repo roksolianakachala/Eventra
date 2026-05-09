@@ -22,9 +22,11 @@ app.get('/', (req, res) => {
 
 const authRouter = require("./src/modules/auth/auth.router");
 const eventsRouter = require("./src/modules/events/events.router"); 
+const profileRouter = require("./src/modules/profile/profile.routes");
 
 app.use("/api/auth", authRouter);
 app.use("/api/events", eventsRouter);
+app.use("/api/profile", profileRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`); 
