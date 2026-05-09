@@ -3,6 +3,8 @@ const ProfileService = require("./profile.service");
 class ProfileController {
   async getMyProfile(req, res) {
     try {
+
+        console.log("GET PROFILE CONTROLLER HIT");
       const userId = req.user.id;
       const profile = await ProfileService.getProfile(userId);
       res.json(profile);
@@ -13,6 +15,7 @@ class ProfileController {
 
   async updateMyProfile(req, res) {
     try {
+        console.log("UPDATE PROFILE CONTROLLER HIT");
       const userId = req.user.id;
       const updated = await ProfileService.updateProfile(userId, req.body);
       res.json(updated);
