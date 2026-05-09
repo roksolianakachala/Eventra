@@ -12,7 +12,7 @@ function ProfilePage() {
 
   const handleProfileSave = async (event) => {
     event.preventDefault();
-    
+
 
     const form = event.target;
 
@@ -27,7 +27,7 @@ function ProfilePage() {
 
     const token = localStorage.getItem("token");
 
-    await fetch("/api/profile/me", {
+    await fetch("https://eventra-j1tj.onrender.com/api/profile/me", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
