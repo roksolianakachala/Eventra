@@ -25,7 +25,16 @@ function ProfilePage() {
       interests,
    };
 
-    const token = localStorage.getItem("token");
+    const auth = JSON.parse(localStorage.getItem("eventra_auth"));
+    const token = auth?.token;
+
+    if (!token) {
+      alert("Нема токена. Перелогінься");
+      return;
+    }
+
+    console.log("AUTH:", localStorage.getItem("eventra_auth"));
+    console.log("TOKEN:", token);
 
     await fetch("https://eventra-j1tj.onrender.com/api/profile/me", {
       method: "PUT",
