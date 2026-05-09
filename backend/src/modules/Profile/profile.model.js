@@ -15,7 +15,10 @@ class ProfileModel {
       })
       .eq("id", userId)
       .select()
-      .single();
+      .maybeSingle();
+
+      console.log("PROFILE DATA:", data);
+    console.log("PROFILE ERROR:", error);
 
     if (error) throw new Error(error.message);
 
@@ -23,16 +26,16 @@ class ProfileModel {
   }
 
   async getProfile(userId) {
-    const { data, error } = await supabaseAdmin
-      .from("profiles")
-      .select("*")
-      .eq("id", userId)
-      .single();
+  const { data, error } = await supabaseAdmin
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle();
 
-    if (error) throw new Error(error.message);
+  if (error) throw new Error(error.message);
 
-    return data;
-  }
+  return data;
+}
 }
 
 module.exports = new ProfileModel();
