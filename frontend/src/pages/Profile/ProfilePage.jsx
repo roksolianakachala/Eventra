@@ -22,6 +22,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../app/providers";
+import { apiRequest } from "../../services/api";
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -55,10 +56,9 @@ function ProfilePage() {
       return;
     }
 
-    await fetch("https://eventra-j1tj.onrender.com/api/profile/me", {
+    await apiRequest("/profile/me", {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
