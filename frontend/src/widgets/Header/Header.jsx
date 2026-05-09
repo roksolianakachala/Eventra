@@ -56,7 +56,7 @@ function Header({ onMenuClick }) {
             <ChevronDown size={18} />
           </Link>
           
-          <button className="header-auth-actions" type="button" onClick={handleLogout}>
+          <button className="logout-btn" type="button" onClick={handleLogout}>
             Вийти
           </button>
         </>
