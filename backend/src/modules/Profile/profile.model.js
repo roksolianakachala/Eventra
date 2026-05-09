@@ -2,6 +2,9 @@ const { supabaseAdmin } = require("../../config/db.config");
 
 class ProfileModel {
   async updateProfile(userId, data) {
+
+
+    
     const { data: result, error } = await supabaseAdmin
       .from("profiles")
       .update({
@@ -17,7 +20,7 @@ class ProfileModel {
       .select()
       .maybeSingle();
 
-      console.log("PROFILE DATA:", data);
+    console.log("PROFILE DATA:", data);
     console.log("PROFILE ERROR:", error);
 
     if (error) throw new Error(error.message);
@@ -26,6 +29,7 @@ class ProfileModel {
   }
 
   async getProfile(userId) {
+    console.log("GET PROFILE MODEL HIT");
   const { data, error } = await supabaseAdmin
     .from("profiles")
     .select("*")
