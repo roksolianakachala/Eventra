@@ -76,8 +76,7 @@ class ProfileModel {
     const { data, error } = await supabaseAdmin
       .from("profiles")
       .select("*")
-      .neq("id", currentUserId)
-      .order("created_at", { ascending: false });
+      .neq("id", currentUserId);
 
     if (error) throw new Error(error.message);
 
