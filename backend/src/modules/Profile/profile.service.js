@@ -10,6 +10,10 @@ class ProfileService {
     console.log("PROFILE SERVICE GET PROFILE HIT");
     return await ProfileModel.getProfile(userId);
   }
+
+  async getPublicProfiles(userId) {
+    return await ProfileModel.getPublicProfiles(userId);
+  }
 }
 
 module.exports = new ProfileService();

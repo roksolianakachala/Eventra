@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Ban,
@@ -60,6 +60,7 @@ function addMessageOnce(messages, nextMessage) {
 
 function MessagesPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, token, isAuthenticated } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
@@ -148,7 +149,7 @@ function MessagesPage() {
 
   const visibleConversations = filteredConversations.slice(0, visibleCount);
 
-  const selectConversation = async (conversation) => {
+  const selectConversation = useCallback(async (conversation) => {
     setSelectedConversation(conversation.id);
     setShowActions(false);
     setMobileView("chat");
@@ -181,7 +182,20 @@ function MessagesPage() {
     } finally {
       setIsMessagesLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const chatId = location.state?.chatId;
+
+    if (!chatId || conversations.length === 0 || selectedConversation === chatId) return;
+
+    const chat = conversations.find((conversation) => conversation.id === chatId);
+
+    if (chat) {
+      selectConversation(chat);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [conversations, location.pathname, location.state, navigate, selectConversation, selectedConversation]);
 
   const toggleSaved = () => {
     if (!selectedChat) return;

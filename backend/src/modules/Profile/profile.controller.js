@@ -23,6 +23,20 @@ class ProfileController {
       res.status(400).json({ message: err.message });
     }
   }
+
+  async getPublicProfiles(req, res) {
+    try {
+      const userId = req.user.id;
+      const profiles = await ProfileService.getPublicProfiles(userId);
+
+      res.json({
+        status: "success",
+        data: profiles,
+      });
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  }
 }
 
 module.exports = new ProfileController();

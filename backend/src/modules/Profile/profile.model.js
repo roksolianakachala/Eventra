@@ -1,6 +1,37 @@
 const { supabaseAdmin } = require("../../config/db.config");
 
 class ProfileModel {
+  normalizeProfile(profile) {
+    const firstName = profile.first_name || profile.firstName || "";
+    const lastName = profile.last_name || profile.lastName || "";
+    const fullName =
+      profile.full_name ||
+      profile.name ||
+      [firstName, lastName].filter(Boolean).join(" ") ||
+      "Користувач Eventra";
+
+    return {
+      id: profile.id,
+      firstName,
+      lastName,
+      fullName,
+      name: fullName,
+      email: profile.email || "",
+      phone: profile.phone || "",
+      avatarUrl: profile.avatar_url || profile.avatarUrl || "",
+      avatar: fullName.charAt(0).toUpperCase() || "E",
+      bio: profile.bio || "Поки немає опису профілю.",
+      city: profile.city || "",
+      country: profile.country || "",
+      location:
+        profile.location ||
+        [profile.city, profile.country].filter(Boolean).join(", ") ||
+        "",
+      interests: Array.isArray(profile.interests) ? profile.interests : [],
+      createdAt: profile.created_at,
+    };
+  }
+
   async updateProfile(userId, data) {
 
 
@@ -40,6 +71,18 @@ class ProfileModel {
 
   return data;
 }
+
+  async getPublicProfiles(currentUserId) {
+    const { data, error } = await supabaseAdmin
+      .from("profiles")
+      .select("*")
+      .neq("id", currentUserId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw new Error(error.message);
+
+    return (data || []).map((profile) => this.normalizeProfile(profile));
+  }
 }
 
 module.exports = new ProfileModel();
