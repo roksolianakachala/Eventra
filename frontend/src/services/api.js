@@ -1,14 +1,19 @@
-const DEFAULT_API_BASE_URL = "https://eventra-j1tj.onrender.com/api";
+const PRODUCTION_API_BASE_URL = "https://eventra-j1tj.onrender.com/api";
+const LOCAL_API_BASE_URL = "http://localhost:5000/api";
 
-// const DEFAULT_API_BASE_URL = "http://localhost:5000/api";
+function getDefaultApiBaseUrl() {
+  if (typeof window !== "undefined") {
+    const localHosts = ["localhost", "127.0.0.1"];
 
+    if (localHosts.includes(window.location.hostname)) {
+      return LOCAL_API_BASE_URL;
+    }
+  }
 
+  return PRODUCTION_API_BASE_URL;
+}
 
-
-
-export const API_BASE_URL = (
-  process.env.REACT_APP_API_URL || DEFAULT_API_BASE_URL
-).replace(/\/$/, "");
+export const API_BASE_URL = (process.env.REACT_APP_API_URL || getDefaultApiBaseUrl()).replace(/\/$/, "");
 
 export async function apiRequest(path, options = {}) {
   const { headers, ...requestOptions } = options;
