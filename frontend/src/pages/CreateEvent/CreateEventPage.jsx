@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar, Clock, MapPin, Users, Ticket, ImagePlus,} from "lucide-react";
+
+import { eventService } from "../../services/eventService";
 import "./CreateEventPage.css";
 
 function CreateEventPage() {
@@ -34,8 +36,29 @@ function CreateEventPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Send new event data to the backend events API.
-    alert("Публікація події буде доступна після підключення backend.");
+    
+    try {
+        const payload = {
+        title: event.title,
+        category: event.category,
+        access_type: "public", // або додай вибір у форму
+        start_time: `${event.date}T${event.time}:00Z`, // Формуємо ISO дату
+        location: `${event.city}, ${event.place}`,
+        description: event.description,
+        price: event.price ? parseFloat(event.price) : 0,
+        capacity: event.maxMembers ? parseInt(event.maxMembers) : null,
+        format: event.format,
+        banner_url: event.image || null
+      }; 
+
+      const result = eventService.createEvent(payload); 
+      alert("Подія створена!"); 
+      navigate("/events"); 
+    } catch (err) {
+      console.error("Error creating event:", err);
+      alert("Помилка створення події");
+    }
+
   };
 
   return (
