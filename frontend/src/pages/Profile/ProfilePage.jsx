@@ -61,11 +61,12 @@ function ProfilePage() {
     const form = event.currentTarget;
 
     const payload = {
-      first_name: form.firstName.value,
-      last_name: form.lastName.value,
-      contact_email: form.email.value,
+      firstName: form.firstName.value,
+      lastName: form.lastName.value,
+      email: form.email.value,
       phone: form.phone.value,
       bio: form.bio.value,
+      // interests,
     };
 
     console.log("PAYLOAD:", payload);
