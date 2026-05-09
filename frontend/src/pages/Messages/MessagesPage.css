@@ -3,9 +3,45 @@
   min-width: 0;
 }
 
-.messages-page h1 {
-  margin: 0 0 24px;
+.messages-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.messages-title-row h1 {
+  margin: 0;
   font-size: 32px;
+}
+
+.messages-title-row button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #075ee8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.messages-title-row button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.messages-error {
+  margin: -10px 0 18px;
+  padding: 12px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
 }
 
 .messages-layout {
@@ -164,6 +200,7 @@
   justify-content: center;
   font-weight: 800;
   flex-shrink: 0;
+  object-fit: cover;
 }
 
 .chat-avatar.support {
@@ -430,6 +467,7 @@
   justify-content: center;
   font-size: 34px;
   font-weight: 800;
+  object-fit: cover;
 }
 
 .profile-avatar-large.support {
@@ -617,9 +655,12 @@
 }
 
 @media (max-width: 768px) {
-  .messages-page h1 {
-    font-size: 26px;
+  .messages-title-row {
     margin-bottom: 12px;
+  }
+
+  .messages-title-row h1 {
+    font-size: 26px;
   }
 
   .chat-list-panel,
@@ -700,7 +741,7 @@
 }
 
 @media (max-width: 576px) {
-  .messages-page h1 {
+  .messages-title-row h1 {
     font-size: 24px;
   }
 

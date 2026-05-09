@@ -11,19 +11,17 @@ import {
 } from "lucide-react";
 
 import "./PeoplePage.css";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../app/providers";
+import { findOrCreateChat } from "../../services/chatService";
+import { fetchPublicProfiles } from "../../services/profileService";
 
 function PeoplePage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [activeFilter, setActiveFilter] = useState(0);
-
-  const handleAddPerson = () => {
-    // TODO: Connect add-person/follow action to the backend connections API.
-    alert("Додавання людей буде доступне після підключення backend.");
-  };
+  const [people, setPeople] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const filters = [
     { name: "Усі", Icon: Users },
@@ -34,36 +32,47 @@ function PeoplePage() {
     { name: "Мистецтво", Icon: Palette },
   ];
 
-  const people = [
-    {
-      name: user.fullName,
-      city: user.location,
-      interests: user.interests,
-      bio: user.bio,
-      avatar: user.initials,
-    },
-    {
-      name: "Андрій Коваль",
-      city: "Київ, Україна",
-      interests: ["Технології", "Ігри", "AI"],
-      bio: "Цікавлюсь стартапами, ІТ та технологічними подіями.",
-      avatar: "А",
-    },
-    {
-      name: "Софія Мельник",
-      city: "Одеса, Україна",
-      interests: ["Мистецтво", "Психологія", "Освіта"],
-      bio: "Шукаю людей для спільних майстер-класів і лекцій.",
-      avatar: "С",
-    },
-    {
-      name: "Дмитро Шевченко",
-      city: "Харків, Україна",
-      interests: ["Спорт", "Біг", "Здоров’я"],
-      bio: "Люблю активні події, забіги та командні тренування.",
-      avatar: "Д",
-    },
-  ];
+  useEffect(() => {
+    const loadPeople = async () => {
+      try {
+        setIsLoading(true);
+        setErrorMessage("");
+        const profiles = await fetchPublicProfiles();
+        setPeople(Array.isArray(profiles) ? profiles : []);
+      } catch (error) {
+        setErrorMessage(error.message || "Не вдалося завантажити людей.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadPeople();
+  }, []);
+
+  const filteredPeople = useMemo(() => {
+    const selectedFilter = filters[activeFilter]?.name;
+
+    if (!selectedFilter || selectedFilter === "Усі") {
+      return people;
+    }
+
+    return people.filter((person) =>
+      Array.isArray(person.interests) && person.interests.includes(selectedFilter)
+    );
+  }, [activeFilter, people]);
+
+  const handleAddPerson = () => {
+    alert("Додавання людей буде доступне після підключення backend.");
+  };
+
+  const handleMessagePerson = async (person) => {
+    try {
+      const chat = await findOrCreateChat(person.id);
+      navigate("/messages", { state: { chatId: chat.id } });
+    } catch (error) {
+      alert(error.message || "Не вдалося створити чат.");
+    }
+  };
 
   return (
     <div className="people-page">
@@ -88,21 +97,30 @@ function PeoplePage() {
         ))}
       </div>
 
+      {errorMessage && <p className="people-message error">{errorMessage}</p>}
+      {isLoading && <p className="people-message">Завантаження людей...</p>}
+
+      {!isLoading && filteredPeople.length === 0 && !errorMessage && (
+        <p className="people-message">Поки немає профілів для цього фільтра.</p>
+      )}
+
       <div className="people-grid">
-        {people.map((person) => (
-          <article className="person-card" key={person.name}>
-            
-           
+        {filteredPeople.map((person) => (
+          <article className="person-card" key={person.id}>
             <div className="person-content">
               <div className="person-top">
-                <div className="person-avatar">{person.avatar}</div>
+                {person.avatarUrl ? (
+                  <img className="person-avatar" src={person.avatarUrl} alt={person.name} />
+                ) : (
+                  <div className="person-avatar">{person.avatar}</div>
+                )}
 
                 <div>
                   <h3>{person.name}</h3>
 
                   <p className="icon-text">
                     <MapPin size={16} />
-                    {person.city}
+                    {person.location || "Локацію не вказано"}
                   </p>
                 </div>
               </div>
@@ -110,20 +128,21 @@ function PeoplePage() {
               <p className="person-bio">{person.bio}</p>
 
               <div className="person-interests">
-                {person.interests.map((interest) => (
-                  <span key={interest}>{interest}</span>
-                ))}
+                {person.interests.length > 0 ? (
+                  person.interests.map((interest) => <span key={interest}>{interest}</span>)
+                ) : (
+                  <span>Інтереси не вказано</span>
+                )}
               </div>
             </div>
 
-            
             <div className="person-actions">
               <button type="button" onClick={handleAddPerson}>
                 <UserPlus size={16} />
                 Додати
               </button>
 
-              <button className="secondary" type="button" onClick={() => navigate("/messages")}>
+              <button className="secondary" type="button" onClick={() => handleMessagePerson(person)}>
                 <MessageSquare size={16} />
                 Написати
               </button>
