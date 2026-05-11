@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Calendar, Clock, MapPin, Users, Ticket, ImagePlus,} from "lucide-react";
+import { Calendar, Clock, MapPin, Users, Ticket, ImagePlus, Key} from "lucide-react";
 
 import { eventService } from "../../services/eventService";
 import "./CreateEventPage.css";
@@ -11,7 +11,9 @@ function CreateEventPage() {
     title: "",
     category: "Музика",
     date: "",
-    time: "",
+    start_time: "",
+    end_time: "", 
+    access_type: "Публічна", 
     city: "",
     place: "",
     format: "Офлайн",
@@ -34,24 +36,26 @@ function CreateEventPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
         const payload = {
-        title: event.title,
-        category: event.category,
-        access_type: "public", // або додай вибір у форму
-        start_time: `${event.date}T${event.time}:00Z`, // Формуємо ISO дату
-        location: `${event.city}, ${event.place}`,
-        description: event.description,
-        price: event.price ? parseFloat(event.price) : 0,
-        capacity: event.maxMembers ? parseInt(event.maxMembers) : null,
-        format: event.format,
-        banner_url: event.image || null
+          title: event.title,
+          category: event.category, 
+          location: `${event.city}, ${event.place}`,
+          description: event.description,
+          price: event.price ? parseFloat(event.price) : 0,
+          capacity: event.maxMembers ? parseInt(event.maxMembers) : null,
+          format: event.format,
+          banner_url: event.image || null, 
+
+          access_type: "public", 
+          start_time: `${event.date}T${event.start_time}:00Z`, 
+          end_time: event.end_time ? `${event.date}T${event.end_time}:00Z` : null, 
       }; 
 
-      const result = eventService.createEvent(payload); 
+      const result = await eventService.createEvent(payload); 
       alert("Подія створена!"); 
       navigate("/events"); 
     } catch (err) {
@@ -91,15 +95,18 @@ function CreateEventPage() {
           <div className="event-form-grid">
             <label>
               Назва події
-              <input
+              <input 
+                required 
                 name="title"
                 value={event.title}
                 onChange={handleChange}
-                placeholder="Наприклад: Вечір настільних ігор"
+                placeholder="Наприклад: Вечір настільних ігор"    
+                onInvalid={(e) => e.target.setCustomValidity('Будь ласка, введіть назву події')} 
+                onInput={(e) => e.target.setCustomValidity('')}
               />
             </label>
 
-            <label>
+            <label> 
               Категорія
               <select
                 name="category"
@@ -118,41 +125,53 @@ function CreateEventPage() {
 
             <label>
               Дата
-              <input
+              <input 
+                required  
                 type="date"
                 name="date"
                 value={event.date}
-                onChange={handleChange}
+                onChange={handleChange} 
+                onInvalid={(e) => e.target.setCustomValidity('Будь ласка, виберіть дату події')} 
+                onInput={(e) => e.target.setCustomValidity('')} 
               />
             </label>
 
             <label>
-              Час
+              Час початку 
               <input
+                required
                 type="time"
-                name="time"
-                value={event.time}
+                name="start_time"
+                value={event.start_time} 
                 onChange={handleChange}
+                onInvalid={(e) => e.target.setCustomValidity('Будь ласка, виберіть час початку')} 
+                onInput={(e) => e.target.setCustomValidity('')} 
               />
             </label>
 
             <label>
               Місто
-              <input
+              <input 
+                required 
                 name="city"
                 value={event.city}
                 onChange={handleChange}
-                placeholder="Наприклад: Львів"
+                placeholder="Наприклад: Львів" 
+                onInvalid={(e) => e.target.setCustomValidity('Будь ласка, введіть місто проведення')} 
+                onInput={(e) => e.target.setCustomValidity('')} 
               />
             </label>
 
             <label>
               Місце проведення
-              <input
+              <input 
+                required
                 name="place"
                 value={event.place}
                 onChange={handleChange}
-                placeholder="Наприклад: Innovation Hub"
+                placeholder="Наприклад: Innovation Hub" 
+                onInvalid={(e) => e.target.setCustomValidity('Будь ласка, введіть місце проведення')} 
+                onInput={(e) => e.target.setCustomValidity('')}
               />
             </label>
 
@@ -187,9 +206,32 @@ function CreateEventPage() {
                 onChange={handleChange}
                 placeholder="Безкоштовно або 200 грн"
               />
+            </label> 
+
+            <label>
+              Час завершення події 
+              <input
+                type="time"
+                name="end_time"
+                value={event.end_time}
+                onChange={handleChange}
+              />
+            </label> 
+
+            <label>
+              Тип доступу 
+              <select
+                name="access_type"
+                value={event.access_type}
+                onChange={handleChange}
+              >
+                <option>Публічна</option> 
+                <option>Приватна</option>
+                <option>За запрошенням</option> 
+              </select>
             </label>
           </div>
-
+          
           <label className="event-full-width">
             Опис події
             <textarea
@@ -227,6 +269,12 @@ function CreateEventPage() {
               <span className="event-preview-category">{event.category}</span>
 
               <h3>{event.title || "Назва вашої події"}</h3>
+              
+               <p className="icon-text">
+                <Key size={16} /> 
+                {event.access_type || "Тип доступу"} 
+              </p>
+
 
               <p className="icon-text">
                 <Calendar size={16} />
@@ -235,7 +283,7 @@ function CreateEventPage() {
 
               <p className="icon-text">
                 <Clock size={16} />
-                {event.time || "Час"}
+                {event.start_time || "Час початку"} - {event.end_time || "Час завершення"} 
               </p>
 
               <p className="icon-text">
@@ -257,7 +305,7 @@ function CreateEventPage() {
                 <h4>Опис</h4>
                 <p>
                   {event.description ||
-                    "Тут буде короткий опис вашої події, щоб учасники зрозуміли, чого очікувати."}
+                    "Тут буде короткий опис вашої події, щоб учасники зрозуміли, чого очікувати."} 
                 </p>
               </div>
             </div>
