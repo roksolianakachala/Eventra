@@ -126,4 +126,82 @@ router.get("/google/callback", async (req, res) => {
   res.redirect(`${frontendUrl}/auth/callback#${params.toString()}`);
 });
 
+
+router.get("/facebook", async (req, res) => {
+  const frontendUrl = getFrontendUrl(req.query.frontend_url);
+
+  const { data, error } =
+    await supabaseAuth.auth.signInWithOAuth({
+      provider: "facebook",
+      options: {
+        redirectTo: `${process.env.BACKEND_URL}/auth/facebook/callback?frontend_url=${frontendUrl}`,
+      },
+    });
+
+  if (error) return res.status(400).json(error);
+
+  res.redirect(data.url);
+});
+
+
+
+router.get("/facebook/callback", async (req, res) => {
+  const { code } = req.query;
+  const frontendUrl = getFrontendUrl(req.query.frontend_url);
+
+  if (!code) {
+    const params = new URLSearchParams({
+      error: "Facebook authorization code was not found",
+    });
+
+    return res.redirect(`${frontendUrl}/auth/callback#${params.toString()}`);
+  }
+
+  const { data, error } =
+    await supabaseAuth.auth.exchangeCodeForSession(code);
+
+  if (error) {
+    const params = new URLSearchParams({
+      error: error.message || "Facebook authorization failed",
+    });
+
+    return res.redirect(`${frontendUrl}/auth/callback#${params.toString()}`);
+  }
+
+  const user = data.user;
+  const token = data.session?.access_token;
+
+  const meta = user.user_metadata || {};
+
+  const fullName = meta.full_name || meta.name || "";
+
+  const firstName = fullName.split(" ")[0] || "";
+  const lastName = fullName.split(" ").slice(1).join(" ") || "";
+
+  const { error: profileError } =
+    await supabaseAdmin
+      .from("profiles")
+      .update({
+        first_name: firstName,
+        last_name: lastName,
+      })
+      .eq("id", user.id);
+
+  console.log(profileError);
+
+  const params = new URLSearchParams({
+    access_token: token || "",
+    user: JSON.stringify({
+      id: user.id,
+      email: user.email,
+      firstName,
+      lastName,
+      fullName,
+      avatarUrl: meta.avatar_url || "",
+    }),
+  });
+
+  res.redirect(`${frontendUrl}/auth/callback#${params.toString()}`);
+});
+
 module.exports = router;
