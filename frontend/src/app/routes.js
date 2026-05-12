@@ -16,6 +16,7 @@ import PeoplePage from "../pages/People/PeoplePage";
 import SavedPage from "../pages/Saved/SavedPage";
 import MessagesPage from "../pages/Messages/MessagesPage";
 import SettingsPage from "../pages/Settings/SettingsPage";
+import PrivacyPage from "../pages/Auth/PrivacyPage";
 
 
 function AppRoutes() {
@@ -36,6 +37,7 @@ function AppRoutes() {
         <Route path="saved" element={<SavedPage />} />
         <Route path="messages" element={<MessagesPage />} />
         <Route path="settings" element={<SettingsPage />} /> 
+        <Route path="/privacy" element={<PrivacyPage />} />
       </Route>
     </Routes>
   );
