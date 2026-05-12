@@ -1,8 +1,10 @@
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   clearStoredAuth,
   demoUser,
-  getStoredAuth,
+  getTokenExpiresAt,
+  getValidStoredAuth,
+  isTokenExpired,
   login,
   normalizeUser,
   register,
@@ -12,12 +14,21 @@ import {
 const AuthContext = createContext(null);
 
 export function AppProviders({ children }) {
-  const storedAuth = getStoredAuth();
+  const storedAuth = getValidStoredAuth();
   const [authState, setAuthState] = useState({
     token: storedAuth?.token || null,
     user: normalizeUser(storedAuth?.user || demoUser),
     isAuthenticated: Boolean(storedAuth?.isAuthenticated || storedAuth?.token),
   });
+
+  const resetAuthState = useCallback(() => {
+    clearStoredAuth();
+    setAuthState({
+      token: null,
+      user: normalizeUser(demoUser),
+      isAuthenticated: false,
+    });
+  }, []);
 
   const completeOAuthLogin = useCallback((auth) => {
     const nextAuth = {
@@ -29,6 +40,20 @@ export function AppProviders({ children }) {
     setAuthState(nextAuth);
     return nextAuth;
   }, []);
+
+  useEffect(() => {
+    if (!authState.token) return undefined;
+
+    if (isTokenExpired(authState.token)) {
+      resetAuthState();
+      return undefined;
+    }
+
+    const expiresInMs = Math.max(getTokenExpiresAt(authState.token) - Date.now() - 30000, 0);
+    const timeoutId = window.setTimeout(resetAuthState, expiresInMs);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [authState.token, resetAuthState]);
 
   const value = useMemo(
     () => ({
@@ -59,15 +84,10 @@ export function AppProviders({ children }) {
         });
       },
       logoutUser() {
-        clearStoredAuth();
-        setAuthState({
-          token: null,
-          user: normalizeUser(demoUser),
-          isAuthenticated: false,
-        });
+        resetAuthState();
       },
     }),
-    [authState, completeOAuthLogin]
+    [authState, completeOAuthLogin, resetAuthState]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
