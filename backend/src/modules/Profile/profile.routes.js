@@ -66,6 +66,22 @@ router.get("/interests/list", async (req, res) => {
 });
 
 
+router.delete("/interests/:interestId", authenticate, async (req, res) => {
+  const userId = req.user.id;
+  const { interestId } = req.params;
+
+  const { error } = await supabaseAdmin
+    .from("userInterests")
+    .delete()
+    .eq("userId", userId)
+    .eq("interestId", interestId);
+
+  if (error) {
+    return res.status(400).json({ message: error.message });
+  }
+
+  res.json({ message: "Interest removed" });
+});
 
 
 
