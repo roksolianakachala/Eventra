@@ -255,10 +255,15 @@ async function findOrCreateChat(userId, participantId) {
   const chat = assertSupabaseResult(chatResult);
 
   assertSupabaseResult(
-    await supabaseAdmin.from("chat_participants").insert([
-      { chat_id: chat.id, user_id: userId },
-      { chat_id: chat.id, user_id: participantId },
-    ])
+    await supabaseAdmin
+      .from("chat_participants")
+      .upsert(
+        [
+          { chat_id: chat.id, user_id: userId },
+          { chat_id: chat.id, user_id: participantId },
+        ],
+        { onConflict: "chat_id,user_id", ignoreDuplicates: true }
+      )
   );
 
   return { id: chat.id, created: true };
