@@ -17,6 +17,7 @@ import SavedPage from "../pages/Saved/SavedPage";
 import MessagesPage from "../pages/Messages/MessagesPage";
 import SettingsPage from "../pages/Settings/SettingsPage";
 import PrivacyPage from "../pages/Auth/PrivacyPage";
+import DataDeletionPage from "../pages/Auth/DataDeletionPage";
 
 
 function AppRoutes() {
@@ -38,6 +39,7 @@ function AppRoutes() {
         <Route path="messages" element={<MessagesPage />} />
         <Route path="settings" element={<SettingsPage />} /> 
         <Route path="privacy" element={<PrivacyPage />} />
+        <Route path="data-deletion" element={<DataDeletionPage />} />
       </Route>
     </Routes>
   );
