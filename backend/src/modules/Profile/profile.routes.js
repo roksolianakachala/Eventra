@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const ProfileController = require("./profile.controller");
 const authenticate = require("../../middlewares/auth.middleware");
+const upload = require("../../middlewares/upload.middleware");
 const {
   supabaseAuth,
   supabaseAdmin,
@@ -9,7 +10,7 @@ const {
 router.get("/me", authenticate, ProfileController.getMyProfile);
 router.put("/me", authenticate, ProfileController.updateMyProfile);
 router.get("/", authenticate, ProfileController.getPublicProfiles);
-const upload = require("../../middlewares/upload.middleware");
+
 
 
 router.put(
