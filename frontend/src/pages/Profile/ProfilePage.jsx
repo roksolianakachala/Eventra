@@ -212,16 +212,20 @@ function ProfilePage() {
 
         <div className="interests-block">
           <p>Інтереси</p>
-
+          
           <div className="interests-list">
             {interests.length > 0 ? (
-              interests.map((interest) => <span key={interest}>{interest} x</span>)
-            ) : (
-            <button className="add-interest-btn" type="button"
-            onClick={() => navigate("/profile/interests")}>
-              Додайте інтереси
-            </button>
+              interests.map((interest) => (
+              <span key={interest}>{interest} x</span>
+            ))
+          ) : (
+          <span>Інтереси ще не додані</span>
           )}
+          
+          <button className="add-interest-btn" type="button"
+            onClick={() => navigate("/profile/interests")}>
+              Додати інтереси
+          </button>
           </div>
         </div>
 
