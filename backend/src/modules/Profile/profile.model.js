@@ -70,7 +70,8 @@ class ProfileModel {
       .select(`
         interestId,
         interestsList (
-          name
+          name,
+          type
         )
       `)
       .eq("userId", userId);
@@ -83,6 +84,7 @@ class ProfileModel {
       .map((item) => ({
         interestId: item.interestId,
         name: item.interestsList?.name,
+        type: item.interestsList?.type,
     }))
     .filter((item) => item.name);
 
@@ -100,7 +102,8 @@ class ProfileModel {
       userInterests (
         interestId,
         interestsList (
-          name
+          name,
+          type
         )
       )
     `)
@@ -115,9 +118,18 @@ class ProfileModel {
       .map((item) => item.interestsList?.name)
       .filter(Boolean);
 
+    const interestTypes = [
+      ...new Set(
+        (profile.userInterests || [])
+          .map((item) => item.interestsList?.type)
+          .filter(Boolean)
+      ),
+    ];
+
     return {
       ...normalizedProfile,
       interests,
+      interestTypes,
     };
   });
 }
