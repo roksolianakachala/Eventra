@@ -134,12 +134,15 @@ function PeoplePage() {
               <p className="person-bio">{person.bio}</p>
 
               <div className="person-interests">
-                {person.interests.length > 0 ? (
-                  person.interests.map((interest) => <span key={interest}>{interest}</span>)
+                {Array.isArray(person.interests) && person.interests.length > 0 ? (
+                  person.interests.map((interest) => (
+                    <span key={interest}>{interest}</span>
+                  ))
                 ) : (
                   <span>Інтереси не вказано</span>
                 )}
               </div>
+              
             </div>
 
             <div className="person-actions">

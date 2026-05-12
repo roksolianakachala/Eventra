@@ -93,15 +93,34 @@ class ProfileModel {
   }
 
   async getPublicProfiles(currentUserId) {
-    const { data, error } = await supabaseAdmin
-      .from("profiles")
-      .select("*")
-      .neq("id", currentUserId);
+  const { data, error } = await supabaseAdmin
+    .from("profiles")
+    .select(`
+      *,
+      userInterests (
+        interestId,
+        interestsList (
+          name
+        )
+      )
+    `)
+    .neq("id", currentUserId);
 
-    if (error) throw new Error(error.message);
+  if (error) throw new Error(error.message);
 
-    return (data || []).map((profile) => this.normalizeProfile(profile));
-  }
+  return (data || []).map((profile) => {
+    const normalizedProfile = this.normalizeProfile(profile);
+
+    const interests = (profile.userInterests || [])
+      .map((item) => item.interestsList?.name)
+      .filter(Boolean);
+
+    return {
+      ...normalizedProfile,
+      interests,
+    };
+  });
+}
 
   async updateAvatar(userId, file) {
   const fileExt = file.originalname.split(".").pop();
