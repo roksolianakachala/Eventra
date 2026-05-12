@@ -208,9 +208,11 @@ function RegisterPage() {
             Google
           </button>
 
-          <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
-            <UserRound size={18} />
-            Facebook
+          <button className="social-btn" type="button" onClick={() => {
+            window.location.href = "https://eventra-j1tj.onrender.com/api/auth/facebook";
+            }}>
+              <UserRound size={18} />
+              Facebook
           </button>
 
           <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
