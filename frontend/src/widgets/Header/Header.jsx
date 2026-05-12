@@ -2,16 +2,40 @@ import { Users, Bell, MessageSquare, Search, ChevronDown, Menu } from "lucide-re
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../app/providers";
+import { useEffect, useState } from "react";
 import "./Header.css";
 
 function Header({ onMenuClick }) {
   const navigate = useNavigate();
   const { user, isAuthenticated, logoutUser } = useAuth();
+  const [profile, setProfile] = useState(null);
 
   const handleLogout = () => {
-    logoutUser();
-    navigate("/login");
+  logoutUser();
+  navigate("/login");
+};
+
+useEffect(() => {
+  const fetchProfile = async () => {
+    const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
+    const token = auth?.token;
+
+    if (!token) return;
+
+    const res = await fetch("https://eventra-j1tj.onrender.com/api/profile/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    setProfile(data);
   };
+
+  if (isAuthenticated) {
+    fetchProfile();
+  }
+}, [isAuthenticated]);
 
 
   const handleNotificationsClick = () => {
@@ -46,8 +70,8 @@ function Header({ onMenuClick }) {
         {isAuthenticated ? (
           <>
           <Link className="user" to="/profile" aria-label="Open my profile">
-            {user.avatarUrl || user.avatar_url ? (
-              <img className="avatar" src={user.avatarUrl || user.avatar_url} alt={user.fullName}/>
+            {profile?.avatar_url || user.avatarUrl || user.avatar_url ? (
+              <img className="avatar" src={profile?.avatar_url || user.avatarUrl || user.avatar_url} alt={user.fullName}/>
             ) : (
               <div className="avatar">{user.initials}</div>
             )}
