@@ -39,7 +39,7 @@ function AppRoutes() {
         <Route path="messages" element={<MessagesPage />} />
         <Route path="settings" element={<SettingsPage />} /> 
         <Route path="privacy" element={<PrivacyPage />} />
-        <Route path="data-deletion" element={<DataDeletionPage />} />
+        <Route path="datadeletion" element={<DataDeletionPage />} />
       </Route>
     </Routes>
   );
