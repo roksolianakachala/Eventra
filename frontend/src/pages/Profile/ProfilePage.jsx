@@ -131,6 +131,8 @@ function ProfilePage() {
         },
       })
     );
+
+    window.location.reload();
   };
 
   const handleProfileSave = async (event) => {
