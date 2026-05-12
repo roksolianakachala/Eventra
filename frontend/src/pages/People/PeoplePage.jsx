@@ -58,7 +58,8 @@ function PeoplePage() {
     }
 
     return people.filter((person) =>
-      Array.isArray(person.interests) && person.interests.includes(selectedFilter)
+      Array.isArray(person.interestTypes) &&
+      person.interestTypes.includes(selectedFilter)
     );
   }, [activeFilter, people]);
 
