@@ -115,7 +115,22 @@ function ProfilePage() {
   setProfile((current) => ({
     ...current,
     avatar_url: data.avatarUrl,
-  }));
+    }));
+
+    const savedAuth = JSON.parse(
+      localStorage.getItem("eventra_auth") || "{}"
+    );
+
+    localStorage.setItem(
+      "eventra_auth",
+      JSON.stringify({
+        ...savedAuth,
+        user: {
+          ...savedAuth.user,
+          avatarUrl: data.avatarUrl,
+        },
+      })
+    );
   };
 
   const handleProfileSave = async (event) => {
