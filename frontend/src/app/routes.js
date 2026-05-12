@@ -18,6 +18,7 @@ import MessagesPage from "../pages/Messages/MessagesPage";
 import SettingsPage from "../pages/Settings/SettingsPage";
 import PrivacyPage from "../pages/Auth/PrivacyPage";
 import DataDeletionPage from "../pages/Auth/DataDeletionPage";
+import ProfileInterestsPage from "../pages/Profile/ProfileInterestsPage";
 
 
 function AppRoutes() {
@@ -40,6 +41,7 @@ function AppRoutes() {
         <Route path="settings" element={<SettingsPage />} /> 
         <Route path="privacy" element={<PrivacyPage />} />
         <Route path="datadeletion" element={<DataDeletionPage />} />
+        <Route path="profile/interests" element={<ProfileInterestsPage />} />
       </Route>
     </Routes>
   );
