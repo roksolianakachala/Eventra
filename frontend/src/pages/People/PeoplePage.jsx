@@ -142,6 +142,7 @@ function PeoplePage() {
                   <span>Інтереси не вказано</span>
                 )}
               </div>
+              
             </div>
 
             <div className="person-actions">
