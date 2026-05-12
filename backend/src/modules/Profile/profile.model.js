@@ -102,6 +102,42 @@ class ProfileModel {
 
     return (data || []).map((profile) => this.normalizeProfile(profile));
   }
+
+  async updateAvatar(userId, file) {
+  const fileExt = file.originalname.split(".").pop();
+  const fileName = `${userId}-${Date.now()}.${fileExt}`;
+
+  const { error: uploadError } = await supabaseAdmin.storage
+    .from("avatars")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+      upsert: true,
+    });
+
+  if (uploadError) {
+    throw new Error(uploadError.message);
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabaseAdmin.storage
+    .from("avatars")
+    .getPublicUrl(fileName);
+
+  const { error: updateError } = await supabaseAdmin
+    .from("profiles")
+    .update({
+      avatar_url: publicUrl,
+    })
+    .eq("id", userId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
+
+  return publicUrl;
+  }
+
 }
 
 module.exports = new ProfileModel();

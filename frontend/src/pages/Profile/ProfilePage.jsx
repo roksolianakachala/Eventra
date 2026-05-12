@@ -82,6 +82,42 @@ function ProfilePage() {
   }));
 };
 
+  const handleAvatarChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
+  const token = auth?.token;
+
+  if (!token) {
+    alert("Немає токена");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const res = await fetch("https://eventra-j1tj.onrender.com/api/profile/avatar", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message);
+    return;
+  }
+
+  setProfile((current) => ({
+    ...current,
+    avatar_url: data.avatarUrl,
+  }));
+  };
+
   const handleProfileSave = async (event) => {
     event.preventDefault();
 
@@ -199,8 +235,11 @@ function ProfilePage() {
             </p>
           )}
 
-          <button className="change-photo-btn" type="button" onClick={handlePlaceholderAction}>
-            Змінити фото
+          <input id="avatarInput" type="file" accept="image/*" hidden onChange={handleAvatarChange} />
+
+          <button className="change-photo-btn" type="button"
+            onClick={() => document.getElementById("avatarInput").click()}>
+              Змінити фото
           </button>
         </div>
       </div>
