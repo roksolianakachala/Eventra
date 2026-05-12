@@ -186,7 +186,7 @@ function RegisterPage() {
           <label className="checkbox-label">
             <input type="checkbox" />
             Я погоджуюсь з <a href="/">Умовами використання</a> та{" "}
-            <a href="/">Політикою конфіденційності</a>
+            <a href="/privacy">Політикою конфіденційності</a>
           </label>
 
           <button type="submit" className="primary-auth-btn">
