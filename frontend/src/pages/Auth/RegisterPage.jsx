@@ -186,7 +186,7 @@ function RegisterPage() {
           <label className="checkbox-label">
             <input type="checkbox" />
             Я погоджуюсь з <a href="/">Умовами використання</a> та{" "}
-            <a href="/">Політикою конфіденційності</a>
+            <a href="/privacy">Політикою конфіденційності</a>
           </label>
 
           <button type="submit" className="primary-auth-btn">
@@ -208,9 +208,11 @@ function RegisterPage() {
             Google
           </button>
 
-          <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
-            <UserRound size={18} />
-            Facebook
+          <button className="social-btn" type="button" onClick={() => {
+            window.location.href = "https://eventra-j1tj.onrender.com/api/auth/facebook";
+            }}>
+              <UserRound size={18} />
+              Facebook
           </button>
 
           <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
