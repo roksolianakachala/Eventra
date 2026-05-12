@@ -37,7 +37,7 @@ function AppRoutes() {
         <Route path="saved" element={<SavedPage />} />
         <Route path="messages" element={<MessagesPage />} />
         <Route path="settings" element={<SettingsPage />} /> 
-        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="privacy" element={<PrivacyPage />} />
       </Route>
     </Routes>
   );
