@@ -217,8 +217,11 @@ function ProfilePage() {
             {interests.length > 0 ? (
               interests.map((interest) => <span key={interest}>{interest} x</span>)
             ) : (
-              <span>Додайте інтереси</span>
-            )}
+            <button className="add-interest-btn" type="button"
+            onClick={() => navigate("/profile/interests")}>
+              Додайте інтереси
+            </button>
+          )}
           </div>
         </div>
 
