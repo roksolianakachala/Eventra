@@ -55,6 +55,33 @@ function ProfilePage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
+
+
+
+  const removeInterest = async (interestId) => {
+  const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
+  const token = auth?.token;
+
+  if (!token) {
+    alert("Немає токена");
+    return;
+  }
+
+  await apiRequest(`/profile/interests/${interestId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  setProfile((current) => ({
+    ...current,
+    interests: current.interests.filter(
+      (interest) => interest.interestId !== interestId
+    ),
+  }));
+};
+
   const handleProfileSave = async (event) => {
     event.preventDefault();
 
@@ -216,7 +243,11 @@ function ProfilePage() {
           <div className="interests-list">
             {interests.length > 0 ? (
               interests.map((interest) => (
-              <span key={interest}>{interest} x</span>
+              <span key={interest.interestId}>{interest.name}
+                <button type="button" onClick={() => removeInterest(interest.interestId)}>
+                  x
+                </button>
+              </span>
             ))
           ) : (
           <span>Інтереси ще не додані</span>

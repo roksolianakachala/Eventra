@@ -79,9 +79,12 @@ class ProfileModel {
       throw new Error(interestsError.message);
     }
 
-    const interests = (userInterests || []).map(
-      (item) => item.interestsList?.name
-    ).filter(Boolean);
+    const interests = (userInterests || [])
+      .map((item) => ({
+        interestId: item.interestId,
+        name: item.interestsList?.name,
+    }))
+    .filter((item) => item.name);
 
     return {
       ...profile,
