@@ -1,7 +1,6 @@
 import "./ProfilePage.css";
 import { useState, useEffect } from "react";
 import {
-  Apple,
   Bell,
   CalendarDays,
   CreditCard,
@@ -17,7 +16,6 @@ import {
   Shield,
   Star,
   User,
-  Users,
   WalletCards,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -187,8 +185,6 @@ function ProfilePage() {
 
   const connectedAccounts = [
     { name: "Google", detail: user.email || "Не підключено", connected: true, icon: Mail },
-    { name: "Facebook", detail: "Не підключено", connected: false, icon: Users },
-    { name: "Apple", detail: "Не підключено", connected: false, icon: Apple },
   ];
 
   const reviews = [

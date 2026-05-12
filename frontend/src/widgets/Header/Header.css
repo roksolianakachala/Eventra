@@ -173,19 +173,21 @@
   min-height: 42px;
   padding: 0 14px;
   border-radius: 10px;
-  border: 1px solid #7f1d1d;
-  background: #991b1b;
-  color: #ffffff;
+  border: 1px solid #dbe4f0;
+  background: #eef5ff;
+  color: #075ee8;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: 0.2s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .logout-btn:hover {
-  background: #7f1d1d;
+  border-color: #bfdbfe;
+  background: #dbeafe;
+  color: #064fc2;
 }
 
 @media (max-width: 1200px) {

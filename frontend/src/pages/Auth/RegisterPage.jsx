@@ -1,5 +1,5 @@
 import "./AuthPages.css";
-import { CalendarDays, User, Lock, Eye, EyeOff, Mail, UserRound, Apple } from "lucide-react";
+import { CalendarDays, User, Lock, Eye, EyeOff, Mail } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../app/providers";
@@ -44,10 +44,6 @@ function RegisterPage() {
     } catch (error) {
       alert(error.message || "Помилка реєстрації");
     }
-  };
-
-  const handleSocialPlaceholder = () => {
-    alert("Цей спосіб реєстрації буде доступний після підключення backend.");
   };
 
   return (
