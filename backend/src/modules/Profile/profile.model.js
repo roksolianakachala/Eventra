@@ -27,15 +27,11 @@ class ProfileModel {
         profile.location ||
         [profile.city, profile.country].filter(Boolean).join(", ") ||
         "",
-      interests: Array.isArray(profile.interests) ? profile.interests : [],
       createdAt: profile.created_at,
     };
   }
 
   async updateProfile(userId, data) {
-
-
-    
     const { data: result, error } = await supabaseAdmin
       .from("profiles")
       .update({
@@ -44,7 +40,6 @@ class ProfileModel {
         phone: data.phone,
         bio: data.bio,
         location: data.location,
-        interests: data.interests,
         updated_at: new Date(),
       })
       .eq("id", userId)
@@ -61,16 +56,38 @@ class ProfileModel {
 
   async getProfile(userId) {
     console.log("GET PROFILE MODEL HIT");
-  const { data, error } = await supabaseAdmin
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .maybeSingle();
 
-  if (error) throw new Error(error.message);
+    const { data: profile, error } = await supabaseAdmin
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
+      .maybeSingle();
 
-  return data;
-}
+    if (error) throw new Error(error.message);
+
+    const { data: userInterests, error: interestsError } = await supabaseAdmin
+      .from("userInterests")
+      .select(`
+        interestId,
+        interestsList (
+          name
+        )
+      `)
+      .eq("userId", userId);
+
+    if (interestsError) {
+      throw new Error(interestsError.message);
+    }
+
+    const interests = (userInterests || []).map(
+      (item) => item.interestsList?.name
+    ).filter(Boolean);
+
+    return {
+      ...profile,
+      interests,
+    };
+  }
 
   async getPublicProfiles(currentUserId) {
     const { data, error } = await supabaseAdmin
