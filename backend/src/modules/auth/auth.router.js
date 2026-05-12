@@ -134,11 +134,16 @@ router.get("/facebook", async (req, res) => {
     await supabaseAuth.auth.signInWithOAuth({
       provider: "facebook",
       options: {
-        redirectTo: `${process.env.BACKEND_URL}/auth/facebook/callback?frontend_url=${frontendUrl}`,
+        redirectTo:
+          `https://eventra-j1tj.onrender.com/api/auth/facebook/callback?frontend_url=${encodeURIComponent(frontendUrl)}`,
       },
     });
 
-  if (error) return res.status(400).json(error);
+  if (error) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
 
   res.redirect(data.url);
 });
