@@ -46,8 +46,8 @@ function Header({ onMenuClick }) {
         {isAuthenticated ? (
           <>
           <Link className="user" to="/profile" aria-label="Open my profile">
-            {user.avatarUrl ? (
-              <img className="avatar" src={user.avatarUrl} alt={user.fullName} />
+            {user.avatarUrl || user.avatar_url ? (
+              <img className="avatar" src={user.avatarUrl || user.avatar_url} alt={user.fullName}/>
             ) : (
               <div className="avatar">{user.initials}</div>
             )}
