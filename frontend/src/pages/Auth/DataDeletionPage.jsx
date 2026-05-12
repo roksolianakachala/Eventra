@@ -9,7 +9,7 @@ function DataDeletionPage() {
       </p>
 
       <p>
-        anastasiabrijovska@gmail.com
+        eventra@gmail.com
       </p>
     </div>
   );
