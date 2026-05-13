@@ -8,9 +8,10 @@ import { eventService } from "../../services/eventService";
 function EventsPage() { 
   const navigate = useNavigate(); 
 
-  const [activeCategory, setActiveCategory] = useState(0); 
+  const [activeCategory, setActiveCategory] = useState(null); 
   const [events, setEvents] = useState([]); 
   const [isLoading, setIsLoading] = useState(true);  
+  const [date, setDate] = useState(''); 
 
   const topEventsRef = useRef(null);
   const smallEventsRef = useRef(null);
@@ -28,7 +29,15 @@ function EventsPage() {
   useEffect(() => {
     const fetchEvents = async () => {
       try { 
-        const response = await eventService.getEvents({ category: categories[activeCategory]?.name, limit: 10 }); 
+        setIsLoading(true);
+      
+        const currentCategory = activeCategory !== null ? categories[activeCategory]?.name : null; 
+        const params = { limit: 10, date: date };
+      
+        if (currentCategory && currentCategory !== "Усе") {
+          params.category = currentCategory;
+        }
+        const response = await eventService.getEvents({ category: categories[activeCategory]?.name, date: date, limit: 10 }); 
         const eventsData = response.data; 
         setEvents(eventsData); 
       } catch (err) { 
@@ -39,7 +48,7 @@ function EventsPage() {
     };
 
     fetchEvents();
-  }, [activeCategory]);
+  }, [activeCategory, date]); 
 
   const scrollSection = (ref, direction) => {
     ref.current?.scrollBy({
@@ -53,7 +62,11 @@ function EventsPage() {
     alert("Ця дія буде доступна після підключення подій до backend.");
   };
 
-  
+  const handleCategoryClick = (index) => {
+    if (activeCategory === index) setActiveCategory(null); 
+    else setActiveCategory(index); 
+    
+  }
 
   if (isLoading) {
     return <div className="events-page"><h2 style={{padding: "40px", textAlign: "center"}}>Завантаження подій...</h2></div>; 
@@ -85,12 +98,27 @@ function EventsPage() {
           <button
             className={activeCategory === index ? "active" : ""}
             key={category.name}
-            onClick={() => setActiveCategory(index)}
+            onClick={ () => handleCategoryClick(index) } 
           >
             {category.Icon && <category.Icon size={18} />} 
             {category.name}
           </button>
         ))}
+      </div> 
+
+      <div className="events-date"> 
+        <input 
+          type="date" 
+          name="date" 
+          placeholder="День події" 
+          value={date} 
+          onChange={ (e) => { setDate(e.target.value) } } 
+        /> 
+        {date && (
+          <button className="reset-date" onClick={() => setDate('')}>
+            Очистити
+          </button>
+        )}
       </div>
 
       <section className="events-section">

@@ -24,8 +24,9 @@ export const eventService = {
     getEvents: async (params = {}) => { 
         const queryParams = new URLSearchParams();
         
-        if (params.category !== undefined) queryParams.append("category", params.category);
-        if (params.limit !== undefined) queryParams.append("limit", params.limit);
+        if (params.category !== undefined) queryParams.append("category", params.category); 
+        if (params.date !== undefined) queryParams.append("date", params.date); 
+        if (params.limit !== undefined) queryParams.append("limit", params.limit); 
 
         const queryString = queryParams.toString();
         const url = queryString ? `/events?${queryString}` : "/events";

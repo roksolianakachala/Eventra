@@ -22,6 +22,44 @@
   margin: 32px 0;
 }
 
+.events-date { 
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #dbe4f0;
+  border-radius: 10px;
+  padding: 0 16px;
+  height: 48px; 
+  width: 100%; 
+  max-width: 280px; 
+  min-width: 180px; 
+  cursor: pointer;
+  transition: all 0.2s ease; 
+} 
+
+.events-date:hover {
+  border-color: #075ee8;
+  box-shadow: 0 4px 12px rgba(7, 94, 232, 0.08);
+} 
+
+.events-date input[type="date"] {
+  border: none;
+  background: transparent;
+  color: #050816;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+} 
+
+.events-date input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(30%) sepia(80%) saturate(5000%) hue-rotate(210deg) brightness(95%) contrast(90%); 
+}
+
 .events-categories button {
   height: 48px;
   border: 1px solid #dbe4f0;

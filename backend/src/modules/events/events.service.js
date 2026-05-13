@@ -2,23 +2,28 @@ const { supabaseAuth, supabaseAdmin } = require('../../config/db.config');
 
 
 const getAllEvents = async (filter = {}) => {
-    const { category, limit = 10 } = filter; 
-    
-    let query = supabaseAuth
-        .from('events')
-        .select('*') 
-        .order('start_time', { ascending: true }) 
-        .limit(limit); 
-    
+    const { category, date, limit = 10 } = filter; 
+
+    let query = supabaseAuth.from('events').select('*'); 
+
     if (category && category.trim() !== '') { 
         query = query.eq('category', category); 
     } 
-    
+
+    if (date && date.trim() !== '') {
+        const startDay = `${date}T00:00:00.000Z`; 
+        const endDay = `${date}T23:59:59.000Z`; 
+
+        query = query.gte('start_time', startDay).lte('start_time', endDay); 
+    } 
+
+    query = query.limit(parseInt(limit)).order('start_time', { ascending: true }); 
+
     const { data, error } = await query; 
 
     if (error) {
         throw new Error(`Помилка отримання даних з бази: ${error.message}`);
-    } 
+    }
 
     return data; 
 }
