@@ -19,6 +19,36 @@ const sendRequest = async (requesterId, receiverId) => {
     return data[0];
 };
 
+const acceptRequest = async (requestId, receiverId) => {
+    const { data: request, error: fetchError } = await supabaseAdmin
+        .from('friendships')
+        .select('*')
+        .eq('id', requestId)
+        .single();
+
+    if (fetchError || !request) {
+        throw new Error("Запит не знайдено");
+    }
+
+    if (request.receiver_id !== receiverId) {
+        throw new Error("Ви не можете прийняти чужий запит");
+    }
+
+    if (request.status === 'accepted') {
+        throw new Error("Запит вже прийнято раніше");
+    }
+
+    const { data, error } = await supabaseAdmin
+        .from('friendships')
+        .update({ status: 'accepted' })
+        .eq('id', requestId)
+        .select();
+
+    if (error) throw new Error(`Помилка бази даних: ${error.message}`);
+    return data[0];
+};
+
 module.exports = {
-    sendRequest
+    sendRequest,
+    acceptRequest
 };

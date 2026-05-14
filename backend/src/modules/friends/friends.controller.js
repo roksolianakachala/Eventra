@@ -21,6 +21,24 @@ const sendFriendRequest = async (req, res) => {
     }
 };
 
+const acceptFriendRequest = async (req, res) => {
+    try {
+        const receiverId = req.user.id; // Той, хто приймає запит (поточний юзер)
+        const requestId = req.params.requestId; // ID самого запиту з URL
+
+        const updatedRequest = await friendsService.acceptRequest(requestId, receiverId);
+        
+        res.status(200).json({ 
+            status: "success", 
+            message: "Запит у друзі прийнято",
+            data: updatedRequest 
+        });
+    } catch (err) {
+        res.status(400).json({ status: "error", message: err.message });
+    }
+};
+
 module.exports = {
-    sendFriendRequest
+    sendFriendRequest,
+    acceptFriendRequest
 };
