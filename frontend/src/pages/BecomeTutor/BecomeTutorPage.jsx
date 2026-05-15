@@ -35,32 +35,53 @@ function BecomeTutorPage() {
   const handleSubmit = async (event) => {
   event.preventDefault();
 
-  const token = localStorage.getItem("token");
+  try {
+    const auth = JSON.parse(
+      localStorage.getItem("eventra_auth") || "{}"
+    );
 
-  const response = await fetch("http://localhost:5000/api/tutor", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      subject: form.subject,
-      experience_years: form.experience,
-      work_format: form.format,
-      city: form.city,
-      price_per_hour: form.price,
-      bio: form.about,
-      education: form.education,
-    }),
-  });
+    const token = auth?.token;
 
-  if (!response.ok) {
-    alert("Помилка при збереженні анкети");
-    return;
+    if (!token) {
+      alert("Немає токена");
+      return;
+    }
+
+    const response = await fetch(
+      "https://eventra-j1tj.onrender.com/api/tutor",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          subject: form.subject,
+          experience_years: Number(form.experience),
+          work_format: form.format,
+          city: form.city,
+          price_per_hour: Number(form.price),
+          bio: form.about,
+          education: form.education,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.log(data);
+      alert(data.message || "Помилка");
+      return;
+    }
+
+    alert("Анкету успішно збережено!");
+
+    navigate("/tutors");
+  } catch (error) {
+    console.error(error);
+    alert("Помилка сервера");
   }
-
-  alert("Анкету збережено!");
-  navigate("/tutors");
 };
 
   return (
