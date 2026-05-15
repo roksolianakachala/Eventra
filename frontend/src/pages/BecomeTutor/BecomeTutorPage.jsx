@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiRequest } from "../../services/api";
 import { GraduationCap, ImagePlus, MapPin, Star } from "lucide-react";
 import "./BecomeTutorPage.css";
 
@@ -47,25 +48,23 @@ function BecomeTutorPage() {
       return;
     }
 
-    const response = await fetch(
-      "https://eventra-j1tj.onrender.com/api/tutor",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          subject: form.subject,
-          experience_years: Number(form.experience),
-          work_format: form.format,
-          city: form.city,
-          price_per_hour: Number(form.price),
-          bio: form.about,
-          education: form.education,
-        }),
-      }
-    );
+    // "https://eventra-j1tj.onrender.com/api/tutor"
+
+    await apiRequest("/tutor", {
+      method: "POST",
+      headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      subject: form.subject,
+      experience_years: Number(form.experience),
+      work_format: form.format,
+      city: form.city,
+      price_per_hour: Number(form.price),
+      bio: form.about,
+      education: form.education,
+    }),
+  });
 
     const data = await response.json();
 

@@ -1,61 +1,60 @@
-const pool = require("../../config/db.config");
+const { supabaseAdmin } = require("../../config/db.config");
 
-const createTutor = async (data) => {
-  const {
-    user_id,
-    subject,
-    experience_years,
-    education,
-    faculty,
-    work_format,
-    price_per_hour,
-    city,
-    bio,
-  } = data;
+class TutorModel {
+  async createTutor(data) {
+    const { data: tutor, error } = await supabaseAdmin
+      .from("tutor")
+      .upsert(
+        {
+          user_id: data.user_id,
+          subject: data.subject,
+          experience_years: data.experience_years,
+          education: data.education,
+          faculty: data.faculty,
+          work_format: data.work_format,
+          price_per_hour: data.price_per_hour,
+          city: data.city,
+          bio: data.bio,
+          updated_at: new Date(),
+        },
+        {
+          onConflict: "user_id",
+        }
+      )
+      .select()
+      .maybeSingle();
 
-  const result = await pool.query(
-    `
-    INSERT INTO tutor (
-      user_id,
-      subject,
-      experience_years,
-      education,
-      faculty,
-      work_format,
-      price_per_hour,
-      city,
-      bio
-    )
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
-    ON CONFLICT (user_id)
-    DO UPDATE SET
-      subject = EXCLUDED.subject,
-      experience_years = EXCLUDED.experience_years,
-      education = EXCLUDED.education,
-      faculty = EXCLUDED.faculty,
-      work_format = EXCLUDED.work_format,
-      price_per_hour = EXCLUDED.price_per_hour,
-      city = EXCLUDED.city,
-      bio = EXCLUDED.bio,
-      updated_at = now()
-    RETURNING *;
-    `,
-    [
-      user_id,
-      subject,
-      experience_years,
-      education,
-      faculty,
-      work_format,
-      price_per_hour,
-      city,
-      bio,
-    ]
-  );
+    if (error) {
+      throw new Error(error.message);
+    }
 
-  return result.rows[0];
-};
+    return tutor;
+  }
 
-module.exports = {
-  createTutor,
-};
+
+
+  async getTutors() {
+  const { data, error } = await supabaseAdmin
+    .from("tutor")
+    .select(`
+      *,
+      profiles (
+        id,
+        first_name,
+        last_name,
+        avatar_url,
+        location
+      )
+    `)
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+}
+
+module.exports = new TutorModel();

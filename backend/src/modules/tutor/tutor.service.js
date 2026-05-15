@@ -14,6 +14,11 @@ const createTutor = async (userId, body) => {
   });
 };
 
+const getTutors = async () => {
+  return await tutorModel.getTutors();
+};
+
 module.exports = {
   createTutor,
+  getTutors,
 };
