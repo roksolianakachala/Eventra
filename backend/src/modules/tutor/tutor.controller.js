@@ -16,6 +16,18 @@ const createTutor = async (req, res) => {
   }
 };
 
+const getTutors = async (req, res) => {
+  try {
+    const tutors = await tutorService.getTutors();
+
+    res.json(tutors);
+  } catch (error) {
+    console.error("Get tutors error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createTutor,
+  getTutors,
 };
