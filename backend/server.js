@@ -8,10 +8,6 @@ const PORT = process.env.PORT || 5000;
 const app = express(); 
 
 
-app.get("/health", (req, res) => {
-  res.send("ok");
-});
-
 app.use(cors({ 
   origin: function (origin, callback) {
     const allowedOrigins = [
@@ -35,17 +31,26 @@ app.get('/', (req, res) => {
   res.send('running ');
 });
 
+
+app.get("/health", (req, res) => {
+  res.send("ok");
+});
+
+
+
 const authRouter = require("./src/modules/auth/auth.router");
 const eventsRouter = require("./src/modules/events/events.router"); 
 const profileRouter = require("./src/modules/Profile/profile.routes");
 const chatsRouter = require("./src/modules/chats/chats.routes");
 const friendsRouter = require("./src/modules/friends/friends.router");
+const tutorRouter = require("./src/modules/tutor/tutor.routes");
 
 app.use("/api/auth", authRouter);
 app.use("/api/events", eventsRouter);
 app.use("/api/profile", profileRouter);
 app.use("/api/chats", chatsRouter);
 app.use("/api/friends", friendsRouter);
+app.use("/api/tutor", tutorRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`); 
