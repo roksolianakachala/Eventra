@@ -70,7 +70,11 @@ function TutorsPage() {
           <div className="tutor-details">
             <div className="tutor-header">
               <div className="avatar big">
-                <GraduationCap size={42} />
+                {selectedTutor.avatarUrl ? (
+                  <img src={selectedTutor.avatarUrl} alt={selectedTutor.name} />
+                ) : (
+                  <GraduationCap size={42} />
+                )}
               </div>
 
               <span className="subject">{selectedTutor.subject}</span>
@@ -122,7 +126,11 @@ function TutorsPage() {
               onClick={() => handleSelectTutor(tutor)}
             >
               <div className="avatar">
-                <GraduationCap size={28} />
+                {tutor.avatarUrl ? (
+                  <img src={tutor.avatarUrl} alt={tutor.name} />
+                ) : (
+                  <GraduationCap size={28} />
+                )}
               </div>
 
               <div>
