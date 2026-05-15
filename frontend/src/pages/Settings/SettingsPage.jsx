@@ -1,3 +1,5 @@
+import { apiRequest } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 import {
   Bell,
   Lock,
@@ -12,10 +14,38 @@ import {
 
 import "./SettingsPage.css";
 
+
 function SettingsPage() {
+  const navigate = useNavigate();
   const handleSettingsPlaceholder = () => {
     // TODO: Connect account settings actions to backend account/security APIs.
     alert("Ця дія налаштувань буде доступна після підключення backend.");
+  };
+
+  const handleDeleteAccount = async () => {
+  const confirmed = window.confirm(
+    "Ви точно хочете видалити акаунт? Цю дію неможливо скасувати."
+  );
+
+  if (!confirmed) return;
+
+  const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
+  const token = auth?.token;
+
+  if (!token) {
+    alert("Немає токена");
+    return;
+  }
+
+  await apiRequest("/profile/me", {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  localStorage.removeItem("eventra_auth");
+    navigate("/register");
   };
 
   return (
@@ -173,7 +203,7 @@ function SettingsPage() {
               <h3>Видалити акаунт</h3>
               <p>Після видалення акаунта дані буде втрачено</p>
             </div>
-            <button className="danger-btn" type="button" onClick={handleSettingsPlaceholder}>Видалити</button>
+            <button type="button" onClick={handleDeleteAccount}> Видалити </button>
           </div>
         </section>
       </div>
