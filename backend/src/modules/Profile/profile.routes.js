@@ -10,6 +10,7 @@ const {
 router.get("/me", authenticate, ProfileController.getMyProfile);
 router.put("/me", authenticate, ProfileController.updateMyProfile);
 router.get("/", authenticate, ProfileController.getPublicProfiles);
+router.delete("/me", authenticate, ProfileController.deleteMyAccount);
 
 
 

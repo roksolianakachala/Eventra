@@ -132,7 +132,7 @@ class ProfileModel {
       interestTypes,
     };
   });
-}
+  }
 
   async updateAvatar(userId, file) {
   const fileExt = file.originalname.split(".").pop();
@@ -168,6 +168,29 @@ class ProfileModel {
 
   return publicUrl;
   }
+
+  async deleteAccount(userId) {
+  const { error: tutorError } = await supabaseAdmin
+    .from("tutor")
+    .delete()
+    .eq("user_id", userId);
+
+  if (tutorError) throw new Error(tutorError.message);
+
+  const { error: profileError } = await supabaseAdmin
+    .from("profiles")
+    .delete()
+    .eq("id", userId);
+
+  if (profileError) throw new Error(profileError.message);
+
+  const { error: authError } =
+    await supabaseAdmin.auth.admin.deleteUser(userId);
+
+  if (authError) throw new Error(authError.message);
+
+  return true;
+}
 
 }
 

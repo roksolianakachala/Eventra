@@ -58,12 +58,25 @@ class ProfileController {
       avatarUrl,
     });
 
+    } catch (err) {
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  }
+
+  async deleteMyAccount(req, res) {
+  try {
+    const userId = req.user.id;
+
+    await ProfileService.deleteAccount(userId);
+
+    res.json({ message: "Account deleted" });
   } catch (err) {
-    res.status(400).json({
-      message: err.message,
-    });
+    res.status(400).json({ message: err.message });
   }
 }
+
 }
 
 module.exports = new ProfileController();

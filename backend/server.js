@@ -44,6 +44,7 @@ const profileRouter = require("./src/modules/Profile/profile.routes");
 const chatsRouter = require("./src/modules/chats/chats.routes");
 const friendsRouter = require("./src/modules/friends/friends.router");
 const tutorRouter = require("./src/modules/tutor/tutor.routes");
+// const searchRouter = require("./src/modules/search/search.routes");
 
 app.use("/api/auth", authRouter);
 app.use("/api/events", eventsRouter);
@@ -51,6 +52,7 @@ app.use("/api/profile", profileRouter);
 app.use("/api/chats", chatsRouter);
 app.use("/api/friends", friendsRouter);
 app.use("/api/tutor", tutorRouter);
+// app.use("/api/search", searchRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`); 
