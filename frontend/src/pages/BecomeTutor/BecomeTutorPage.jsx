@@ -32,11 +32,36 @@ function BecomeTutorPage() {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // TODO: Send tutor application data to the backend tutor application API.
-    alert("Анкету буде надіслано після підключення backend.");
-  };
+  const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  const token = localStorage.getItem("token");
+
+  const response = await fetch("http://localhost:5000/api/tutor", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      subject: form.subject,
+      experience_years: form.experience,
+      work_format: form.format,
+      city: form.city,
+      price_per_hour: form.price,
+      bio: form.about,
+      education: form.education,
+    }),
+  });
+
+  if (!response.ok) {
+    alert("Помилка при збереженні анкети");
+    return;
+  }
+
+  alert("Анкету збережено!");
+  navigate("/tutors");
+};
 
   return (
     <div className="become-tutor-page">
@@ -65,12 +90,12 @@ function BecomeTutorPage() {
           <div className="form-grid">
             <label>
               Ім’я
-              <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="Введіть ім’я" />
+              <input name="firstName" value={form.firstName} disabled placeholder="Ім’я" />
             </label>
 
             <label>
               Прізвище
-              <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Введіть прізвище" />
+              <input name="lastName" value={form.lastName} disabled placeholder="Прізвище" />
             </label>
 
             <label>
