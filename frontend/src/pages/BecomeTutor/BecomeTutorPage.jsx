@@ -66,13 +66,6 @@ function BecomeTutorPage() {
     }),
   });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.log(data);
-      alert(data.message || "Помилка");
-      return;
-    }
 
     alert("Анкету успішно збережено!");
 
