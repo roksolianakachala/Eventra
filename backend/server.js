@@ -7,6 +7,23 @@ const PORT = process.env.PORT || 5000;
 
 const app = express(); 
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 63c759606aa2dbd0dba8b0a33c77c7bbe6dcb034
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://eventra-for-events.netlify.app"
+  ],
+  credentials: true
+}));
+app.use(express.json({ limit: '10mb' })); 
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 63c759606aa2dbd0dba8b0a33c77c7bbe6dcb034
 
 app.use(cors({ 
   origin: function (origin, callback) {
@@ -26,6 +43,10 @@ app.use(cors({
 })); 
 
 app.use(express.json()); 
+<<<<<<< HEAD
+>>>>>>> 8f2f7a42eb4ed0e68653e746f2c9c5adde111507
+=======
+>>>>>>> 63c759606aa2dbd0dba8b0a33c77c7bbe6dcb034
 
 app.get('/', (req, res) => {
   res.send('running ');

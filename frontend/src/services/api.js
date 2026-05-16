@@ -15,15 +15,22 @@ function getDefaultApiBaseUrl() {
 
 export const API_BASE_URL = (process.env.REACT_APP_API_URL || getDefaultApiBaseUrl()).replace(/\/$/, "");
 
-export async function apiRequest(path, options = {}) {
-  const { headers, ...requestOptions } = options;
+export async function apiRequest(path, options = {}) { 
+  const { headers = {}, ...requestOptions } = options; 
+  const fetchHeaders = { ...headers };
+
+  if (requestOptions.body) {
+    if (requestOptions.body instanceof FormData) { 
+      delete fetchHeaders["Content-Type"];
+    } else { 
+      fetchHeaders["Content-Type"] = "application/json";
+      requestOptions.body = JSON.stringify(requestOptions.body);
+    }
+  }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...requestOptions,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
+    headers: fetchHeaders,
   });
 
   const contentType = response.headers.get("content-type") || "";
@@ -32,10 +39,9 @@ export async function apiRequest(path, options = {}) {
     : await response.text();
 
   if (!response.ok) {
-    const message =
-      typeof data === "string" ? data : data?.message || "Request failed";
+    const message = typeof data === "string" ? data : data?.message || "Request failed";
     throw new Error(message);
   }
 
   return data;
-}
+} 
