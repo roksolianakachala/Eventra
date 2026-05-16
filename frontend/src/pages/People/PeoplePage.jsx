@@ -13,6 +13,7 @@ import {
 import "./PeoplePage.css";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { clearStoredAuth, isExpiredJwtError } from "../../services/authService";
 import { findOrCreateChat } from "../../services/chatService";
 import { fetchPublicProfiles } from "../../services/profileService";
 
@@ -41,6 +42,12 @@ function PeoplePage() {
         const profiles = await fetchPublicProfiles();
         setPeople(Array.isArray(profiles) ? profiles : []);
       } catch (error) {
+        if (isExpiredJwtError(error.message)) {
+          clearStoredAuth();
+          setErrorMessage("Сесія закінчилася. Увійдіть в акаунт ще раз.");
+          return;
+        }
+
         setErrorMessage(error.message || "Не вдалося завантажити людей.");
       } finally {
         setIsLoading(false);
@@ -58,7 +65,8 @@ function PeoplePage() {
     }
 
     return people.filter((person) =>
-      Array.isArray(person.interests) && person.interests.includes(selectedFilter)
+      Array.isArray(person.interestTypes) &&
+      person.interestTypes.includes(selectedFilter)
     );
   }, [activeFilter, people]);
 
@@ -74,6 +82,12 @@ function PeoplePage() {
       const chat = await findOrCreateChat(person.id);
       navigate("/messages", { state: { chatId: chat.id } });
     } catch (error) {
+      if (isExpiredJwtError(error.message)) {
+        clearStoredAuth();
+        alert("Сесія закінчилася. Увійдіть в акаунт ще раз.");
+        return;
+      }
+
       alert(error.message || "Не вдалося створити чат.");
     } finally {
       setMessagingPersonId(null);
@@ -134,12 +148,15 @@ function PeoplePage() {
               <p className="person-bio">{person.bio}</p>
 
               <div className="person-interests">
-                {person.interests.length > 0 ? (
-                  person.interests.map((interest) => <span key={interest}>{interest}</span>)
+                {Array.isArray(person.interests) && person.interests.length > 0 ? (
+                  person.interests.map((interest) => (
+                    <span key={interest}>{interest}</span>
+                  ))
                 ) : (
                   <span>Інтереси не вказано</span>
                 )}
               </div>
+              
             </div>
 
             <div className="person-actions">

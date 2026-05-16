@@ -1,8 +1,8 @@
 import { apiRequest } from "./api";
-import { getStoredAuth } from "./authService";
+import { getValidStoredAuth } from "./authService";
 
 function getAuthHeaders() {
-  const token = getStoredAuth()?.token;
+  const token = getValidStoredAuth()?.token;
 
   return token ? { Authorization: `Bearer ${token}` } : {};
 }

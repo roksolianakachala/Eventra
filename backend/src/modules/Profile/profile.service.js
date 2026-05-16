@@ -14,6 +14,14 @@ class ProfileService {
   async getPublicProfiles(userId) {
     return await ProfileModel.getPublicProfiles(userId);
   }
+
+  async updateAvatar(userId, file) {
+    return await ProfileModel.updateAvatar(userId, file);
+  }
+
+  async deleteAccount(userId) {
+    return await ProfileModel.deleteAccount(userId);
+  }
 }
 
 module.exports = new ProfileService();

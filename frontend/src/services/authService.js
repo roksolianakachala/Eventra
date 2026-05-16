@@ -123,7 +123,7 @@ function decodeBase64Url(value) {
 
 export function getUserFromJwtToken(token) {
   try {
-    const payload = JSON.parse(decodeBase64Url(token.split(".")[1] || ""));
+    const payload = getJwtPayload(token);
     return normalizeUser({
       id: payload.sub,
       email: payload.email,
@@ -133,6 +133,41 @@ export function getUserFromJwtToken(token) {
   } catch {
     return null;
   }
+}
+
+export function getJwtPayload(token) {
+  return JSON.parse(decodeBase64Url(token.split(".")[1] || ""));
+}
+
+export function getTokenExpiresAt(token) {
+  const payload = getJwtPayload(token);
+  return Number(payload.exp || 0) * 1000;
+}
+
+export function isTokenExpired(token, skewSeconds = 30) {
+  if (!token) return true;
+
+  try {
+    const expiresAt = getTokenExpiresAt(token);
+    return !expiresAt || expiresAt <= Date.now() + skewSeconds * 1000;
+  } catch {
+    return true;
+  }
+}
+
+export function getValidStoredAuth() {
+  const storedAuth = getStoredAuth();
+
+  if (storedAuth?.token && isTokenExpired(storedAuth.token)) {
+    clearStoredAuth();
+    return null;
+  }
+
+  return storedAuth;
+}
+
+export function isExpiredJwtError(message = "") {
+  return /token is expired|jwt.*expired|invalid jwt/i.test(String(message));
 }
 
 function normalizeAuthResponse(response) {
@@ -154,6 +189,8 @@ function normalizeAuthResponse(response) {
 
   return {
     token,
+    refreshToken: response?.refreshToken || response?.refresh_token || session?.refresh_token || null,
+    expiresAt: session?.expires_at || null,
     user: normalizedUser,
     isAuthenticated: Boolean(token || normalizedUser.id !== demoUser.id),
   };

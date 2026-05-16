@@ -1,7 +1,6 @@
 import "./ProfilePage.css";
 import { useState, useEffect } from "react";
 import {
-  Apple,
   Bell,
   CalendarDays,
   CreditCard,
@@ -17,7 +16,6 @@ import {
   Shield,
   Star,
   User,
-  Users,
   WalletCards,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -54,6 +52,86 @@ function ProfilePage() {
   const [activeMenuIndex, setActiveMenuIndex] = useState(0);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+
+
+
+
+  const removeInterest = async (interestId) => {
+  const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
+  const token = auth?.token;
+
+  if (!token) {
+    alert("Немає токена");
+    return;
+  }
+
+  await apiRequest(`/profile/interests/${interestId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  setProfile((current) => ({
+    ...current,
+    interests: current.interests.filter(
+      (interest) => interest.interestId !== interestId
+    ),
+  }));
+};
+
+  const handleAvatarChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const auth = JSON.parse(localStorage.getItem("eventra_auth") || "{}");
+  const token = auth?.token;
+
+  if (!token) {
+    alert("Немає токена");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const res = await fetch("https://eventra-j1tj.onrender.com/api/profile/avatar", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message);
+    return;
+  }
+
+  setProfile((current) => ({
+    ...current,
+    avatar_url: data.avatarUrl,
+    }));
+
+    const savedAuth = JSON.parse(
+      localStorage.getItem("eventra_auth") || "{}"
+    );
+
+    localStorage.setItem(
+      "eventra_auth",
+      JSON.stringify({
+        ...savedAuth,
+        user: {
+          ...savedAuth.user,
+          avatarUrl: data.avatarUrl,
+        },
+      })
+    );
+
+    window.location.reload();
+  };
 
   const handleProfileSave = async (event) => {
     event.preventDefault();
@@ -107,8 +185,6 @@ function ProfilePage() {
 
   const connectedAccounts = [
     { name: "Google", detail: user.email || "Не підключено", connected: true, icon: Mail },
-    { name: "Facebook", detail: "Не підключено", connected: false, icon: Users },
-    { name: "Apple", detail: "Не підключено", connected: false, icon: Apple },
   ];
 
   const reviews = [
@@ -172,8 +248,11 @@ function ProfilePage() {
             </p>
           )}
 
-          <button className="change-photo-btn" type="button" onClick={handlePlaceholderAction}>
-            Змінити фото
+          <input id="avatarInput" type="file" accept="image/*" hidden onChange={handleAvatarChange} />
+
+          <button className="change-photo-btn" type="button"
+            onClick={() => document.getElementById("avatarInput").click()}>
+              Змінити фото
           </button>
         </div>
       </div>
@@ -212,13 +291,24 @@ function ProfilePage() {
 
         <div className="interests-block">
           <p>Інтереси</p>
-
+          
           <div className="interests-list">
             {interests.length > 0 ? (
-              interests.map((interest) => <span key={interest}>{interest} x</span>)
-            ) : (
-              <span>Додайте інтереси</span>
-            )}
+              interests.map((interest) => (
+              <span key={interest.interestId}>{interest.name}
+                <button type="button" onClick={() => removeInterest(interest.interestId)}>
+                  x
+                </button>
+              </span>
+            ))
+          ) : (
+          <span>Інтереси ще не додані</span>
+          )}
+          
+          <button className="add-interest-btn" type="button"
+            onClick={() => navigate("/profile/interests")}>
+              Додати інтереси
+          </button>
           </div>
         </div>
 

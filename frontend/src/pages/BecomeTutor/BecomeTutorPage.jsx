@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { apiRequest } from "../../services/api";
 import { GraduationCap, ImagePlus, MapPin, Star } from "lucide-react";
 import "./BecomeTutorPage.css";
 
@@ -32,11 +33,48 @@ function BecomeTutorPage() {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // TODO: Send tutor application data to the backend tutor application API.
-    alert("Анкету буде надіслано після підключення backend.");
-  };
+  const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  try {
+    const auth = JSON.parse(
+      localStorage.getItem("eventra_auth") || "{}"
+    );
+
+    const token = auth?.token;
+
+    if (!token) {
+      alert("Немає токена");
+      return;
+    }
+
+    // "https://eventra-j1tj.onrender.com/api/tutor"
+
+    await apiRequest("/tutor", {
+      method: "POST",
+      headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      subject: form.subject,
+      experience_years: Number(form.experience),
+      work_format: form.format,
+      city: form.city,
+      price_per_hour: Number(form.price),
+      bio: form.about,
+      education: form.education,
+    }),
+  });
+
+
+    alert("Анкету успішно збережено!");
+
+    navigate("/tutors");
+  } catch (error) {
+    console.error(error);
+    alert("Помилка сервера");
+  }
+};
 
   return (
     <div className="become-tutor-page">
@@ -65,12 +103,12 @@ function BecomeTutorPage() {
           <div className="form-grid">
             <label>
               Ім’я
-              <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="Введіть ім’я" />
+              <input name="firstName" value={form.firstName} disabled placeholder="Ім’я" />
             </label>
 
             <label>
               Прізвище
-              <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Введіть прізвище" />
+              <input name="lastName" value={form.lastName} disabled placeholder="Прізвище" />
             </label>
 
             <label>

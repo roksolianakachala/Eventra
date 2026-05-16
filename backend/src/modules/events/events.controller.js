@@ -34,9 +34,9 @@ const getEventById = async (req, res) => {
 
 const getEvents = async (req, res) => {
     try {
-        const { category, limit} = req.query; 
+        const { category, date, limit} = req.query; 
         
-        const events = await eventsService.getAllEvents({ category, limit }); 
+        const events = await eventsService.getAllEvents({ category, date, limit }); 
         return res.status(200).json({ 
             status: "success", 
             data: events 

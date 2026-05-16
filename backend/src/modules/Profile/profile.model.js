@@ -27,15 +27,11 @@ class ProfileModel {
         profile.location ||
         [profile.city, profile.country].filter(Boolean).join(", ") ||
         "",
-      interests: Array.isArray(profile.interests) ? profile.interests : [],
       createdAt: profile.created_at,
     };
   }
 
   async updateProfile(userId, data) {
-
-
-    
     const { data: result, error } = await supabaseAdmin
       .from("profiles")
       .update({
@@ -44,7 +40,6 @@ class ProfileModel {
         phone: data.phone,
         bio: data.bio,
         location: data.location,
-        interests: data.interests,
         updated_at: new Date(),
       })
       .eq("id", userId)
@@ -61,27 +56,142 @@ class ProfileModel {
 
   async getProfile(userId) {
     console.log("GET PROFILE MODEL HIT");
-  const { data, error } = await supabaseAdmin
-    .from("profiles")
-    .select("*")
-    .eq("id", userId)
-    .maybeSingle();
 
-  if (error) throw new Error(error.message);
-
-  return data;
-}
-
-  async getPublicProfiles(currentUserId) {
-    const { data, error } = await supabaseAdmin
+    const { data: profile, error } = await supabaseAdmin
       .from("profiles")
       .select("*")
-      .neq("id", currentUserId);
+      .eq("id", userId)
+      .maybeSingle();
 
     if (error) throw new Error(error.message);
 
-    return (data || []).map((profile) => this.normalizeProfile(profile));
+    const { data: userInterests, error: interestsError } = await supabaseAdmin
+      .from("userInterests")
+      .select(`
+        interestId,
+        interestsList (
+          name,
+          type
+        )
+      `)
+      .eq("userId", userId);
+
+    if (interestsError) {
+      throw new Error(interestsError.message);
+    }
+
+    const interests = (userInterests || [])
+      .map((item) => ({
+        interestId: item.interestId,
+        name: item.interestsList?.name,
+        type: item.interestsList?.type,
+    }))
+    .filter((item) => item.name);
+
+    return {
+      ...profile,
+      interests,
+    };
   }
+
+  async getPublicProfiles(currentUserId) {
+  const { data, error } = await supabaseAdmin
+    .from("profiles")
+    .select(`
+      *,
+      userInterests (
+        interestId,
+        interestsList (
+          name,
+          type
+        )
+      )
+    `)
+    .neq("id", currentUserId);
+
+  if (error) throw new Error(error.message);
+
+  return (data || []).map((profile) => {
+    const normalizedProfile = this.normalizeProfile(profile);
+
+    const interests = (profile.userInterests || [])
+      .map((item) => item.interestsList?.name)
+      .filter(Boolean);
+
+    const interestTypes = [
+      ...new Set(
+        (profile.userInterests || [])
+          .map((item) => item.interestsList?.type)
+          .filter(Boolean)
+      ),
+    ];
+
+    return {
+      ...normalizedProfile,
+      interests,
+      interestTypes,
+    };
+  });
+  }
+
+  async updateAvatar(userId, file) {
+  const fileExt = file.originalname.split(".").pop();
+  const fileName = `${userId}-${Date.now()}.${fileExt}`;
+
+  const { error: uploadError } = await supabaseAdmin.storage
+    .from("avatars")
+    .upload(fileName, file.buffer, {
+      contentType: file.mimetype,
+      upsert: true,
+    });
+
+  if (uploadError) {
+    throw new Error(uploadError.message);
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabaseAdmin.storage
+    .from("avatars")
+    .getPublicUrl(fileName);
+
+  const { error: updateError } = await supabaseAdmin
+    .from("profiles")
+    .update({
+      avatar_url: publicUrl,
+    })
+    .eq("id", userId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
+
+  return publicUrl;
+  }
+
+  async deleteAccount(userId) {
+  const { error: tutorError } = await supabaseAdmin
+    .from("tutor")
+    .delete()
+    .eq("user_id", userId);
+
+  if (tutorError) throw new Error(tutorError.message);
+
+  const { error: profileError } = await supabaseAdmin
+    .from("profiles")
+    .delete()
+    .eq("id", userId);
+
+  if (profileError) throw new Error(profileError.message);
+
+  const { error: authError } =
+    await supabaseAdmin.auth.admin.deleteUser(userId);
+
+  if (authError) throw new Error(authError.message);
+
+  return true;
+}
+
 }
 
 module.exports = new ProfileModel();

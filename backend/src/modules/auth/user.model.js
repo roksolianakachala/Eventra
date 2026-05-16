@@ -16,6 +16,7 @@ class UserModel {
       email,
       password,
       options: {
+          emailRedirectTo: "https://eventra-for-events.netlify.app/login",
         data: {
           first_name: firstName,
           last_name: lastName,
