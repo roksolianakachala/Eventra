@@ -16,14 +16,22 @@ function getDefaultApiBaseUrl() {
 export const API_BASE_URL = (process.env.REACT_APP_API_URL || getDefaultApiBaseUrl()).replace(/\/$/, "");
 
 export async function apiRequest(path, options = {}) {
-  const { headers, ...requestOptions } = options;
+  const { headers = {}, ...requestOptions } = options;
+  const fetchHeaders = { ...headers };
+
+  // Додаємо єдину перевірку: якщо це файл (FormData), то НЕ ставимо Content-Type.
+  // Браузер сам додасть правильний заголовок (multipart/form-data)
+  if (requestOptions.body instanceof FormData) {
+    delete fetchHeaders["Content-Type"];
+    delete fetchHeaders["content-type"];
+  } else {
+    // Для всіх інших запитів (текстових) залишаємо старий добрий JSON
+    fetchHeaders["Content-Type"] = "application/json";
+  }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...requestOptions,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
+    headers: fetchHeaders,
   });
 
   const contentType = response.headers.get("content-type") || "";
@@ -38,4 +46,4 @@ export async function apiRequest(path, options = {}) {
   }
 
   return data;
-}
+} 
