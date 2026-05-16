@@ -16,28 +16,10 @@ export const eventService = {
                 headers: {
                     Authorization: `Bearer ${auth.token}` 
                 }, 
-                body: eventData
+                body: JSON.stringify(eventData) 
             }
         ); 
-    }, 
-
-    uploadBanner: async (fileObject) => {
-        const auth = getStoredAuth(); 
-        if (!auth || !auth.token) {
-            throw new Error("Користувач не авторизований"); 
-        } 
-
-        const formData = new FormData();
-        formData.append("banner", fileObject);
-
-        return await apiRequest("/events/upload", {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${auth.token}` 
-            },
-            body: formData
-        });
-    }, 
+    },  
 
     getEvents: async (params = {}) => { 
         const queryParams = new URLSearchParams();
