@@ -97,11 +97,35 @@ const deleteEvent = async (creatorId, eventId) => {
     } 
     
     return data[0]; 
+}; 
+
+const uploadBannerImage = async (file) => { 
+    const fileExt = file.originalname.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `banners/${fileName}`;
+
+    const { data, error } = await supabaseAdmin.storage
+        .from('event-banners')
+        .upload(filePath, file.buffer, {
+            contentType: file.mimetype,
+            upsert: true
+        });
+
+    if (error) {
+        throw new Error(`Помилка Supabase Storage: ${error.message}`);
+    }
+
+    const { data: publicUrlData } = supabaseAdmin.storage
+        .from('event-banners')
+        .getPublicUrl(filePath);
+
+    return publicUrlData.publicUrl;
 };
 
 module.exports = { 
     getAllEvents, 
     findEvent, 
     createNewEvent,
-    deleteEvent
+    deleteEvent, 
+    uploadBannerImage
 }; 

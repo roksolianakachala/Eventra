@@ -106,9 +106,32 @@ const deleteEvent = async (req, res) => {
     } 
 }
 
+const uploadEventBanner = async (req, res) => {
+    try { 
+        if (!req.file) {
+            return res.status(400).json({ message: 'Файл не завантажено' });
+        }
+
+        const bannerUrl = await eventsService.uploadBannerImage(req.file);
+
+        res.status(200).json({
+            status: 'success',
+            url: bannerUrl
+        });
+
+    } catch (error) {
+        console.error('Помилка завантаження фото:', error);
+        res.status(500).json({ 
+            message: 'Не вдалося завантажити зображення', 
+            error: error.message 
+        });
+    }
+}; 
+
 module.exports = { 
     getEventById, 
     getEvents, 
     createEvent,  
-    deleteEvent
+    deleteEvent, 
+    uploadEventBanner
 }; 

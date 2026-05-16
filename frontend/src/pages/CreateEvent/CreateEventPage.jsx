@@ -23,6 +23,9 @@ function CreateEventPage() {
     image: "",
   });
 
+  const [imageFile, setImageFile] = useState(null); 
+  const [imagePreview, setImagePreview] = useState(""); 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEvent({ ...event, [name]: value });
@@ -32,38 +35,47 @@ function CreateEventPage() {
     const file = e.target.files[0];
 
     if (file) {
-      setEvent({ ...event, image: URL.createObjectURL(file) });
+      setEvent({ ...event, image: URL.createObjectURL(file) }); 
+      setImageFile(file); 
+      setImagePreview(URL.createObjectURL(file)); 
     }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     
     try {
-        const payload = {
-          title: event.title,
-          category: event.category, 
-          location: `${event.city}, ${event.place}`,
-          description: event.description,
-          price: event.price ? parseFloat(event.price) : 0,
-          capacity: event.maxMembers ? parseInt(event.maxMembers) : null,
-          format: event.format,
-          banner_url: event.image || null, 
+      let finalBannerUrl = "";
 
-          access_type: "public", 
-          start_time: `${event.date}T${event.start_time}:00Z`, 
-          end_time: event.end_time ? `${event.date}T${event.end_time}:00Z` : null, 
+      if (imageFile) {
+        const uploadResult = await eventService.uploadBanner(imageFile);
+        finalBannerUrl = uploadResult.url; 
+      }
+
+      const payload = {
+        title: event.title,
+        category: event.category, 
+        location: `${event.city}, ${event.place}`,
+        description: event.description,
+        price: event.price ? parseFloat(event.price) : 0,
+        capacity: event.maxMembers ? parseInt(event.maxMembers) : null,
+        format: event.format, 
+        banner_url: finalBannerUrl || null, 
+
+        access_type: "public", 
+        start_time: `${event.date}T${event.start_time}:00Z`, 
+        end_time: event.end_time ? `${event.date}T${event.end_time}:00Z` : null, 
       }; 
 
-      const result = await eventService.createEvent(payload); 
+      await eventService.createEvent(payload); 
+      
       alert("Подія створена!"); 
       navigate("/events"); 
     } catch (err) {
       console.error("Error creating event:", err);
       alert("Помилка створення події");
     }
-
-  };
+  }; 
 
   return (
     <div className="create-event-page">
