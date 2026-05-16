@@ -1,58 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, MapPin, Star, X } from "lucide-react";
+import { apiRequest } from "../../services/api";
 import "./TutorsPage.css";
 
-const tutors = [
-  {
-    id: "math-oleksandr",
-    name: "Олександр Іваненко",
-    subject: "Математика",
-    rating: 4.9,
-    reviews: 128,
-    location: "Львів, Україна",
-    experience: "8 років викладання математики",
-    about:
-      "Маю 8 років досвіду викладання математики для учнів 5-11 класів та підготовки до ЗНО/НМТ.",
-  },
-  {
-    id: "english-anastasiia",
-    name: "Анастасія Лисенко",
-    subject: "Англійська мова",
-    rating: 4.9,
-    reviews: 128,
-    location: "Київ, Україна",
-    experience: "5 років досвіду викладання англійської мови",
-    about:
-      "Допомагаю учням впевнено говорити англійською, підтягнути граматику та підготуватися до іспитів.",
-  },
-  {
-    id: "physics-dmytro",
-    name: "Дмитро Коваль",
-    subject: "Фізика",
-    rating: 4.9,
-    reviews: 128,
-    location: "Одеса, Україна",
-    experience: "6 років роботи з учнями та студентами",
-    about:
-      "Пояснюю фізику через практичні приклади, задачі та зрозумілу логіку розв'язання.",
-  },
-  {
-    id: "chemistry-ihor",
-    name: "Ігор Петренко",
-    subject: "Хімія",
-    rating: 4.9,
-    reviews: 128,
-    location: "Харків, Україна",
-    experience: "7 років підготовки до контрольних, НМТ та олімпіад",
-    about:
-      "Працюю з базовими темами та складними задачами, допомагаю систематизувати знання з хімії.",
-  },
-];
+
 
 function TutorsPage() {
+  const [tutors, setTutors] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [selectedTutor, setSelectedTutor] = useState(null);
+
+
+  useEffect(() => {
+  const fetchTutors = async () => { 
+    try {
+      const data = await apiRequest("/tutor");
+
+      const normalized = data.map((item) => ({
+        id: item.id,
+        name: `${item.profiles?.first_name || ""} ${item.profiles?.last_name || ""}`.trim() || "Репетитор Eventra",
+        subject: item.subject,
+        rating: item.rating || 0,
+        reviews: 0,
+        location: item.city || item.profiles?.location || "Місто не вказано",
+        experience: item.experience_years
+          ? `${item.experience_years} років досвіду`
+          : "Досвід не вказано",
+        about: item.bio || "Опис ще не додано.",
+        price: item.price_per_hour,
+        avatarUrl: item.profiles?.avatar_url,
+      }));
+
+      setTutors(normalized);
+    } catch (error) {
+      console.error(error);
+      alert("Помилка при завантаженні репетиторів");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchTutors();
+  }, []);
 
   const handleContactTutor = () => {
     // TODO: Connect tutor contact requests to backend messaging/booking flow.
@@ -79,7 +70,11 @@ function TutorsPage() {
           <div className="tutor-details">
             <div className="tutor-header">
               <div className="avatar big">
-                <GraduationCap size={42} />
+                {selectedTutor.avatarUrl ? (
+                  <img src={selectedTutor.avatarUrl} alt={selectedTutor.name} />
+                ) : (
+                  <GraduationCap size={42} />
+                )}
               </div>
 
               <span className="subject">{selectedTutor.subject}</span>
@@ -131,7 +126,11 @@ function TutorsPage() {
               onClick={() => handleSelectTutor(tutor)}
             >
               <div className="avatar">
-                <GraduationCap size={28} />
+                {tutor.avatarUrl ? (
+                  <img src={tutor.avatarUrl} alt={tutor.name} />
+                ) : (
+                  <GraduationCap size={28} />
+                )}
               </div>
 
               <div>

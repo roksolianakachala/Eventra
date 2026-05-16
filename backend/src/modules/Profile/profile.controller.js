@@ -37,6 +37,46 @@ class ProfileController {
       res.status(400).json({ message: err.message });
     }
   }
+
+  async updateAvatar(req, res) {
+  try {
+    const userId = req.user.id;
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Файл не завантажено",
+      });
+    }
+
+    const avatarUrl = await ProfileService.updateAvatar(
+      userId,
+      req.file
+    );
+
+    res.json({
+      message: "Avatar updated",
+      avatarUrl,
+    });
+
+    } catch (err) {
+      res.status(400).json({
+        message: err.message,
+      });
+    }
+  }
+
+  async deleteMyAccount(req, res) {
+  try {
+    const userId = req.user.id;
+
+    await ProfileService.deleteAccount(userId);
+
+    res.json({ message: "Account deleted" });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+}
+
 }
 
 module.exports = new ProfileController();

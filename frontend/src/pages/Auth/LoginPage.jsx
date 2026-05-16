@@ -1,5 +1,5 @@
 import "./AuthPages.css";
-import { Smile, Lock, Eye, EyeOff, Mail, UserRound, Apple } from "lucide-react";
+import { Smile, Lock, Eye, EyeOff, Mail } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../app/providers";
@@ -29,11 +29,6 @@ function LoginPage() {
     } catch (error) {
       alert(error.message || "Не вдалося увійти");
     }
-  };
-
-  const handleSocialPlaceholder = () => {
-    
-    alert("Цей спосіб входу буде доступний після підключення backend.");
   };
 
   return (
@@ -122,15 +117,6 @@ function LoginPage() {
             Google
           </button>
 
-          <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
-            <UserRound size={18} />
-            Facebook
-          </button>
-
-          <button className="social-btn" type="button" onClick={handleSocialPlaceholder}>
-            <Apple size={18} />
-            Apple
-          </button>
         </div>
 
         <p className="auth-bottom-text">

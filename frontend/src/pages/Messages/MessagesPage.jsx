@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 
 import { useAuth } from "../../app/providers";
+import { clearStoredAuth, isExpiredJwtError } from "../../services/authService";
 import {
   fetchChats,
   fetchMessages,
@@ -106,6 +107,13 @@ function MessagesPage() {
         }))
       );
     } catch (error) {
+      if (isExpiredJwtError(error.message)) {
+        clearStoredAuth();
+        setConversations([]);
+        setErrorMessage("Сесія закінчилася. Увійдіть в акаунт ще раз.");
+        return;
+      }
+
       setErrorMessage(error.message || "Не вдалося завантажити чати.");
     } finally {
       setIsLoading(false);
@@ -205,6 +213,12 @@ function MessagesPage() {
 
       await markChatAsRead(conversation.id);
     } catch (error) {
+      if (isExpiredJwtError(error.message)) {
+        clearStoredAuth();
+        setErrorMessage("Сесія закінчилася. Увійдіть в акаунт ще раз.");
+        return;
+      }
+
       setErrorMessage(error.message || "Не вдалося завантажити повідомлення.");
     } finally {
       setIsMessagesLoading(false);
@@ -273,6 +287,12 @@ function MessagesPage() {
       );
     } catch (error) {
       setMessageText(text);
+      if (isExpiredJwtError(error.message)) {
+        clearStoredAuth();
+        setErrorMessage("Сесія закінчилася. Увійдіть в акаунт ще раз.");
+        return;
+      }
+
       setErrorMessage(error.message || "Не вдалося надіслати повідомлення.");
     } finally {
       setIsSending(false);

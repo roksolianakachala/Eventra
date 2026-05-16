@@ -1,16 +1,58 @@
-import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import "./EventsPage.css";
-import { MapPin, Bell, MessageSquare, Music, Dumbbell, GraduationCap, Laptop, Palette, Gamepad2, ChevronDown, ChevronLeft, ChevronRight, Users, User, Heart, } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom"; 
+import { MapPin, Bell, MessageSquare, Music, Dumbbell, GraduationCap, Laptop, Palette, Gamepad2, ChevronDown, ChevronLeft, ChevronRight, Users, User, Heart, } from "lucide-react"; 
 
-function EventsPage() {
-  const [activeCategory, setActiveCategory] = useState(0);
+import "./EventsPage.css"; 
+import { eventService } from "../../services/eventService"; 
+
+function EventsPage() { 
+  const navigate = useNavigate(); 
+
+  const [activeCategory, setActiveCategory] = useState(null); 
+  const [events, setEvents] = useState([]); 
+  const [isLoading, setIsLoading] = useState(true);  
+  const [date, setDate] = useState(''); 
+
   const topEventsRef = useRef(null);
   const smallEventsRef = useRef(null);
 
+  const categories = [ 
+      { name: "Музика", Icon: Music },
+      { name: "Спорт", Icon: Dumbbell },
+      { name: "Освіта", Icon: GraduationCap },
+      { name: "Технології", Icon: Laptop },
+      { name: "Мистецтво", Icon: Palette },
+      { name: "Ігри", Icon: Gamepad2 },
+      { name: "Більше", Icon: ChevronDown },
+    ]; 
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try { 
+        setIsLoading(true);
+      
+        const currentCategory = activeCategory !== null ? categories[activeCategory]?.name : null; 
+        const params = { limit: 10, date: date };
+      
+        if (currentCategory && currentCategory !== "Усе") {
+          params.category = currentCategory;
+        }
+        const response = await eventService.getEvents({ category: categories[activeCategory]?.name, date: date, limit: 10 }); 
+        const eventsData = response.data; 
+        setEvents(eventsData); 
+      } catch (err) { 
+        console.error("Помилка при завантаженні подій:", err);
+      } finally {
+        setIsLoading(false); 
+      } 
+    };
+
+    fetchEvents();
+  }, [activeCategory, date]); 
+
   const scrollSection = (ref, direction) => {
     ref.current?.scrollBy({
-      left: direction * 340,
+      left: direction * 340, 
       behavior: "smooth",
     });
   };
@@ -20,105 +62,32 @@ function EventsPage() {
     alert("Ця дія буде доступна після підключення подій до backend.");
   };
 
-  const categories = [
-    { name: "Музика", Icon: Music },
-    { name: "Спорт", Icon: Dumbbell },
-    { name: "Освіта", Icon: GraduationCap },
-    { name: "Технології", Icon: Laptop },
-    { name: "Мистецтво", Icon: Palette },
-    { name: "Ігри", Icon: Gamepad2 },
-    { name: "Більше", Icon: ChevronDown },
-  ];
-  const topEvents = [
-    {
-      date: "17",
-      month: "лип",
-      time: "19:00",
-      title: "Концерт гурту Без обмежень",
-      category: "Музика",
-      place: "Палац спорту, Київ",
-      members: "+24",
-      image: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600",
-    },
-    {
-      date: "19",
-      month: "лип",
-      time: "10:00",
-      title: "Ранкова йога у парку",
-      category: "Спорт",
-      place: "Парк Шевченка, Львів",
-      members: "+18",
-      image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600",
-    },
-    {
-      date: "21",
-      month: "лип",
-      time: "14:00",
-      title: "Майстер-клас з живопису",
-      category: "Мистецтво",
-      place: "Арт-студія, Одеса",
-      members: "+12",
-      image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600",
-    },
-    {
-      date: "23",
-      month: "лип",
-      time: "18:30",
-      title: "Tech Talk: Майбутнє штучного інтелекту",
-      category: "Технології",
-      place: "Простір, Дніпро",
-      members: "+36",
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600",
-    },
-    {
-      date: "25",
-      month: "лип",
-      time: "21:00",
-      title: "Кіновечір просто неба",
-      category: "Кіно",
-      place: "Парк «Наталка», Київ",
-      members: "+45",
-      image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600",
-    },
-  ];
+  const handleCategoryClick = (index) => {
+    if (activeCategory === index) setActiveCategory(null); 
+    else setActiveCategory(index); 
+    
+  }
 
-  const smallEvents = [
-    {
-      date: "26 липня, 16:00",
-      title: "Обговорення книги «Сила звички»",
-      category: "Освіта",
-      place: "Книгарня Сенс, Київ",
-      members: "+15",
-      image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400",
-    },
-    {
-      date: "27 липня, 08:00",
-      title: "Забіг 5 км у вашому місті",
-      category: "Спорт",
-      place: "Труханів острів, Київ",
-      members: "+33",
-      image: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=400",
-    },
-    {
-      date: "28 липня, 15:00",
-      title: "Основи фотографії для початківців",
-      category: "Освіта",
-      place: "Креативний простір, Львів",
-      members: "+9",
-      image: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=400",
-    },
-    {
-      date: "30 липня, 19:00",
-      title: "Вечір настільних ігор",
-      category: "Ігри",
-      place: "GameHub, Харків",
-      members: "+22",
-      image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400",
-    },
-  ];
+  if (isLoading) {
+    return <div className="events-page"><h2 style={{padding: "40px", textAlign: "center"}}>Завантаження подій...</h2></div>; 
+  }  
+
+  const topEvents = events.slice(0, 5); 
+  const smallEvents = events.slice(5); 
+
+  const formatDate = (isoString) => {
+    if (!isoString) return { date: "", month: "", time: "", fullText: "" };
+    const dateObj = new Date(isoString);
+    return {
+      date: dateObj.getDate(),
+      month: dateObj.toLocaleString("uk-UA", { month: "short" }),
+      time: dateObj.toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" }),
+      fullText: dateObj.toLocaleString("uk-UA", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" })
+    };
+  }; 
 
   return (
-    <div className="events-page">
+    <div className="events-page"> 
       <div className="events-title">
         <h1>Рекомендовані події</h1>
         <p>Дібрано спеціально для вас на основі ваших інтересів та активності</p>
@@ -129,12 +98,27 @@ function EventsPage() {
           <button
             className={activeCategory === index ? "active" : ""}
             key={category.name}
-            onClick={() => setActiveCategory(index)}
+            onClick={ () => handleCategoryClick(index) } 
           >
-            {category.Icon && <category.Icon size={18} />}
+            {category.Icon && <category.Icon size={18} />} 
             {category.name}
           </button>
         ))}
+      </div> 
+
+      <div className="events-date"> 
+        <input 
+          type="date" 
+          name="date" 
+          placeholder="День події" 
+          value={date} 
+          onChange={ (e) => { setDate(e.target.value) } } 
+        /> 
+        {date && (
+          <button className="reset-date" onClick={() => setDate('')}>
+            Очистити
+          </button>
+        )}
       </div>
 
       <section className="events-section">
@@ -149,21 +133,24 @@ function EventsPage() {
           </button>
 
         <div className="top-events-grid scroll-row" ref={topEventsRef}>
-          {topEvents.map((event) => (
-            <article className="top-event-card" key={event.title}>
+          {topEvents.map((event) => { 
+            const { date, month, time } = formatDate(event.start_time);
+
+            return (
+            <article className="top-event-card" key={event.id}>
               <div className="top-event-image">
-                <img src={event.image} alt={event.title} />
+                <img src={event.banner_url || "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600"} alt={event.title} />
 
                 <div className="top-event-date">
-                  <strong>{event.date}</strong>
-                  <span>{event.month}</span>
-                  <small>{event.time}</small>
+                  <strong>{date}</strong>
+                  <span>{month}</span>
+                  <small>{time}</small>
                 </div>
 
                 <button className="bookmark" type="button" onClick={handlePlaceholderAction}>
                   <Heart size={24} />
                 </button>
-                <span className="image-time">{event.time}</span>
+                <span className="image-time">{time}</span>
               </div>
 
               <div className="top-event-body">
@@ -171,22 +158,21 @@ function EventsPage() {
                 <span className="tag">{event.category}</span>
                 <p className="icon-text">
                   <MapPin size={16} />
-                  {event.place}
+                  {event.location}
                 </p>
 
                 <div className="event-members">
                   <div className="mini-avatars">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <b>{event.members}</b>
+                    <span></span><span></span><span></span>
+                  </div> 
+                  <b>{event.capacity ? `До ${event.capacity}` : "Безліміт"}</b>
                 </div>
 
-                <button className="details-btn" type="button" onClick={handlePlaceholderAction}>Детальніше</button>
+                <button className="details-btn" type="button" onClick={() => navigate(`/events/${event.id}`)}>Детальніше</button>
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
 
           <button className="scroll-btn right" type="button" onClick={() => scrollSection(topEventsRef, 1)} aria-label="Scroll top events right">
@@ -209,7 +195,7 @@ function EventsPage() {
         <div className="small-events-grid scroll-row" ref={smallEventsRef}>
           {smallEvents.map((event) => (
             <article className="small-event-card" key={event.title}>
-              <img src={event.image} alt={event.title} />
+              <img src={event.banner_url || "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=600"} alt={event.title} />
 
               <div className="small-event-info">
                 <div className="small-date">{event.date}</div>
@@ -217,7 +203,7 @@ function EventsPage() {
                 <span className="tag">{event.category}</span>
                 <p className="icon-text">
                   <MapPin size={16} />
-                  {event.place}
+                  {event.location}
                 </p>
 
                 <div className="event-members">
